@@ -24,7 +24,7 @@ fi
 rm -rf "$STAGE" "$DMG"; mkdir -p "$STAGE"
 cp -R build/ClamMac.app "$STAGE/"
 ln -s /Applications "$STAGE/Applications"
-sed "s/__VERSION__/$VERSION/g" Docs/Leeme.template.html > "$STAGE/Léeme.html"
+sed "s/__VERSION__/$VERSION/g" Installer/Leeme.template.html > "$STAGE/Léeme.html"
 cp Icon/InstallerIcon.icns "$STAGE/.VolumeIcon.icns"
 SetFile -a C "$STAGE"
 hdiutil create -volname "ClamMac" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
