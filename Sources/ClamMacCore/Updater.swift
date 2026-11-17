@@ -8,7 +8,7 @@ public struct DatabaseInfo: Sendable, Equatable {
     /// Fecha de las firmas en el idioma del sistema; si no se puede interpretar, el texto original.
     public var displayDate: String {
         let p = DateFormatter()
-        p.locale = Locale(identifier: "en_US_POSIX"); p.timeZone = TimeZone(identifier: "UTC")
+        p.locale = Locale(identifier: "en_US_POSIX"); p.timeZone = .current   // clamscan imprime la hora en local (ctime)
         p.dateFormat = "EEE MMM d HH:mm:ss yyyy"
         guard let d = p.date(from: date) else { return date }
         let o = DateFormatter(); o.locale = Locale.current; o.dateStyle = .medium; o.timeStyle = .short

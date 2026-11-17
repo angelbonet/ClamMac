@@ -28,6 +28,8 @@ final class CoreTests: XCTestCase {
         let v = DatabaseInfo(version: "1.5.4", signatureVersion: "28186", date: "Tue Nov 17 07:30:05 2026")
         XCTAssertFalse(v.displayDate.contains("Tue"), v.displayDate)
         XCTAssertTrue(v.displayDate.contains("2026"))
+        // la hora no debe cambiar: clamscan ya da hora local (07:30), no UTC
+        XCTAssertTrue(v.displayDate.contains("7:30"), v.displayDate)
         XCTAssertEqual(DatabaseInfo(version: "", signatureVersion: "", date: "raro").displayDate, "raro")
     }
 
