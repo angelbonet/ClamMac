@@ -2,6 +2,10 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.0.3] — 2026-11-17
+### Corregido
+- ClamMac ya no se queda en el Dock al cerrar la ventana: vuelve a ser solo icono de barra de menús.
+
 ## [1.0.2] — 2026-11-17
 ### Añadido
 - **Binario universal** (Apple Silicon + Intel).

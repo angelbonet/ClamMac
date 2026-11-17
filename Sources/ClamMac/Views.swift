@@ -42,6 +42,14 @@ struct MainView: View {
         // Con la ventana abierta la app aparece en el Dock (con su icono); al cerrarla vuelve a ser solo barra de menú.
         .onAppear { NSApp.setActivationPolicy(.regular); NSApp.activate(ignoringOtherApps: true) }
         .onDisappear { NSApp.setActivationPolicy(.accessory) }
+        // SwiftUI no llama a onDisappear al cerrar la ventana (solo la oculta): escuchamos el cierre real.
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { note in
+            let closing = note.object as? NSWindow
+            DispatchQueue.main.async {
+                let open = NSApp.windows.contains { $0 !== closing && $0.isVisible && $0.canBecomeMain && !($0 is NSPanel) }
+                if !open { NSApp.setActivationPolicy(.accessory) }
+            }
+        }
     }
 }
 
