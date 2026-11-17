@@ -29,8 +29,14 @@ public enum ClamPaths {
     }
 
     public static var appSupport: URL {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        let url = base.appendingPathComponent("ClamMac", isDirectory: true)
+        // CLAMMAC_DATA_DIR: solo para pruebas aisladas (no toca los datos reales)
+        let url: URL
+        if let d = ProcessInfo.processInfo.environment["CLAMMAC_DATA_DIR"], !d.isEmpty {
+            url = URL(fileURLWithPath: d, isDirectory: true)
+        } else {
+            let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            url = base.appendingPathComponent("ClamMac", isDirectory: true)
+        }
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         return url
     }

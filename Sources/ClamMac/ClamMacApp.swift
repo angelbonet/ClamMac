@@ -29,7 +29,7 @@ struct MenuContent: View {
         Text(engine.busy ?? (engine.settings.realtimeEnabled ? "Protegido · vigilando carpetas" : "Vigilancia desactivada"))
         if let d = engine.dbInfo { Text("Firmas \(d.signatureVersion) · \(d.displayDate)").font(.caption) }
         if let u = engine.availableUpdate {
-            Button("⬆️ Actualizar a ClamMac \(u.version)") { Task { await engine.installAppUpdate() } }.disabled(engine.busy != nil)
+            Button("⬆️ Actualizar a ClamMac \(u.version) y reiniciar") { Task { await engine.installAppUpdate() } }.disabled(engine.busy != nil)
         }
         Divider()
         Toggle("Vigilancia de carpetas", isOn: $engine.settings.realtimeEnabled)

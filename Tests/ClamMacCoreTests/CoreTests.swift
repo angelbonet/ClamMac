@@ -79,6 +79,54 @@ final class CoreTests: XCTestCase {
         print("LIVE OK version=\(r.version) sha=\(r.sha256 ?? "-") size=\((try? FileManager.default.attributesOfItem(atPath: dmg.path)[.size]) ?? 0)")
     }
 
+    // MARK: ayudante de autoactualización (script real, con VERIFY/OPEN desactivados)
+    func runHelper(pid: Int32, new: URL, dest: URL, log: URL, env: [String: String] = [:]) throws {
+        let d = try tmpDir(); let sc = d.appendingPathComponent("h.sh")
+        try SelfUpdater.helperScript.write(to: sc, atomically: true, encoding: .utf8)
+        let p = Process(); p.executableURL = URL(fileURLWithPath: "/bin/sh")
+        p.arguments = [sc.path, "\(pid)", new.path, dest.path, log.path]
+        p.environment = ["VERIFY": "0", "OPEN": "0", "PATH": "/usr/bin:/bin"].merging(env) { $1 }
+        try p.run(); p.waitUntilExit()
+    }
+    func fakeApp(_ dir: URL, _ name: String, marker: String) throws -> URL {
+        let a = dir.appendingPathComponent(name); try FileManager.default.createDirectory(at: a, withIntermediateDirectories: true)
+        try marker.write(to: a.appendingPathComponent("v.txt"), atomically: true, encoding: .utf8); return a
+    }
+
+    func testHelperReplacesApp() throws {
+        let d = try tmpDir(); let old = try fakeApp(d, "ClamMac.app", marker: "viejo"); let new = try fakeApp(d, "new.app", marker: "nuevo")
+        let log = d.appendingPathComponent("u.log")
+        try runHelper(pid: 999_999, new: new, dest: old, log: log)    // PID inexistente: no espera
+        XCTAssertEqual(try String(contentsOf: old.appendingPathComponent("v.txt")), "nuevo")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: new.path), "la copia temporal se borra")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: old.path + ".previous"), "la copia de seguridad se borra")
+        XCTAssertTrue(try String(contentsOf: log).contains("instalada"))
+    }
+
+    func testHelperRollsBackOnFailure() throws {
+        let d = try tmpDir(); let old = try fakeApp(d, "ClamMac.app", marker: "viejo")
+        let missing = d.appendingPathComponent("no-existe.app"), log = d.appendingPathComponent("u.log")
+        try runHelper(pid: 999_999, new: missing, dest: old, log: log)
+        XCTAssertEqual(try String(contentsOf: old.appendingPathComponent("v.txt")), "viejo", "debe quedar la app anterior")
+        XCTAssertTrue(try String(contentsOf: log).contains("restaurando"))
+    }
+
+    func testHelperWaitsForAppToQuit() throws {
+        let d = try tmpDir(); let old = try fakeApp(d, "ClamMac.app", marker: "viejo"); let new = try fakeApp(d, "new.app", marker: "nuevo")
+        let sleeper = Process(); sleeper.executableURL = URL(fileURLWithPath: "/bin/sleep"); sleeper.arguments = ["2"]; try sleeper.run()
+        let t0 = Date()
+        try runHelper(pid: sleeper.processIdentifier, new: new, dest: old, log: d.appendingPathComponent("u.log"))
+        XCTAssertGreaterThan(Date().timeIntervalSince(t0), 1.0, "debe esperar a que la app termine")
+        XCTAssertEqual(try String(contentsOf: old.appendingPathComponent("v.txt")), "nuevo")
+    }
+
+    func testCanReplace() {
+        XCTAssertFalse(SelfUpdater.canReplace(appURL: URL(fileURLWithPath: "/Volumes/ClamMac/ClamMac.app")))
+        XCTAssertFalse(SelfUpdater.canReplace(appURL: URL(fileURLWithPath: "/private/var/folders/x/AppTranslocation/ABC/d/ClamMac.app")))
+        XCTAssertFalse(SelfUpdater.canReplace(appURL: URL(fileURLWithPath: "/tmp/ClamMac")))      // no es .app
+        XCTAssertTrue(SelfUpdater.canReplace(appURL: URL(fileURLWithPath: NSTemporaryDirectory() + "ClamMac.app")))
+    }
+
     func testIgnored() {
         let ex: Set<String> = ["download", "crdownload"]
         XCTAssertTrue(FolderWatcher.isIgnored(path: "/a/.DS_Store", excluded: ex))

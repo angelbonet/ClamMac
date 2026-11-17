@@ -55,9 +55,12 @@ struct StatusView: View {
                     Text("Hay una versión nueva de ClamMac: \(u.version)").font(.headline)
                     if !u.notes.isEmpty { Text(u.notes).font(.callout).lineLimit(6) }
                     HStack {
-                        Button("Descargar e instalar") { Task { await e.installAppUpdate() } }.disabled(e.busy != nil)
+                        Button(e.canSelfUpdate ? "Actualizar y reiniciar" : "Descargar e instalar") { Task { await e.installAppUpdate() } }.disabled(e.busy != nil)
                         Link("Ver en GitHub", destination: u.pageURL)
                     }
+                    Text(e.canSelfUpdate ? "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más."
+                                         : "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones.")
+                        .font(.caption).foregroundStyle(.secondary)
                 }
                 .padding(12).frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.accentColor.opacity(0.15), in: RoundedRectangle(cornerRadius: 8))

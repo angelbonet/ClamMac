@@ -10,14 +10,15 @@ public struct ReleaseInfo: Sendable, Equatable {
 }
 
 public enum UpdateError: Error, LocalizedError {
-    case network(String), noAsset, noHash, hashMismatch, badSignature(String)
+    case network(String), noAsset, noHash, hashMismatch, badSignature(String), installFailed(String)
     public var errorDescription: String? {
         switch self {
         case .network(let m): return "Sin conexión con GitHub: \(m)"
         case .noAsset: return "La release no incluye un DMG."
         case .noHash: return "La release no publica el SHA-256 del DMG; no se instala automáticamente."
         case .hashMismatch: return "El SHA-256 del DMG descargado no coincide con el publicado. Descarga cancelada."
-        case .badSignature(let m): return "El DMG no está firmado y notarizado por el desarrollador: \(m)"
+        case .badSignature(let m): return "La actualización no está firmada y notarizada por el desarrollador: \(m)"
+        case .installFailed(let m): return "No se pudo preparar la actualización: \(m)"
         }
     }
 }

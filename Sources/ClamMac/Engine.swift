@@ -53,6 +53,7 @@ final class Engine: ObservableObject {
     // MARK: arranque
     func start() async {
         guard engineInstalled else { add("ClamAV no está instalado. Ejecuta: brew install clamav", alert: true); return }
+        noteVersionChange()
         dbInfo = await Updater.databaseInfo()
         if settings.useDaemon { await startDaemon() }
         applyWatcher()
@@ -219,6 +220,17 @@ final class Engine: ObservableObject {
         else { try? line.write(to: ClamPaths.logFile, atomically: true, encoding: .utf8) }
     }
 
+    /// Tras una actualización avisa («ClamMac se ha actualizado a X»). Ignora la versión simulada de pruebas.
+    private func noteVersionChange() {
+        guard ProcessInfo.processInfo.environment["CLAMMAC_FAKE_VERSION"] == nil else { return }
+        let now = currentVersion
+        if let last = settings.lastRunVersion, UpdateChecker.isNewer(now, than: last) {
+            add("ClamMac se ha actualizado de \(last) a \(now)")
+            notify(title: "ClamMac actualizada", body: "Ahora usas la versión \(now). La protección está activa.")
+        }
+        if settings.lastRunVersion != now { settings.lastRunVersion = now }
+    }
+
     // MARK: actualizaciones de la app (GitHub)
     var currentVersion: String {
         ProcessInfo.processInfo.environment["CLAMMAC_FAKE_VERSION"]      // solo para pruebas
@@ -234,20 +246,37 @@ final class Engine: ObservableObject {
             if let r = rel {
                 updateStatus = "Hay una versión nueva: \(r.version)"
                 add("Nueva versión de ClamMac disponible: \(r.version)")
-                notify(title: "ClamMac \(r.version) disponible", body: "Ábrelo para descargarla e instalarla.")
+                notify(title: "ClamMac \(r.version) disponible", body: "Ábrelo para actualizarla con un clic.")
+                if ProcessInfo.processInfo.environment["CLAMMAC_AUTOINSTALL"] == "1" { await installAppUpdate() }   // solo pruebas
             } else { updateStatus = "ClamMac \(currentVersion) está al día"; if manual { add(updateStatus!) } }
         } catch { updateStatus = error.localizedDescription; if manual { add(error.localizedDescription, alert: true) } }
     }
 
+    /// true si la app puede sustituirse a sí misma (instalada en /Applications u otra carpeta con permiso).
+    var canSelfUpdate: Bool { SelfUpdater.canReplace(appURL: Bundle.main.bundleURL) }
+
     func installAppUpdate() async {
         guard let rel = availableUpdate, busy == nil else { return }
         busy = "Descargando ClamMac \(rel.version)…"
-        defer { busy = nil }
         do {
             let dmg = try await UpdateChecker.downloadAndVerify(rel)
-            add("ClamMac \(rel.version) descargada y verificada (SHA-256, firma y notarización). Arrastra la app a Aplicaciones.")
+            if canSelfUpdate {
+                busy = "Preparando la actualización…"
+                let newApp = try await SelfUpdater.prepareNewApp(from: dmg, expectedVersion: rel.version)
+                try? FileManager.default.removeItem(at: dmg)
+                add("ClamMac \(rel.version) verificada. Se reiniciará sola en unos segundos.")
+                let noRelaunch = ProcessInfo.processInfo.environment["CLAMMAC_UPDATE_NO_RELAUNCH"] == "1"   // solo pruebas
+                try SelfUpdater.launchHelper(newApp: newApp, dest: Bundle.main.bundleURL, noRelaunch: noRelaunch)
+                shutdown()
+                NSApp.terminate(nil)
+                return
+            }
+            // Ubicación sin permiso de escritura (p. ej. ejecutada desde el DMG): se abre el DMG y se explica el paso manual.
+            add("ClamMac \(rel.version) descargada y verificada. Cierra ClamMac (menú del escudo › Salir), arrastra la app nueva a Aplicaciones y ábrela.", alert: true)
+            notify(title: "Actualización lista", body: "Cierra ClamMac, arrastra la app nueva a Aplicaciones y ábrela.")
             NSWorkspace.shared.open(dmg)
         } catch { add(error.localizedDescription, alert: true); updateStatus = error.localizedDescription }
+        busy = nil
     }
 
     func shutdown() { watcher?.stop(); daemon.stop() }

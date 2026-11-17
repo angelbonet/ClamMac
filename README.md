@@ -8,7 +8,7 @@ Interfaz nativa para macOS (SwiftUI, barra de menú) del antivirus libre **ClamA
 - **Cuarentena** con restaurar y eliminar.
 - **clamd propio** para análisis instantáneo (opcional).
 - **Avisos**: notificaciones del sistema y Pushover (token en el llavero).
-- **Actualizaciones de la app** desde las *releases* de este repositorio (descarga verificada: SHA-256, firma Developer ID y notarización).
+- **Actualización de la app con un clic** desde las *releases* de este repositorio: descarga verificada (SHA-256, firma Developer ID y notarización), se cierra, se sustituye y se vuelve a abrir sola; si algo falla restaura la versión anterior.
 
 Requisitos: macOS 14 o superior y ClamAV (`brew install clamav`).
 

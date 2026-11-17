@@ -51,6 +51,8 @@ public struct AppSettings: Codable, Equatable, Sendable {
     /// Buscar nuevas versiones de ClamMac en GitHub (como máximo una vez al día).
     public var autoCheckAppUpdates: Bool = true
     public var lastAppUpdateCheck: Date?
+    /// Versión de la app la última vez que se ejecutó (para avisar «actualizada a X»).
+    public var lastRunVersion: String?
 
     public init() {}
 
@@ -58,7 +60,7 @@ public struct AppSettings: Codable, Equatable, Sendable {
     enum CodingKeys: String, CodingKey {
         case watchedFolders, realtimeEnabled, updateMode, updateIntervalHours, lastUpdateCheck, scheduledScan,
              useDaemon, autoQuarantine, notificationsEnabled, pushoverEnabled, pushoverUser, excludeExtensions,
-             autoCheckAppUpdates, lastAppUpdateCheck
+             autoCheckAppUpdates, lastAppUpdateCheck, lastRunVersion
     }
     public init(from d: Decoder) throws {
         self.init()
@@ -77,6 +79,7 @@ public struct AppSettings: Codable, Equatable, Sendable {
         excludeExtensions = try c.decodeIfPresent([String].self, forKey: .excludeExtensions) ?? excludeExtensions
         autoCheckAppUpdates = try c.decodeIfPresent(Bool.self, forKey: .autoCheckAppUpdates) ?? autoCheckAppUpdates
         lastAppUpdateCheck = try c.decodeIfPresent(Date.self, forKey: .lastAppUpdateCheck)
+        lastRunVersion = try c.decodeIfPresent(String.self, forKey: .lastRunVersion)
     }
 
     public static func load(from url: URL = ClamPaths.settingsFile) -> AppSettings {

@@ -5,7 +5,7 @@ set -e
 cd "${0:A:h}"
 SIGN_HASH="F211AC309817AB7AE7332B19F29F294C19C40AA0"
 APP="build/ClamMac.app"
-VERSION="1.0.1"
+VERSION="1.0.2"
 
 swift build -c release
 BIN=$(swift build -c release --show-bin-path)/ClamMac
