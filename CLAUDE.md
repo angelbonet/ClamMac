@@ -16,7 +16,14 @@ App nativa de barra de menú (SwiftUI, macOS 14+, binario universal arm64 + x86_
 - Autoprueba de la app: fichero EICAR (`TestFile`) → botón «Probar protección»; gancho de pruebas `CLAMMAC_AUTOSELFTEST=1`. Hay ZIP descargable en `docs/descargas/`.
 - Las versiones <1.0.2 no tienen autoactualización; el cambio de versión depende del código de la versión *instalada*.
 - El `swift`/`git` del PATH deben ser los modernos (Xcode / Homebrew); en esta máquina hubo restos antiguos.
+- **Dock**: la app es `LSUIElement`; al abrir la ventana pasa a `.regular` y vuelve a `.accessory` escuchando `NSWindow.willCloseNotification` (en SwiftUI `onDisappear` NO se dispara al cerrar la ventana).
+- Notarización: un `503` de notarytool es caída del servicio de Apple (no del llavero); reintentar más tarde. `gh` necesita el scope `workflow` para subir `.github/workflows`.
 - Los iconos derivan de la mascota de ClamAV (marca de Cisco): no cubiertos por la licencia MIT.
 
+## Estado
+- Última versión publicada: **1.0.3** (2026-11-17), universal, notarizada; web de docs desplegada. Autoactualización de un clic verificada en uso real.
+
 ## Pendiente
+- Capturas nuevas (Estado, Cuarentena, Firmas) para la documentación; probar en un Mac Intel real.
+- Decisiones abiertas: licencia MIT, ZIP EICAR, logo abDatabase en «Acerca de».
 - Retomar capturas de pantalla de la 1.0.2 para la documentación (Estado, Cuarentena, Firmas).
