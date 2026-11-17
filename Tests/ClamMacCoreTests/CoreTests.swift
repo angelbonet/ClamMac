@@ -63,6 +63,20 @@ final class CoreTests: XCTestCase {
         XCTAssertFalse(l.useDaemon); XCTAssertTrue(l.autoCheckAppUpdates)
     }
 
+    /// Prueba real contra GitHub (solo con CLAMMAC_LIVE=1): encuentra la release, la descarga y la verifica.
+    func testLiveGitHubRelease() async throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["CLAMMAC_LIVE"] == "1", "prueba de red desactivada")
+        let none = try await UpdateChecker.check(current: "99.0.0")
+        XCTAssertNil(none, "con una versión futura no debe ofrecer actualización")
+        let rel = try await UpdateChecker.check(current: "0.0.1")
+        let r = try XCTUnwrap(rel, "debe encontrar una release más nueva que 0.0.1")
+        XCTAssertNotNil(r.sha256)
+        let dmg = try await UpdateChecker.downloadAndVerify(r)
+        defer { try? FileManager.default.removeItem(at: dmg) }
+        XCTAssertEqual(try UpdateChecker.sha256(of: dmg), r.sha256)
+        print("LIVE OK version=\(r.version) sha=\(r.sha256 ?? "-") size=\((try? FileManager.default.attributesOfItem(atPath: dmg.path)[.size]) ?? 0)")
+    }
+
     func testIgnored() {
         let ex: Set<String> = ["download", "crdownload"]
         XCTAssertTrue(FolderWatcher.isIgnored(path: "/a/.DS_Store", excluded: ex))
