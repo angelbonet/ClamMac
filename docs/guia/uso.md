@@ -6,7 +6,7 @@ El menú del escudo permite activar/desactivar la vigilancia, lanzar un análisi
 
 ## Estado
 
-Resume la protección: vigilancia, motor, versión de firmas, modo de actualización y elementos en cuarentena. Aquí aparecen los avisos importantes (falta de ClamAV, falta de *Acceso total al disco*, versión nueva de la app).
+Resume la protección: vigilancia, motor, versión de firmas, modo de actualización y elementos en cuarentena. Incluye el botón **Probar protección** ([más info](prueba.md)). Aquí aparecen los avisos importantes (falta de ClamAV, falta de *Acceso total al disco*, versión nueva de la app).
 
 ## Vigilancia de carpetas
 

@@ -26,7 +26,11 @@ El DMG incluye un `Léeme.html` con estos pasos.
 
 Imprescindible: [Acceso total al disco](permisos.md).
 
-## 4. Ajustes recomendados
+## 4. Comprobar que funciona
+
+En **Estado**, pulsa **Probar protección**: ClamMac crea un fichero de prueba inofensivo y comprueba que lo detecta. Detalles en [Comprobar que funciona](prueba.md).
+
+## 5. Ajustes recomendados
 
 - **Firmas**: elige *Automática* o *Manual* y la frecuencia.
 - **Vigilancia**: añade las carpetas que quieras proteger (Descargas ya viene activada).

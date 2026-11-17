@@ -17,6 +17,7 @@ ClamMac/
 │   │   ├── Updater.swift         # freshclam y versión de las firmas
 │   │   ├── UpdateChecker.swift   # busca/descarga/verifica versiones de la app en GitHub
 │   │   ├── SelfUpdater.swift     # sustituye la app en ejecución y la reabre (con marcha atrás)
+│   │   ├── TestFile.swift        # fichero de prueba EICAR (autoprueba)
 │   │   ├── Keychain.swift        # token de Pushover
 │   │   └── Pushover.swift
 │   └── ClamMac/                  # app SwiftUI

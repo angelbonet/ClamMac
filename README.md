@@ -26,13 +26,15 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 - **Actualización de la app con un clic**: se descarga desde GitHub, se verifica (SHA-256, firma y notarización), se cierra, se sustituye y se vuelve a abrir sola; si algo falla restaura la versión anterior
 - **Firmada y notarizada por Apple**: se abre con doble clic, sin avisos de Gatekeeper
 - **Aviso de permisos**: detecta cuándo falta el *Acceso total al disco* y lo dice claramente
+- **Botón «Probar protección»**: crea un fichero de prueba EICAR (inofensivo) y comprueba que ClamMac lo detecta y lo aparta
+- **Binario universal**: Apple Silicon e Intel
 
 ## Requisitos
 
 | Componente | Descripción | Enlace |
 |------------|-------------|--------|
 | macOS 14 (Sonoma) o superior | Sistema operativo | — |
-| Mac con **Apple Silicon** (M1 o posterior) | La versión actual es solo `arm64`; la de Intel está pendiente | — |
+| Mac con **Apple Silicon o Intel** | Binario universal (`arm64` + `x86_64`) | — |
 | ClamAV | Motor antivirus (ClamMac **no lo incluye**, usa el de Homebrew) | `brew install clamav` · [clamav.net](https://www.clamav.net/) |
 | Conexión a Internet | Para descargar firmas y buscar versiones nuevas | — |
 
@@ -42,8 +44,15 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 2. Ábrelo y **arrastra ClamMac a Aplicaciones** (el DMG incluye un `Léeme.html` con los pasos)
 3. Abre ClamMac: aparece un **escudo en la barra de menú**
 4. Concede el permiso de **Acceso total al disco** (imprescindible, ver abajo)
+5. Comprueba que todo funciona con **Estado › Probar protección** ([qué es el fichero de prueba](https://angelbonet.github.io/ClamMac/guia/prueba/))
 
 > ⚠️ **Acceso total al disco**: sin este permiso macOS impide a ClamMac leer carpetas como Descargas, Escritorio o Documentos **y se salta ficheros sin avisar**. Ajustes del Sistema › Privacidad y seguridad › Acceso total al disco › activa **ClamMac** (o pulsa `+` y añádela). Pasos con detalle en [la guía de permisos](https://angelbonet.github.io/ClamMac/guia/permisos/). Si falta, ClamMac muestra un aviso naranja en la pantalla *Estado*.
+
+## Comprobar que funciona
+
+Pulsa **Probar protección** en la pantalla *Estado*: ClamMac crea un fichero de prueba **EICAR** en una carpeta vigilada y comprueba que lo detecta y lo aparta a cuarentena. EICAR es el fichero de prueba estándar de la industria: **no es malware**, es una cadena de texto que todos los antivirus detectan a propósito.
+
+También puedes hacerlo a mano o [descargar el fichero de prueba](https://angelbonet.github.io/ClamMac/descargas/ClamMac-prueba-EICAR.zip) (explicado en detalle en la [guía](https://angelbonet.github.io/ClamMac/guia/prueba/)).
 
 ## Actualizaciones
 
@@ -57,6 +66,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 | [📦 Instalación](https://angelbonet.github.io/ClamMac/guia/instalacion/) | Instalar paso a paso, con ClamAV |
 | [🔐 Permisos](https://angelbonet.github.io/ClamMac/guia/permisos/) | Acceso total al disco y notificaciones |
 | [📖 Uso](https://angelbonet.github.io/ClamMac/guia/uso/) | Vigilancia, análisis, cuarentena, firmas y ajustes |
+| [✅ Comprobar que funciona](https://angelbonet.github.io/ClamMac/guia/prueba/) | Fichero de prueba EICAR: qué es y cómo usarlo |
 | [🔄 Actualizaciones](https://angelbonet.github.io/ClamMac/guia/actualizaciones/) | Firmas y actualización de la app |
 | [🛡️ Seguridad y privacidad](https://angelbonet.github.io/ClamMac/guia/seguridad/) | Qué hace, qué no hace y qué datos usa |
 | [🧰 Problemas frecuentes](https://angelbonet.github.io/ClamMac/guia/problemas/) | Solución de problemas y desinstalación |

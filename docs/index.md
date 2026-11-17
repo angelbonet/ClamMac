@@ -32,7 +32,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 ## Requisitos
 
 - macOS 14 (Sonoma) o superior
-- Mac con **Apple Silicon** (la versión para Intel está pendiente)
+- Mac con **Apple Silicon o Intel** (binario universal)
 - ClamAV: `brew install clamav`
 
 ---

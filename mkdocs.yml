@@ -65,6 +65,7 @@ nav:
       - Instalación: guia/instalacion.md
       - Permisos: guia/permisos.md
       - Uso: guia/uso.md
+      - Comprobar que funciona: guia/prueba.md
       - Actualizaciones: guia/actualizaciones.md
       - Seguridad y privacidad: guia/seguridad.md
       - Problemas frecuentes: guia/problemas.md

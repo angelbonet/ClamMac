@@ -14,7 +14,7 @@ cd ClamMac
 
 swift build                   # compilación de desarrollo
 swift test                    # tests (incluye detección EICAR real)
-./build_app.sh                # build/ClamMac.app firmada
+./build_app.sh                # build/ClamMac.app firmada (binario universal arm64 + x86_64)
 ./build_app.sh --install      # ... y la copia a /Applications
 ./build_dmg.sh                # DMG firmado y notarizado (build/ClamMac-x.y.z.dmg)
 SKIP_NOTARIZE=1 ./build_dmg.sh   # DMG sin notarizar, para pruebas rápidas
@@ -53,6 +53,7 @@ NOTARY_PROFILE=mi-perfil ./build_dmg.sh
 | `CLAMMAC_FAKE_VERSION` | Simula otra versión instalada (p. ej. `0.0.1` para forzar el aviso de actualización) |
 | `CLAMMAC_AUTOINSTALL=1` | Instala la actualización en cuanto la encuentra |
 | `CLAMMAC_UPDATE_NO_RELAUNCH=1` | No reabre la app tras sustituirla |
+| `CLAMMAC_AUTOSELFTEST=1` | Lanza la autoprueba EICAR al arrancar y cierra la app |
 | `CLAMMAC_LIVE=1` | Activa el test contra la API real de GitHub |
 
 !!! danger "Aísla siempre las pruebas"

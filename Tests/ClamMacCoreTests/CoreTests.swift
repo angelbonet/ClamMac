@@ -127,6 +127,22 @@ final class CoreTests: XCTestCase {
         XCTAssertTrue(SelfUpdater.canReplace(appURL: URL(fileURLWithPath: NSTemporaryDirectory() + "ClamMac.app")))
     }
 
+    func testEicarTestFile() throws {
+        XCTAssertEqual(TestFile.eicar.utf8.count, 68)
+        let d = try tmpDir(); let p = try TestFile.create(in: d.path)
+        XCTAssertTrue(TestFile.isTestFile(path: p)); XCTAssertFalse(TestFile.isTestFile(path: "/a/eicar.com"))
+        XCTAssertEqual(try UpdateChecker.sha256(of: URL(fileURLWithPath: p)), TestFile.eicarSHA256, "debe ser el EICAR oficial")
+    }
+
+    func testEicarInsideZipIsDetected() async throws {
+        try XCTSkipIf(ClamPaths.clamscan == nil, "ClamAV no instalado")
+        let d = try tmpDir(); let p = try TestFile.create(in: d.path)
+        let zip = d.appendingPathComponent("t.zip")
+        let z = await Shell.run("/usr/bin/zip", ["-q", "-j", zip.path, p]); XCTAssertEqual(z.status, 0)
+        let r = await Scanner(daemon: ClamdManager()).scan(files: [zip.path])
+        XCTAssertEqual(r.threats.count, 1, "el ZIP con EICAR debe detectarse; error=\(r.engineError ?? "-")")
+    }
+
     func testIgnored() {
         let ex: Set<String> = ["download", "crdownload"]
         XCTAssertTrue(FolderWatcher.isIgnored(path: "/a/.DS_Store", excluded: ex))

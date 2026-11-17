@@ -4,6 +4,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
 ## [1.0.2] — 2026-11-17
 ### Añadido
+- **Binario universal** (Apple Silicon + Intel).
+- **Botón «Probar protección»**: crea un fichero de prueba EICAR (inofensivo), comprueba que ClamMac lo detecta y lo aparta, y lo limpia. También en el menú del escudo.
+- Guía «Comprobar que funciona» y ZIP descargable con el fichero de prueba y un LEEME explicativo.
 - **Actualización con un clic**: la app descarga y verifica la versión nueva, se cierra, se sustituye y se vuelve a abrir sola. Si algo falla, restaura la anterior.
 - Aviso al arrancar tras actualizarse («ClamMac se ha actualizado a X»).
 ### Cambiado

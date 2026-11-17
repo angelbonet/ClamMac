@@ -82,6 +82,30 @@ struct StatusView: View {
                 Button("Análisis rápido") { Task { await e.quickScan() } }.disabled(e.busy != nil)
                 Button("Actualizar firmas") { Task { await e.updateSignatures() } }.disabled(e.busy != nil)
             }
+            SelfTestCard()
+        }
+    }
+}
+
+struct SelfTestCard: View {
+    @EnvironmentObject var e: Engine
+    var body: some View {
+        GroupBox("Comprobar que funciona") {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Crea un fichero de prueba EICAR en una carpeta vigilada y comprueba que ClamMac lo detecta y lo aparta. El fichero es **inofensivo**: es un texto estándar que todos los antivirus detectan a propósito.")
+                    .font(.callout).foregroundStyle(.secondary)
+                HStack {
+                    Button("Probar protección") { Task { await e.runSelfTest() } }.disabled(e.busy != nil || e.selfTest == .running)
+                    Link("¿Qué es EICAR?", destination: URL(string: "https://angelbonet.github.io/ClamMac/guia/prueba/")!)
+                    if e.selfTest == .running { ProgressView().controlSize(.small); Text("Esperando la detección…").foregroundStyle(.secondary) }
+                }
+                switch e.selfTest {
+                case .passed(let m): Label(m, systemImage: "checkmark.circle.fill").foregroundStyle(.green)
+                case .warning(let m): Label(m, systemImage: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+                case .failed(let m): Label(m, systemImage: "xmark.octagon.fill").foregroundStyle(.red)
+                default: EmptyView()
+                }
+            }.frame(maxWidth: .infinity, alignment: .leading).padding(4)
         }
     }
 }

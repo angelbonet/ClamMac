@@ -35,13 +35,7 @@ Ve a **Cuarentena › Restaurar**. Si el fichero vuelve a detectarse en cada an�
 
 ## ¿Cómo sé que me protege?
 
-Prueba con el fichero de test **EICAR** (inofensivo, reconocido por todos los antivirus). En una carpeta vigilada:
-
-```bash
-printf '%s' 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > ~/Downloads/eicar-test.com
-```
-
-En unos segundos debe desaparecer de Descargas y aparecer en **Cuarentena** como `Eicar-Test-Signature`. Elimínalo desde la app.
+Pulsa **Estado › Probar protección**, o usa el fichero de prueba EICAR: [guía completa](prueba.md).
 
 ## La app no se actualiza sola
 

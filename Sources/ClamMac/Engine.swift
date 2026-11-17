@@ -4,6 +4,11 @@ import UserNotifications
 import ServiceManagement
 import ClamMacCore
 
+enum SelfTest: Equatable {
+    case idle, running
+    case passed(String), warning(String), failed(String)
+}
+
 struct LogEntry: Identifiable {
     let id = UUID()
     let date = Date()
@@ -22,6 +27,7 @@ final class Engine: ObservableObject {
     @Published var lastReport: ScanReport?
     @Published var hasFullDiskAccess = true
     @Published var engineInstalled = ClamPaths.clamscan != nil
+    @Published var selfTest: SelfTest = .idle
     @Published var availableUpdate: ReleaseInfo?
     @Published var updateStatus: String?     // mensaje de la última búsqueda de versiones
 
@@ -62,6 +68,9 @@ final class Engine: ObservableObject {
         }
         minuteTick()
         add("ClamMac \(currentVersion) iniciado")
+        if ProcessInfo.processInfo.environment["CLAMMAC_AUTOSELFTEST"] == "1" {      // solo pruebas
+            await runSelfTest(); add("AUTOSELFTEST: \(selfTest)"); shutdown(); NSApp.terminate(nil)
+        }
     }
 
     func startDaemon() async {
@@ -111,6 +120,7 @@ final class Engine: ObservableObject {
                 catch { action = "no se pudo mover a cuarentena: \(error.localizedDescription)" }
             }
             let name = (t.path as NSString).lastPathComponent
+            if TestFile.isTestFile(path: t.path) { add("PRUEBA: detectado \(t.signature) en \(name) — \(action)"); continue }
             add("AMENAZA \(t.signature) en \(name) — \(action)", alert: true)
             notify(title: "Amenaza detectada", body: "\(name): \(t.signature) (\(action))")
         }
@@ -172,6 +182,52 @@ final class Engine: ObservableObject {
                 Task { await updateSignatures(); await scan(folders: s.folders) }
             }
         }
+    }
+
+    // MARK: autoprueba (fichero EICAR)
+    /// Crea un fichero EICAR en una carpeta vigilada y comprueba que ClamMac lo detecta y lo aparta.
+    func runSelfTest() async {
+        guard selfTest != .running, busy == nil else { return }
+        selfTest = .running
+        add("Prueba de protección iniciada")
+        let folder = settings.realtimeEnabled
+            ? settings.watchedFolders.first(where: { $0.enabled && FileManager.default.fileExists(atPath: $0.path) })?.path : nil
+        guard let folder else {
+            // Sin vigilancia: solo se puede probar el motor, no la protección automática.
+            let tmp = FileManager.default.temporaryDirectory.path
+            guard let p = try? TestFile.create(in: tmp) else { selfTest = .failed("No se pudo crear el fichero de prueba."); return }
+            defer { try? FileManager.default.removeItem(atPath: p) }
+            let r = await scanner.scan(files: [p])
+            if let e = r.engineError { selfTest = .failed("Error del motor: \(e)") }
+            else if r.threats.isEmpty { selfTest = .failed("El motor NO detectó el fichero de prueba. Actualiza las firmas y reinstala ClamAV.") }
+            else { selfTest = .warning("El motor detecta amenazas, pero la vigilancia de carpetas está desactivada: no se protegería automáticamente. Actívala en Vigilancia.") }
+            add("Prueba de protección: \(selfTest)")
+            return
+        }
+        let path: String
+        do { path = try TestFile.create(in: folder) } catch {
+            selfTest = .failed("No se pudo crear el fichero de prueba en \((folder as NSString).abbreviatingWithTildeInPath): \(error.localizedDescription)"); return
+        }
+        let name = (path as NSString).lastPathComponent
+        for _ in 0..<40 {                                     // hasta ~40 s
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            let item = quarantine.list().first { ($0.originalPath as NSString).lastPathComponent == name }
+            let gone = !FileManager.default.fileExists(atPath: path)
+            if let item {                                      // detectado y apartado: limpiar la prueba
+                try? quarantine.delete(item); refreshQuarantine()
+                selfTest = .passed("Todo funciona: ClamMac detectó el fichero de prueba en \((folder as NSString).abbreviatingWithTildeInPath) y lo apartó a cuarentena.")
+                add("Prueba de protección superada"); return
+            }
+            if gone && !settings.autoQuarantine { break }      // alguien lo borró: no se puede concluir nada
+            if !settings.autoQuarantine, log.contains(where: { $0.text.contains(name) && $0.text.hasPrefix("PRUEBA") }) {
+                try? FileManager.default.removeItem(atPath: path)
+                selfTest = .passed("Todo funciona: ClamMac detectó el fichero de prueba. (La cuarentena automática está desactivada, por eso solo se avisa.)")
+                add("Prueba de protección superada"); return
+            }
+        }
+        try? FileManager.default.removeItem(atPath: path)
+        selfTest = .failed("ClamMac no detectó el fichero de prueba en 40 s. Revisa: 1) el permiso de Acceso total al disco, 2) que la carpeta esté vigilada y activada, 3) que las firmas estén descargadas.")
+        add("Prueba de protección FALLIDA", alert: true)
     }
 
     // MARK: cuarentena

@@ -1,6 +1,6 @@
 # CLAUDE.md — ClamMac
 
-App nativa de barra de menú (SwiftUI, macOS 14+, solo arm64 por ahora) que es la interfaz del ClamAV de Homebrew. Equivalente de ClamGuard (Windows). Autor: Ángel Bonet · ABDatabase. Docs: https://angelbonet.github.io/ClamMac/
+App nativa de barra de menú (SwiftUI, macOS 14+, binario universal arm64 + x86_64) que es la interfaz del ClamAV de Homebrew. Equivalente de ClamGuard (Windows). Autor: Ángel Bonet · ABDatabase. Docs: https://angelbonet.github.io/ClamMac/
 
 ## Estructura
 - `Sources/ClamMacCore` lógica testeable · `Sources/ClamMac` app (Engine = orquestador, Views, ClamMacApp).
@@ -13,9 +13,10 @@ App nativa de barra de menú (SwiftUI, macOS 14+, solo arm64 por ahora) que es l
 - `clamscan --version` imprime la fecha de las firmas en **hora local** (no UTC).
 - Ajustes (`AppSettings`) con decodificación tolerante: al añadir un campo hay que añadirlo también a `CodingKeys` e `init(from:)`, o se pierden ajustes antiguos.
 - **Pruebas aisladas**: usar `CLAMMAC_DATA_DIR`; sin él una instancia de prueba comparte datos y mata el `clamd` de la app real. Otras variables de prueba: `CLAMMAC_FAKE_VERSION`, `CLAMMAC_AUTOINSTALL`, `CLAMMAC_UPDATE_NO_RELAUNCH`, `CLAMMAC_LIVE`.
+- Autoprueba de la app: fichero EICAR (`TestFile`) → botón «Probar protección»; gancho de pruebas `CLAMMAC_AUTOSELFTEST=1`. Hay ZIP descargable en `docs/descargas/`.
 - Las versiones <1.0.2 no tienen autoactualización; el cambio de versión depende del código de la versión *instalada*.
 - El `swift`/`git` del PATH deben ser los modernos (Xcode / Homebrew); en esta máquina hubo restos antiguos.
 - Los iconos derivan de la mascota de ClamAV (marca de Cisco): no cubiertos por la licencia MIT.
 
 ## Pendiente
-- Binario universal (Intel) · retomar capturas de pantalla de la 1.0.2 para la documentación (Estado, Cuarentena, Firmas).
+- Retomar capturas de pantalla de la 1.0.2 para la documentación (Estado, Cuarentena, Firmas).
