@@ -4,13 +4,11 @@
 
 Concédelo siguiendo la [guía de permisos](permisos.md). Después cierra y abre ClamMac.
 
-## «ClamAV no está instalado»
+## «ClamMac todavía NO te protege» (falta ClamAV)
 
-```bash
-brew install clamav
-```
+En *Estado* pulsa **Instalar ClamAV ahora**. Si en su lugar te explica cómo instalar Homebrew, sigue esos pasos (es lo que ocurre si `brew` da «command not found»). ClamMac detecta la instalación solo; no hace falta reabrirlo.
 
-Después reabre ClamMac.
+A mano también vale: `brew install clamav`.
 
 ## «clamd no arrancó; se usará clamscan»
 

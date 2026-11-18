@@ -73,25 +73,59 @@ struct StatusView: View {
                 .padding(12).frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.accentColor.opacity(0.15), in: RoundedRectangle(cornerRadius: 8))
             }
-            if !e.engineInstalled { Banner(text: "ClamAV no está instalado. En Terminal: brew install clamav", color: .red) }
+            if !e.engineInstalled { EngineMissingCard() }
             if !e.hasFullDiskAccess {
                 Banner(text: "Falta Acceso total al disco: macOS ocultará ficheros al análisis. Ajustes del Sistema → Privacidad y seguridad → Acceso total al disco → añade ClamMac.", color: .orange)
                 Button("Abrir ajustes de privacidad") {
                     NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!)
                 }
             }
-            Row("Vigilancia", e.settings.realtimeEnabled ? "Activa (\(e.settings.watchedFolders.filter(\.enabled).count) carpeta(s))" : "Desactivada")
+            Row("Vigilancia", !e.engineInstalled ? "⚠️ Sin protección: falta ClamAV" : e.settings.realtimeEnabled ? "Activa (\(e.settings.watchedFolders.filter(\.enabled).count) carpeta(s))" : "Desactivada")
             Row("Motor", e.daemonReady ? "clamd en marcha (rápido)" : "clamscan bajo demanda")
             Row("Firmas", e.dbInfo.map { "v\($0.signatureVersion) · \($0.displayDate)" } ?? "—")
             Row("Actualización", e.settings.updateMode == .automatic ? "Automática cada \(e.settings.updateIntervalHours) h" : "Manual")
             Row("En cuarentena", "\(e.quarantined.count) elemento(s)")
             if let b = e.busy { HStack { ProgressView().controlSize(.small); Text(b) } }
             HStack {
-                Button("Análisis rápido") { Task { await e.quickScan() } }.disabled(e.busy != nil)
-                Button("Actualizar firmas") { Task { await e.updateSignatures() } }.disabled(e.busy != nil)
+                Button("Análisis rápido") { Task { await e.quickScan() } }.disabled(e.busy != nil || !e.engineInstalled)
+                Button("Actualizar firmas") { Task { await e.updateSignatures() } }.disabled(e.busy != nil || !e.engineInstalled)
             }
             SelfTestCard()
         }
+    }
+}
+
+struct EngineMissingCard: View {
+    @EnvironmentObject var e: Engine
+    private let brewCmd = "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Label("ClamMac todavía NO te protege: falta el motor antivirus (ClamAV)", systemImage: "exclamationmark.shield.fill")
+                .font(.headline).foregroundStyle(.red)
+            if e.hasBrew {
+                Text("ClamMac puede instalarlo por ti. Tarda unos minutos y no tienes que hacer nada más.").font(.callout)
+                HStack {
+                    Button("Instalar ClamAV ahora") { Task { await e.installEngine() } }
+                        .buttonStyle(.borderedProminent).disabled(e.installingEngine)
+                    if e.installingEngine { ProgressView().controlSize(.small); Text("Instalando… no cierres ClamMac").foregroundStyle(.secondary) }
+                }
+            } else {
+                Text("ClamAV se instala con Homebrew, que no está en este Mac. Dos pasos:").font(.callout)
+                Text("1. Abre **Terminal** (Spotlight → «Terminal») y pega este comando; te pedirá la contraseña del Mac:").font(.callout)
+                Text(brewCmd).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
+                    .padding(8).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.quaternary, in: RoundedRectangle(cornerRadius: 6))
+                HStack {
+                    Button("Copiar comando") { NSPasteboard.general.clearContents(); NSPasteboard.general.setString(brewCmd, forType: .string) }
+                    Button("Abrir Terminal") { NSWorkspace.shared.open(URL(fileURLWithPath: "/System/Applications/Utilities/Terminal.app")) }
+                    Link("Más información", destination: URL(string: "https://brew.sh/es")!)
+                }
+                Text("2. Cuando termine, vuelve aquí: ClamMac lo detecta solo y te mostrará el botón «Instalar ClamAV ahora».").font(.callout)
+            }
+            if let err = e.engineInstallError { Text(err).font(.caption).foregroundStyle(.red) }
+        }
+        .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
     }
 }
 
@@ -103,7 +137,7 @@ struct SelfTestCard: View {
                 Text("Crea un fichero de prueba EICAR en una carpeta vigilada y comprueba que ClamMac lo detecta y lo aparta. El fichero es **inofensivo**: es un texto estándar que todos los antivirus detectan a propósito.")
                     .font(.callout).foregroundStyle(.secondary)
                 HStack {
-                    Button("Probar protección") { Task { await e.runSelfTest() } }.disabled(e.busy != nil || e.selfTest == .running)
+                    Button("Probar protección") { Task { await e.runSelfTest() } }.disabled(e.busy != nil || e.selfTest == .running || !e.engineInstalled)
                     Link("¿Qué es EICAR?", destination: URL(string: "https://angelbonet.github.io/ClamMac/guia/prueba/")!)
                     if e.selfTest == .running { ProgressView().controlSize(.small); Text("Esperando la detección…").foregroundStyle(.secondary) }
                 }

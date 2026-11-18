@@ -18,6 +18,20 @@ public enum ClamPaths {
     public static var clamdscan: String? { binary("clamdscan") }
     public static var clamd: String? { binary("clamd") }
     public static var freshclam: String? { binary("freshclam") }
+    public static var brew: String? { binary("brew") }
+
+    /// Tras `brew install clamav` solo existe freshclam.conf.sample: crea el .conf (quitando la línea «Example»).
+    public static func ensureFreshclamConf() {
+        for p in prefixes {
+            let dir = "\(p)/etc/clamav"
+            let conf = "\(dir)/freshclam.conf", sample = conf + ".sample"
+            guard !FileManager.default.fileExists(atPath: conf),
+                  let text = try? String(contentsOfFile: sample, encoding: .utf8) else { continue }
+            let out = text.split(separator: "\n", omittingEmptySubsequences: false)
+                .filter { $0.trimmingCharacters(in: .whitespaces) != "Example" }.joined(separator: "\n")
+            try? out.write(toFile: conf, atomically: true, encoding: .utf8)
+        }
+    }
 
     /// Directorio de firmas de Homebrew (se reutiliza, no se duplica).
     public static var databaseDir: String {

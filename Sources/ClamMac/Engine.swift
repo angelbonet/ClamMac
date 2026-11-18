@@ -28,6 +28,10 @@ final class Engine: ObservableObject {
     @Published var hasFullDiskAccess = true
     @Published var engineInstalled = ClamPaths.clamscan != nil
     @Published var selfTest: SelfTest = .idle
+    @Published var installingEngine = false
+    @Published var engineInstallError: String?
+    @Published var hasBrew = ClamPaths.brew != nil
+    private var engineWatch: Timer?
     @Published var availableUpdate: ReleaseInfo?
     @Published var updateStatus: String?     // mensaje de la última búsqueda de versiones
 
@@ -58,7 +62,10 @@ final class Engine: ObservableObject {
 
     // MARK: arranque
     func start() async {
-        guard engineInstalled else { add("ClamAV no está instalado. Ejecuta: brew install clamav", alert: true); return }
+        guard engineInstalled else {
+            add("ClamAV no está instalado: ClamMac no protege hasta instalarlo", alert: true)
+            watchForEngine(); return
+        }
         noteVersionChange()
         dbInfo = await Updater.databaseInfo()
         if settings.useDaemon { await startDaemon() }
@@ -70,6 +77,42 @@ final class Engine: ObservableObject {
         add("ClamMac \(currentVersion) iniciado")
         if ProcessInfo.processInfo.environment["CLAMMAC_AUTOSELFTEST"] == "1" {      // solo pruebas
             await runSelfTest(); add("AUTOSELFTEST: \(selfTest)"); shutdown(); NSApp.terminate(nil)
+        }
+    }
+
+    /// Mientras falte ClamAV, comprueba cada 3 s si ya está (instalado por la app o a mano) y arranca la protección.
+    private func watchForEngine() {
+        engineWatch?.invalidate()
+        engineWatch = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] t in
+            Task { @MainActor in
+                guard let self else { return }
+                self.hasBrew = ClamPaths.brew != nil
+                guard ClamPaths.clamscan != nil, !self.installingEngine else { return }
+                t.invalidate(); self.engineWatch = nil
+                self.engineInstalled = true
+                self.add("ClamAV detectado: arrancando la protección")
+                await self.start()
+                await self.updateSignatures()
+            }
+        }
+    }
+
+    /// Instala ClamAV con Homebrew sin que el usuario tenga que abrir Terminal.
+    func installEngine() async {
+        guard let brew = ClamPaths.brew, !installingEngine else { return }
+        installingEngine = true; engineInstallError = nil
+        add("Instalando ClamAV con Homebrew (puede tardar unos minutos)…")
+        let cmd = "export HOMEBREW_NO_ANALYTICS=1 HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_NO_AUTO_UPDATE=1; '\(brew)' install clamav"
+        let r = await Shell.run("/bin/bash", ["-c", cmd], timeout: 1800)
+        installingEngine = false
+        if r.status == 0, ClamPaths.clamscan != nil {
+            add("ClamAV instalado correctamente")
+            // el temporizador de vigilancia lo detecta y arranca; si no estaba activo, lo forzamos
+            if engineWatch == nil { engineInstalled = true; await start(); await updateSignatures() }
+        } else {
+            let tail = (r.stdout + r.stderr).split(separator: "\n").suffix(3).joined(separator: " ")
+            engineInstallError = "No se pudo instalar ClamAV. \(tail)"
+            add(engineInstallError!, alert: true)
         }
     }
 

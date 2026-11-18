@@ -28,6 +28,7 @@ public enum Updater {
         guard let bin = ClamPaths.freshclam else {
             return UpdateResult(ok: false, updated: false, message: "freshclam no encontrado (brew install clamav)")
         }
+        ClamPaths.ensureFreshclamConf()
         var args: [String] = []
         for p in ClamPaths.prefixes {
             let conf = "\(p)/etc/clamav/freshclam.conf"
