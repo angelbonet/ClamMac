@@ -77,7 +77,7 @@ Casi siempre es una de estas tres causas:
 
 1. **Falta el permiso de «Acceso total al disco»** → [cómo concederlo](permisos.md). Sin él macOS oculta la carpeta y ClamMac no ve el fichero.
 2. **La carpeta no está vigilada** (o la vigilancia está desactivada) → pantalla *Vigilancia*.
-3. **No hay firmas** o ClamAV no está bien instalado → pantalla *Firmas › Actualizar ahora*, y `brew install clamav`.
+3. **No hay firmas** → pantalla *Firmas › Actualizar ahora* (hace falta conexión a internet). Si sigue sin descargarlas, comprueba en *Acerca de* que tienes la última versión de ClamMac: las anteriores a la 1.1.0 dependían de Homebrew y no funcionan en un Mac que no lo tenga.
 
 Más ayuda en [Problemas frecuentes](problemas.md).
 
