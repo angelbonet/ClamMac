@@ -8,6 +8,10 @@ Concédelo siguiendo la [guía de permisos](permisos.md). Después cierra y abre
 
 Desde la 1.1.0 el motor va dentro de la app, así que no debería ocurrir. Si aparece, la copia de ClamMac está incompleta o dañada: descarga el DMG de [Releases](https://github.com/angelbonet/ClamMac/releases/latest) e instálalo de nuevo.
 
+## La app tiene un icono de «prohibido» o no se abre
+
+Tu Mac tiene un macOS anterior a **13 (Ventura)**. Mira *menú Apple → Acerca de este Mac*. Si no se puede actualizar, ClamMac no es compatible con ese equipo: [requisitos del sistema](requisitos.md).
+
 ## «Todavía no hay firmas de virus»
 
 Pasa si la primera descarga falló por falta de internet. Conéctate y pulsa **Estado › Actualizar firmas**.

@@ -15,6 +15,6 @@ NOTES="${1:-ClamMac $VERSION}
 
 **SHA-256:** \`$SHA\`
 
-Firmado con Developer ID de Ángel Bonet (desarrollador independiente) y notarizado por Apple. Requiere macOS 14+. El motor antivirus ClamAV va incluido."
+Firmado con Developer ID de Ángel Bonet (desarrollador independiente) y notarizado por Apple. **Requiere macOS 13 (Ventura) o superior** (Apple Silicon o Intel). El motor antivirus ClamAV va incluido."
 gh release create "$TAG" "$DMG" --target "$(git rev-parse --abbrev-ref HEAD)" --title "ClamMac $VERSION" --notes "$NOTES" --latest
 echo "Publicada: $(gh release view "$TAG" --json url --jq .url)"

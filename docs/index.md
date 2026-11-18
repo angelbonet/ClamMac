@@ -31,7 +31,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 
 ## Requisitos
 
-- macOS 14 (Sonoma) o superior
+- **macOS 13 (Ventura) o superior** — no funciona en Monterey, Big Sur, Catalina ni anteriores ([comprueba tu Mac](guia/requisitos.md))
 - Mac con **Apple Silicon o Intel** (binario universal)
 - Nada más: el motor antivirus ClamAV **va incluido** en la app (no hace falta Homebrew ni Terminal)
 

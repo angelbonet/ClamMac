@@ -288,7 +288,7 @@ struct SettingsView: View {
             if e.settings.pushoverEnabled {
                 TextField("User key", text: $e.settings.pushoverUser).textFieldStyle(.roundedBorder).frame(width: 340)
                 SecureField("App token (se guarda en el llavero)", text: $token).textFieldStyle(.roundedBorder).frame(width: 340)
-                    .onChange(of: token) { _, v in Keychain.set(v, account: "pushover-token") }
+                    .onChange(of: token) { v in Keychain.set(v, account: "pushover-token") }
             }
             Divider()
             Toggle("Buscar nuevas versiones de ClamMac en GitHub (una vez al día)", isOn: $e.settings.autoCheckAppUpdates)
@@ -382,7 +382,7 @@ struct AboutView: View {
                 Link(destination: Dev.webURL) { Label("abdatabase.com", systemImage: "globe") }
             }
             Divider()
-            Text("Incluye el motor ClamAV 1.5.4 (licencia GPLv2). ").font(.caption).foregroundStyle(.secondary)
+            Text("Incluye el motor ClamAV 1.5.4 (licencia GPLv2). ").font(.caption).foregroundColor(.secondary)
             + Text("[Licencias y código fuente](https://angelbonet.github.io/ClamMac/licencias/)").font(.caption)
             Text("ClamAV® es una marca de Cisco Systems. ClamMac no está afiliado a Cisco ni a Apple.")
                 .font(.caption).foregroundStyle(.secondary)

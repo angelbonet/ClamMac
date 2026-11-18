@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.1.2] — 2026-11-18
+### Cambiado
+- **Requisito mínimo: macOS 13 (Ventura)** en lugar de macOS 14: la app y el motor ClamAV se han recompilado con ese mínimo, lo que añade los Mac Intel de 2017 en adelante que se quedaron en Ventura.
+### Añadido
+- Página «Requisitos del sistema» (versiones de macOS, Macs compatibles, espacio, cómo comprobarlo) y aviso de requisitos en el Léeme del DMG, el README y la web.
+
 ## [1.1.1] — 2026-11-18
 ### Cambiado
 - La app y el instalador se firman y notarizan con la cuenta de **Ángel Bonet (desarrollador independiente)**, ya no con INNOVAORTO AIE. Al instalarla por primera vez con esta firma macOS puede pedir de nuevo el permiso de *Acceso total al disco*.

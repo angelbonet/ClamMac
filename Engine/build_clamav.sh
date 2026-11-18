@@ -7,7 +7,8 @@ set -euo pipefail
 export PATH=/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 W="$ROOT/build/engine"; mkdir -p "$W/src"
-MIN=14.0
+MIN=13.0
+export MACOSX_DEPLOYMENT_TARGET=$MIN
 export RUSTUP_HOME="$W/rustup" CARGO_HOME="$W/cargo"
 RUSTBIN="$(ls -d "$RUSTUP_HOME"/toolchains/*/bin | head -1)"
 JOBS=$(sysctl -n hw.ncpu)

@@ -2,7 +2,7 @@
 
 ## Requisitos
 
-- macOS 14+ con **Xcode** (Swift 6.x). Comprueba que `swift --version` es el de Xcode.
+- macOS 14+ con **Xcode** (la app resultante funciona desde macOS 13) (Swift 6.x). Comprueba que `swift --version` es el de Xcode.
 - ClamAV (`brew install clamav`) para ejecutar los tests de detección.
 - Para construir la app: CMake, Ninja y Rust (`brew install cmake ninja rustup`); `Engine/build_clamav.sh` compila el motor (una vez) y `build_app.sh` lo incluye.
 - Python 3 con Pillow y numpy, solo para regenerar los iconos.

@@ -5,7 +5,7 @@ set -e
 cd "${0:A:h}"
 SIGN_HASH="DD3894D51C0CD7431CB40011799962688668037D"
 APP="build/ClamMac.app"
-VERSION="1.1.1"
+VERSION="1.1.2"
 
 swift build -c release --arch arm64 --arch x86_64
 BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/ClamMac
@@ -26,7 +26,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
  <key>CFBundlePackageType</key><string>APPL</string>
  <key>CFBundleShortVersionString</key><string>$VERSION</string>
  <key>CFBundleVersion</key><string>1</string>
- <key>LSMinimumSystemVersion</key><string>14.0</string>
+ <key>LSMinimumSystemVersion</key><string>13.0</string>
  <key>LSUIElement</key><true/>
  <key>NSHighResolutionCapable</key><true/>
  <key>NSHumanReadableCopyright</key><string>© Ángel Bonet · ABDatabase</string>

@@ -1,5 +1,8 @@
 # Instalación
 
+!!! warning "Requisito: macOS 13 (Ventura) o superior"
+    En un Mac con una versión anterior la app no se abre (verás el icono de «prohibido»). [Comprueba tu Mac](requisitos.md) antes de descargar.
+
 ## 1. El motor antivirus ya va incluido
 
 ClamMac lleva dentro el motor **ClamAV** (versión para Apple Silicon e Intel). **No tienes que instalar nada más**: ni Homebrew, ni Terminal.

@@ -2,7 +2,7 @@
 
 [![Documentación](https://img.shields.io/badge/docs-online-blue?logo=readthedocs)](https://angelbonet.github.io/ClamMac/)
 [![Última versión](https://img.shields.io/github/v/release/angelbonet/ClamMac?label=versi%C3%B3n)](https://github.com/angelbonet/ClamMac/releases/latest)
-[![macOS 14+](https://img.shields.io/badge/macOS-14%2B-lightgrey?logo=apple)](#requisitos)
+[![macOS 13+](https://img.shields.io/badge/macOS-13%2B-lightgrey?logo=apple)](#requisitos)
 [![Licencia](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 Antivirus para Mac basado en **ClamAV**, con interfaz nativa en la barra de menú. Vigila las carpetas que elijas (por defecto **Descargas**) y analiza todo lo que entra, mantiene al día la biblioteca de amenazas —de forma automática o manual—, aparta lo infectado a cuarentena y se actualiza a sí mismo con un clic.
@@ -33,7 +33,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 
 | Componente | Descripción | Enlace |
 |------------|-------------|--------|
-| macOS 14 (Sonoma) o superior | Sistema operativo | — |
+| **macOS 13 (Ventura) o superior** | Sistema operativo. **No funciona en macOS 12 o anterior** (Monterey, Big Sur, Catalina…) | [Requisitos y Macs compatibles](https://angelbonet.github.io/ClamMac/guia/requisitos/) |
 | Mac con **Apple Silicon o Intel** | Binario universal (`arm64` + `x86_64`) | — |
 | ClamAV | Motor antivirus: **va incluido** en ClamMac (universal, sin Homebrew ni Terminal) | [clamav.net](https://www.clamav.net/) · [licencias](https://angelbonet.github.io/ClamMac/licencias/) |
 | Conexión a Internet | Para descargar firmas y buscar versiones nuevas | — |
