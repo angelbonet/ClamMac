@@ -8,7 +8,7 @@ App nativa de barra de menú (SwiftUI, macOS 14+, binario universal arm64 + x86_
 - Documentación para usuarios y desarrollo en `docs/` (MkDocs Material → GitHub Pages, workflow `docs.yml`). Léeme del DMG: `Installer/Leeme.template.html`.
 
 ## Cosas que NO son obvias
-- **Firma por hash** (`SIGN_HASH`, certificado G2 de Innovaorto `F211AC…`) porque hay dos certificados con el mismo nombre. Notarización: perfil `notarytool` `cephaloplan` en el llavero. **Con la pantalla bloqueada, notarytool no lee el llavero** y falla: mantener desbloqueado.
+- **Firma por hash** (`SIGN_HASH` = `DD3894D5…`, «Developer ID Application: Angel Bonet Catalá», Team `P4CY35PF88`, cuenta PERSONAL; desde 1.1.1, antes Innovaorto `54HHDMD6T8`: el usuario no quiere Innovaorto en ClamMac). Notarización: perfil `cephaloplan` con `--team-id P4CY35PF88` (`NOTARY_TEAM`). `UpdateChecker.expectedTeamID` debe coincidir con el Team de firma: cambiarlo rompe la autoactualización desde versiones anteriores (hay que instalar a mano una vez). Con la pantalla bloqueada, notarytool no lee el llavero.
 - La app **no está sandboxeada** y necesita *Acceso total al disco*; sin él macOS oculta ficheros en silencio (por eso hay banner de aviso).
 - `clamscan --version` imprime la fecha de las firmas en **hora local** (no UTC).
 - Ajustes (`AppSettings`) con decodificación tolerante: al añadir un campo hay que añadirlo también a `CodingKeys` e `init(from:)`, o se pierden ajustes antiguos.
