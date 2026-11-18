@@ -7,7 +7,7 @@
 
 Antivirus para Mac basado en **ClamAV**, con interfaz nativa en la barra de menú. Vigila las carpetas que elijas (por defecto **Descargas**) y analiza todo lo que entra, mantiene al día la biblioteca de amenazas —de forma automática o manual—, aparta lo infectado a cuarentena y se actualiza a sí mismo con un clic.
 
-Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGuard) (Windows): una interfaz gráfica sencilla sobre el motor libre ClamAV, pensada para que cualquiera pueda usarla sin tocar la terminal.
+Es el equivalente para macOS de [ClamGuard](https://github.com/davidcasascompetenciadigital-prog/ClamGuard) (Windows), de David Casas M: una interfaz gráfica sencilla sobre el motor libre ClamAV, pensada para que cualquiera pueda usarla sin tocar la terminal.
 
 **[📖 Documentación completa](https://angelbonet.github.io/ClamMac/)**
 
@@ -93,9 +93,18 @@ pip install mkdocs-material
 mkdocs serve
 ```
 
+## Proyectos hermanos
+
+| Sistema | Proyecto | Autor |
+|---------|----------|-------|
+| 🍎 macOS | **ClamMac** (este) | Ángel Bonet · ABDatabase |
+| 🪟 Windows | [ClamGuard](https://github.com/davidcasascompetenciadigital-prog/ClamGuard) | David Casas M · Competencia_Digital |
+
+Misma idea —una interfaz gratuita, con protección residente y cuarentena, sobre el motor libre ClamAV—, una por sistema. Existe además un [fork de ClamGuard](https://github.com/angelbonet/ClamGuard) mantenido por Ángel Bonet.
+
 ## Créditos y licencia
 
-Código bajo **licencia MIT** (ver [LICENSE](LICENSE)). Idea inspirada en [ClamGuard](https://github.com/angelbonet/ClamGuard) para Windows.
+Código bajo **licencia MIT** (ver [LICENSE](LICENSE)). Idea inspirada en [ClamGuard](https://github.com/davidcasascompetenciadigital-prog/ClamGuard) para Windows, de David Casas M ([Competencia_Digital](https://www.youtube.com/@Competencia_Digital)); ClamMac está escrito desde cero en Swift y no contiene código de ClamGuard.
 
 ClamAV® y su mascota son marcas de Cisco Systems. ClamMac es un proyecto independiente, sin relación con Cisco ni con Apple, que solo es una interfaz para el ClamAV que tienes instalado. Los iconos derivan de la mascota de ClamAV y **no** están cubiertos por la licencia MIT.
 

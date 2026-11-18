@@ -4,6 +4,10 @@
 
 Interfaz de ClamMac: licencia **MIT**, © Ángel Bonet · ABDatabase. Los iconos derivan de la mascota de ClamAV (marca de Cisco) y no están cubiertos por la MIT.
 
+## Relación con ClamGuard (Windows)
+
+ClamMac nace de la idea de [ClamGuard](https://github.com/davidcasascompetenciadigital-prog/ClamGuard), de **David Casas M** ([Competencia_Digital](https://www.youtube.com/@Competencia_Digital)), publicado bajo CC BY-SA 4.0. ClamMac **no es un fork ni una obra derivada**: está escrito desde cero en Swift y no incluye código, texto ni recursos de ClamGuard, por lo que mantiene su propia licencia MIT. Son proyectos hermanos: ClamGuard para Windows, ClamMac para macOS.
+
 ## Componentes incluidos
 
 Desde la 1.1.0 ClamMac incluye el motor antivirus **ClamAV** sin modificar, compilado de forma estática para Apple Silicon e Intel:

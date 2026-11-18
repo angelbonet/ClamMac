@@ -6,7 +6,7 @@
 
 ClamMac vigila las carpetas que elijas —por defecto **Descargas**— y analiza todo lo que entra, mantiene al día la biblioteca de amenazas (de forma automática o manual), aparta lo infectado a cuarentena y se actualiza a sí mismo con un clic.
 
-Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGuard) (Windows): una interfaz gráfica sencilla sobre el motor libre **ClamAV**, para usarlo sin tocar la terminal.
+Es el equivalente para macOS de [ClamGuard](https://github.com/davidcasascompetenciadigital-prog/ClamGuard) (Windows), de David Casas M: una interfaz gráfica sencilla sobre el motor libre **ClamAV**, para usarlo sin tocar la terminal.
 
 ![Vigilancia de carpetas](img/vigilancia.png)
 
