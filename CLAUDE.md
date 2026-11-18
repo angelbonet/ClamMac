@@ -31,7 +31,8 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Sin motor incluido (builds de desarrollo) cae al de Homebrew. Pruebas de la app desde terminal NO pasan el autotest (TCC): instalar en /Applications y lanzar con `open -n --env ...`.
 
 ## Estado
-- Última versión publicada: **1.1.2** (mínimo macOS 13, firmada con la cuenta personal). **1.2.0** (idiomas) preparada en el árbol, sin publicar. Autoactualización de un clic verificada en uso real.
+- Última versión publicada: **1.2.0** (2026-11-18; 14 idiomas; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
+- Fork en la organización: https://github.com/fmwarriors/ClamMac (web https://fmwarriors.github.io/ClamMac/), como con rustdesk-manager. Sincronizar tras cada push: `gh repo sync fmwarriors/ClamMac` (y relanzar `Deploy Documentation` si cambian docs).
 
 ## Pendiente
 - Capturas nuevas (Estado, Cuarentena, Firmas) para la documentación; probar en un Mac Intel real.
