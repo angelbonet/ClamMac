@@ -1,6 +1,6 @@
 # CLAUDE.md — ClamMac
 
-App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS 14 como `onChange(_:_:)` de dos parámetros ni `Text.foregroundStyle`), binario universal arm64 + x86_64) que es la interfaz del ClamAV de Homebrew. Equivalente de ClamGuard (Windows). Autor: Ángel Bonet · ABDatabase. Docs: https://angelbonet.github.io/ClamMac/
+App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS 14 como `onChange(_:_:)` de dos parámetros ni `Text.foregroundStyle`), binario universal arm64 + x86_64) con el motor ClamAV incluido (sin Homebrew). Proyecto propio, NO es un fork: la idea nace de ClamGuard (Windows) de David Casas M (CC BY-SA 4.0; `davidcasascompetenciadigital-prog/ClamGuard`), sin compartir código; el MIT de ClamMac solo vale mientras siga así. Autor: Ángel Bonet · ABDatabase. Docs: https://angelbonet.github.io/ClamMac/
 
 ## Estructura
 - `Sources/ClamMacCore` lógica testeable · `Sources/ClamMac` app (Engine = orquestador, Views, ClamMacApp).
@@ -34,7 +34,13 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Última versión publicada: **1.2.0** (2026-11-18; 14 idiomas; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
 - Fork en la organización: https://github.com/fmwarriors/ClamMac (web https://fmwarriors.github.io/ClamMac/), como con rustdesk-manager. Sincronizar tras cada push: `gh repo sync fmwarriors/ClamMac` (y relanzar `Deploy Documentation` si cambian docs).
 
+- Solo se conserva en GitHub la release más reciente (y su etiqueta): al publicar una nueva, borrar la anterior (`gh release delete vX --cleanup-tag --yes`) si Ángel lo confirma.
+- `LICENSE` debe quedar como MIT estándar (GitHub lo reconoce); los avisos extra van en `NOTICE.md`.
+- Fork de ClamGuard `angelbonet/ClamGuard`: copia sin cambios del de David; decidir si se borra.
+
 ## Pendiente
-- Capturas nuevas (Estado, Cuarentena, Firmas) para la documentación; probar en un Mac Intel real.
-- Decisiones abiertas: licencia MIT, ZIP EICAR, logo abDatabase en «Acerca de».
-- Retomar capturas de pantalla de la 1.0.2 para la documentación (Estado, Cuarentena, Firmas).
+- Probar en un Mac Intel real, en macOS 13 y en una instalación limpia sin Homebrew; probar el cambio de idioma desde el selector.
+- Traducciones (13 idiomas nuevos) sin revisar por nativos.
+- Web y Léeme del DMG solo en español; «Acerca de» sin mención a ClamGuard (requiere versión nueva).
+- Capturas nuevas (Estado, Cuarentena, Firmas) para la documentación.
+- Decisiones abiertas: ZIP EICAR, logo abDatabase en «Acerca de».
