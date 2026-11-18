@@ -5,7 +5,7 @@ Swift Package con dos destinos: una librería con la lógica (`ClamMacCore`, tes
 ```
 ClamMac/
 ├── Package.swift
-├── Localization/             # es, ca, en, fr, de: <idioma>.lproj/Localizable.strings (clave = texto en español)
+├── Localization/             # 14 idiomas: <idioma>.lproj/Localizable.strings (clave = texto en español)
 ├── Sources/
 │   ├── ClamMacCore/              # lógica, sin interfaz
 │   │   ├── ClamPaths.swift       # localiza binarios de ClamAV y carpetas de datos
@@ -49,6 +49,6 @@ ClamMac/
 ## Idiomas
 
 - La clave de cada cadena es el **texto en español**. En vistas SwiftUI, `Text("…")`, `Button("…")`, etc. se traducen solos; para cadenas calculadas o con datos se usa `tr("clave %@", valor)` (marcadores `%@` texto y `%ld` enteros `Int`).
-- Una cadena nueva debe añadirse a los **cinco** `Localizable.strings`; el test `testTranslationsAreComplete` falla si falta alguna clave o si los marcadores no coinciden.
+- Una cadena nueva debe añadirse a **todos** los `Localizable.strings` (un directorio `.lproj` por idioma; añadir un idioma = añadir su carpeta y su caso en `Language`); el test `testTranslationsAreComplete` falla si falta alguna clave o si los marcadores no coinciden.
 - `build_app.sh` copia los `.lproj` a `Contents/Resources` y declara `CFBundleLocalizations` en el Info.plist. macOS elige el idioma según las preferencias del usuario; *Ajustes › Idioma* lo fija con `AppleLanguages` (efectivo al reiniciar).
 - Evita `Text(a ? "x" : "y")` con literales: el ternario es un `String` y no se traduce; usa `tr()`.

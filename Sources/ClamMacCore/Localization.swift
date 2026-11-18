@@ -10,7 +10,7 @@ public func tr(_ key: String, _ args: CVarArg...) -> String {
 
 /// Idiomas de la app. `auto` sigue el idioma del sistema.
 public enum Language: String, CaseIterable, Identifiable, Sendable {
-    case auto, es, ca, en, fr, de
+    case auto, es, ca, en, fr, de, it, ptPT = "pt-PT", ptBR = "pt-BR", nl, pl, ro, sv, el, cs
     public var id: String { rawValue }
 
     /// Nombre en su propio idioma (no se traduce); `auto` se muestra con la clave traducible «Automático (idioma del sistema)».
@@ -18,14 +18,16 @@ public enum Language: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .auto: nil
         case .es: "Español"; case .ca: "Català"; case .en: "English"; case .fr: "Français"; case .de: "Deutsch"
+        case .it: "Italiano"; case .ptPT: "Português (Portugal)"; case .ptBR: "Português (Brasil)"; case .nl: "Nederlands"
+        case .pl: "Polski"; case .ro: "Română"; case .sv: "Svenska"; case .el: "Ελληνικά"; case .cs: "Čeština"
         }
     }
 
     /// Idioma fijado por el usuario en la app (nil = seguir al sistema).
     public static var override: Language {
         let dom = Bundle.main.bundleIdentifier.flatMap { UserDefaults.standard.persistentDomain(forName: $0) }
-        guard let first = (dom?["AppleLanguages"] as? [String])?.first,
-              let l = Language(rawValue: String(first.prefix(2))), l != .auto else { return .auto }
+        guard let first = (dom?["AppleLanguages"] as? [String])?.first else { return .auto }
+        let l = Language(rawValue: first) ?? Language(rawValue: String(first.prefix(2))) ?? .auto
         return l
     }
 

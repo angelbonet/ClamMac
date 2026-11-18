@@ -223,12 +223,15 @@ final class CoreTests: XCTestCase {
     // MARK: idiomas
     func testTranslationsAreComplete() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-        let langs = ["es", "ca", "en", "fr", "de"]
+        let langs = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Localization").path)
+            .filter { $0.hasSuffix(".lproj") }.map { String($0.dropLast(6)) }.sorted()
+        XCTAssertGreaterThanOrEqual(langs.count, 14)
+        XCTAssertTrue(Language.allCases.filter { $0 != .auto }.allSatisfy { langs.contains($0.rawValue) }, "selector con idioma sin traducción")
         let tables = try langs.map { l -> [String: String] in
             let url = root.appendingPathComponent("Localization/\(l).lproj/Localizable.strings")
             return try XCTUnwrap(NSDictionary(contentsOf: url) as? [String: String], "falta o es inválido \(l)")
         }
-        let base = Set(tables[0].keys)
+        let base = Set(tables[langs.firstIndex(of: "es")!].keys)
         XCTAssertGreaterThan(base.count, 150)
         func marks(_ s: String) -> [String] { s.components(separatedBy: "%").dropFirst().map { String($0.prefix(while: { $0.isLetter || $0 == "@" }).prefix(2)) } }
         for (l, t) in zip(langs, tables) {

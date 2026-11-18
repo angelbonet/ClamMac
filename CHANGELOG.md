@@ -4,8 +4,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
 ## [1.2.0] — 2026-11-18
 ### Añadido
-- **Selección de idioma**: español, català, English, français y Deutsch. Por defecto sigue el idioma de macOS; se puede fijar en *Ajustes › Idioma* (se aplica al reiniciar). Traducidos menús, pantallas, avisos, registro y mensajes de error; fechas y horas según el idioma.
-- Prueba automática de que las cinco traducciones están completas (mismas claves y marcadores).
+- **Selección de idioma** en 14 idiomas: español, català, English, français, Deutsch, italiano, português (Portugal y Brasil), Nederlands, polski, română, svenska, ελληνικά y čeština. Por defecto sigue el idioma de macOS; se puede fijar en *Ajustes › Idioma* (se aplica al reiniciar). Traducidos menús, pantallas, avisos, registro y mensajes de error; fechas y horas según el idioma.
+- Prueba automática de que todas las traducciones están completas (mismas claves y marcadores).
 
 ## [1.1.2] — 2026-11-18
 ### Cambiado

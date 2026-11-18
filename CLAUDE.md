@@ -21,7 +21,7 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Los iconos derivan de la mascota de ClamAV (marca de Cisco): no cubiertos por la licencia MIT.
 
 ## Idiomas (desde 1.2.0)
-- es/ca/en/fr/de en `Localization/<id>.lproj/Localizable.strings`, clave = texto en español. SwiftUI traduce los literales; lo calculado usa `tr()` (en `Localization.swift`, marcadores `%@`/`%ld`). Evitar ternarios de literales en `Text`/`Button` (no se traducen). Test `testTranslationsAreComplete`.
+- 14 idiomas (es ca en fr de it pt-PT pt-BR nl pl ro sv el cs) en `Localization/<id>.lproj/Localizable.strings`, clave = texto en español. SwiftUI traduce los literales; lo calculado usa `tr()` (en `Localization.swift`, marcadores `%@`/`%ld`). Evitar ternarios de literales en `Text`/`Button` (no se traducen). Test `testTranslationsAreComplete`.
 - Selector en Ajustes (`Language.setOverride` → `AppleLanguages`, se aplica al reiniciar). Prueba de UI: `CLAMMAC_OPENWINDOW=1` abre la ventana al arrancar; capturar SOLO la ventana (`screencapture -l <id>`), nunca la pantalla completa.
 
 ## Motor incluido (desde 1.1.0)
