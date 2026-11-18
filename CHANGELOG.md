@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.2.0] — 2026-11-18
+### Añadido
+- **Selección de idioma**: español, català, English, français y Deutsch. Por defecto sigue el idioma de macOS; se puede fijar en *Ajustes › Idioma* (se aplica al reiniciar). Traducidos menús, pantallas, avisos, registro y mensajes de error; fechas y horas según el idioma.
+- Prueba automática de que las cinco traducciones están completas (mismas claves y marcadores).
+
 ## [1.1.2] — 2026-11-18
 ### Cambiado
 - **Requisito mínimo: macOS 13 (Ventura)** en lugar de macOS 14: la app y el motor ClamAV se han recompilado con ese mínimo, lo que añade los Mac Intel de 2017 en adelante que se quedaron en Ventura.

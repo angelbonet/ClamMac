@@ -27,6 +27,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/davidcasascompete
 - **Firmada y notarizada por Apple**: se abre con doble clic, sin avisos de Gatekeeper
 - **Aviso de permisos**: detecta cuándo falta el *Acceso total al disco* y lo dice claramente
 - **Botón «Probar protección»**: crea un fichero de prueba EICAR (inofensivo) y comprueba que ClamMac lo detecta y lo aparta
+- **5 idiomas**: español, català, English, français y Deutsch; se adapta al idioma del Mac y se puede cambiar en *Ajustes › Idioma*
 - **Binario universal**: Apple Silicon e Intel
 
 ## Requisitos

@@ -44,6 +44,7 @@ Ver [Actualizaciones](actualizaciones.md).
 ![Ajustes](../img/ajustes.png)
 
 - *Abrir ClamMac al iniciar sesión*.
+- *Idioma*: **Automático** (sigue el idioma del Mac) o **Español, Català, English, Français, Deutsch**. El cambio se aplica al reiniciar ClamMac (botón *Reiniciar ahora*). Si el idioma de tu Mac no está entre estos cinco, ClamMac se muestra en español.
 - *Mantener clamd en marcha*: análisis casi instantáneo a cambio de ~1 GB de RAM. Si lo desactivas, cada análisis carga las firmas desde cero (unos segundos más).
 - *Notificaciones del sistema* y **Pushover** (opcional).
 - *Buscar nuevas versiones de ClamMac en GitHub*.

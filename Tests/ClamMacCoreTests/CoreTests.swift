@@ -219,4 +219,35 @@ final class CoreTests: XCTestCase {
         for n in ["main.cvd", "daily.cld"] { fm.createFile(atPath: ClamPaths.databaseDir + "/" + n, contents: Data()) }
         XCTAssertTrue(ClamPaths.hasDatabase)
     }
+
+    // MARK: idiomas
+    func testTranslationsAreComplete() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let langs = ["es", "ca", "en", "fr", "de"]
+        let tables = try langs.map { l -> [String: String] in
+            let url = root.appendingPathComponent("Localization/\(l).lproj/Localizable.strings")
+            return try XCTUnwrap(NSDictionary(contentsOf: url) as? [String: String], "falta o es inválido \(l)")
+        }
+        let base = Set(tables[0].keys)
+        XCTAssertGreaterThan(base.count, 150)
+        func marks(_ s: String) -> [String] { s.components(separatedBy: "%").dropFirst().map { String($0.prefix(while: { $0.isLetter || $0 == "@" }).prefix(2)) } }
+        for (l, t) in zip(langs, tables) {
+            XCTAssertEqual(Set(t.keys), base, "\(l): claves distintas")
+            for (k, v) in t {
+                XCTAssertFalse(v.isEmpty, "\(l): vacía «\(k)»")
+                XCTAssertEqual(marks(k).map { $0.hasPrefix("ld") ? "ld" : "@" }, marks(v).map { $0.hasPrefix("ld") ? "ld" : "@" }, "\(l): marcadores distintos en «\(k)»")
+            }
+        }
+        // Toda cadena tr("…") sin interpolar del código tiene traducción.
+        let src = root.appendingPathComponent("Sources")
+        let files = FileManager.default.enumerator(at: src, includingPropertiesForKeys: nil)!.compactMap { $0 as? URL }.filter { $0.pathExtension == "swift" }
+        let re = try NSRegularExpression(pattern: #"\btr\(\s*"((?:[^"\\]|\\.)*)""#)
+        for f in files {
+            let text = try String(contentsOf: f, encoding: .utf8)
+            for m in re.matches(in: text, range: NSRange(text.startIndex..., in: text)) {
+                let key = (text as NSString).substring(with: m.range(at: 1)).replacingOccurrences(of: "\\\"", with: "\"")
+                XCTAssertTrue(base.contains(key), "sin traducción: «\(key)» en \(f.lastPathComponent)")
+            }
+        }
+    }
 }

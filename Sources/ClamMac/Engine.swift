@@ -43,6 +43,7 @@ final class Engine: ObservableObject {
     private var ticker: Timer?
     private var signalSources: [DispatchSourceSignal] = []
     private var lastScheduledMinute = ""
+    private var testDetections = Set<String>()      // ficheros de prueba EICAR ya detectados (para la autoprueba)
 
     init() {
         settings = AppSettings.load()
@@ -64,12 +65,12 @@ final class Engine: ObservableObject {
     // MARK: arranque
     func start() async {
         guard engineInstalled else {
-            add("ClamAV no está instalado: ClamMac no protege hasta instalarlo", alert: true)
+            add(tr("ClamAV no está instalado: ClamMac no protege hasta instalarlo"), alert: true)
             watchForEngine(); return
         }
         noteVersionChange()
         if !ClamPaths.hasDatabase {          // primera vez con el motor incluido: descarga de firmas antes de arrancar
-            add("Primera ejecución: preparando las firmas de ClamAV (puede tardar unos minutos)…")
+            add(tr("Primera ejecución: preparando las firmas de ClamAV (puede tardar unos minutos)…"))
             await updateSignatures()
         }
         hasSignatures = ClamPaths.hasDatabase
@@ -80,7 +81,7 @@ final class Engine: ObservableObject {
             Task { @MainActor in self?.minuteTick() }
         }
         minuteTick()
-        add("ClamMac \(currentVersion) iniciado")
+        add(tr("ClamMac %@ iniciado", currentVersion))
         if ProcessInfo.processInfo.environment["CLAMMAC_AUTOSELFTEST"] == "1" {      // solo pruebas
             await runSelfTest(); add("AUTOSELFTEST: \(selfTest)"); shutdown(); NSApp.terminate(nil)
         }
@@ -96,7 +97,7 @@ final class Engine: ObservableObject {
                 guard ClamPaths.clamscan != nil, !self.installingEngine else { return }
                 t.invalidate(); self.engineWatch = nil
                 self.engineInstalled = true
-                self.add("ClamAV detectado: arrancando la protección")
+                self.add(tr("ClamAV detectado: arrancando la protección"))
                 await self.start()
                 await self.updateSignatures()
             }
@@ -107,17 +108,17 @@ final class Engine: ObservableObject {
     func installEngine() async {
         guard let brew = ClamPaths.brew, !installingEngine else { return }
         installingEngine = true; engineInstallError = nil
-        add("Instalando ClamAV con Homebrew (puede tardar unos minutos)…")
+        add(tr("Instalando ClamAV con Homebrew (puede tardar unos minutos)…"))
         let cmd = "export HOMEBREW_NO_ANALYTICS=1 HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_NO_AUTO_UPDATE=1; '\(brew)' install clamav"
         let r = await Shell.run("/bin/bash", ["-c", cmd], timeout: 1800)
         installingEngine = false
         if r.status == 0, ClamPaths.clamscan != nil {
-            add("ClamAV instalado correctamente")
+            add(tr("ClamAV instalado correctamente"))
             // el temporizador de vigilancia lo detecta y arranca; si no estaba activo, lo forzamos
             if engineWatch == nil { engineInstalled = true; await start(); await updateSignatures() }
         } else {
             let tail = (r.stdout + r.stderr).split(separator: "\n").suffix(3).joined(separator: " ")
-            engineInstallError = "No se pudo instalar ClamAV. \(tail)"
+            engineInstallError = tr("No se pudo instalar ClamAV. %@", tail)
             add(engineInstallError!, alert: true)
         }
     }
@@ -125,7 +126,7 @@ final class Engine: ObservableObject {
     func startDaemon() async {
         daemon.start()
         daemonReady = await daemon.waitUntilReady()
-        add(daemonReady ? "clamd listo (análisis instantáneo)" : "clamd no arrancó; se usará clamscan", alert: !daemonReady)
+        add(daemonReady ? tr("clamd listo (análisis instantáneo)") : tr("clamd no arrancó; se usará clamscan"), alert: !daemonReady)
     }
 
     private func settingsChanged(old: AppSettings) {
@@ -141,7 +142,7 @@ final class Engine: ObservableObject {
     // MARK: vigilancia
     func applyWatcher() {
         watcher?.stop(); watcher = nil
-        guard settings.realtimeEnabled else { add("Vigilancia desactivada"); return }
+        guard settings.realtimeEnabled else { add(tr("Vigilancia desactivada")); return }
         let paths = settings.watchedFolders.filter(\.enabled).map(\.path)
         guard !paths.isEmpty else { return }
         let w = FolderWatcher(excludeExtensions: settings.excludeExtensions) { [weak self] files in
@@ -149,29 +150,29 @@ final class Engine: ObservableObject {
         }
         w.start(paths: paths)
         watcher = w
-        add("Vigilando: " + paths.map { ($0 as NSString).abbreviatingWithTildeInPath }.joined(separator: ", "))
+        add(tr("Vigilando: %@", paths.map { ($0 as NSString).abbreviatingWithTildeInPath }.joined(separator: ", ")))
     }
 
     func handleNewFiles(_ files: [String]) async {
         let report = await scanner.scan(files: files)
-        if let e = report.engineError { add("Error del motor: \(e)", alert: true); return }
-        if report.permissionDenied > 0 { checkFullDiskAccess(); add("\(report.permissionDenied) fichero(s) sin permiso de lectura", alert: true) }
+        if let e = report.engineError { add(tr("Error del motor: %@", e), alert: true); return }
+        if report.permissionDenied > 0 { checkFullDiskAccess(); add(tr("%ld fichero(s) sin permiso de lectura", report.permissionDenied), alert: true) }
         if report.threats.isEmpty {
-            add("Analizado: " + files.map { ($0 as NSString).lastPathComponent }.joined(separator: ", "))
+            add(tr("Analizado: %@", files.map { ($0 as NSString).lastPathComponent }.joined(separator: ", ")))
         } else { await handleThreats(report.threats) }
     }
 
     private func handleThreats(_ threats: [Threat]) async {
         for t in threats {
-            var action = "sin mover"
+            var action = tr("sin mover")
             if settings.autoQuarantine {
-                do { try quarantine.add(path: t.path, signature: t.signature); action = "enviado a cuarentena" }
-                catch { action = "no se pudo mover a cuarentena: \(error.localizedDescription)" }
+                do { try quarantine.add(path: t.path, signature: t.signature); action = tr("enviado a cuarentena") }
+                catch { action = tr("no se pudo mover a cuarentena: %@", error.localizedDescription) }
             }
             let name = (t.path as NSString).lastPathComponent
-            if TestFile.isTestFile(path: t.path) { add("PRUEBA: detectado \(t.signature) en \(name) — \(action)"); continue }
-            add("AMENAZA \(t.signature) en \(name) — \(action)", alert: true)
-            notify(title: "Amenaza detectada", body: "\(name): \(t.signature) (\(action))")
+            if TestFile.isTestFile(path: t.path) { testDetections.insert(name); add(tr("PRUEBA: detectado %@ en %@ — %@", t.signature, name, action)); continue }
+            add(tr("AMENAZA %@ en %@ — %@", t.signature, name, action), alert: true)
+            notify(title: tr("Amenaza detectada"), body: "\(name): \(t.signature) (\(action))")
         }
         refreshQuarantine()
     }
@@ -184,27 +185,27 @@ final class Engine: ObservableObject {
 
     func scan(folders: [String]) async {
         guard busy == nil else { return }
-        busy = "Analizando…"
-        add("Análisis iniciado: \(folders.joined(separator: ", "))")
+        busy = tr("Analizando…")
+        add(tr("Análisis iniciado: %@", folders.joined(separator: ", ")))
         let r = await scanner.scan(folders: folders)
         busy = nil
         lastReport = r
-        if let e = r.engineError { add("Error del motor: \(e)", alert: true); return }
+        if let e = r.engineError { add(tr("Error del motor: %@", e), alert: true); return }
         if r.permissionDenied > 0 { checkFullDiskAccess() }
-        add("Análisis terminado: \(r.scannedFiles) ficheros, \(r.threats.count) amenaza(s)"
-            + (r.permissionDenied > 0 ? ", \(r.permissionDenied) sin permiso" : ""), alert: !r.clean)
+        add(tr("Análisis terminado: %ld ficheros, %ld amenaza(s)", r.scannedFiles, r.threats.count)
+            + (r.permissionDenied > 0 ? tr(", %ld sin permiso", r.permissionDenied) : ""), alert: !r.clean)
         if !r.threats.isEmpty { await handleThreats(r.threats) }
-        else if settings.notificationsEnabled { notify(title: "Análisis terminado", body: "\(r.scannedFiles) ficheros, sin amenazas") }
+        else if settings.notificationsEnabled { notify(title: tr("Análisis terminado"), body: tr("%ld ficheros, sin amenazas", r.scannedFiles)) }
     }
 
     // MARK: firmas
     func updateSignatures() async {
         guard busy == nil else { return }
-        busy = "Actualizando firmas…"
+        busy = tr("Actualizando firmas…")
         let r = await Updater.updateNow()
         busy = nil
         settings.lastUpdateCheck = Date()
-        add("Firmas: \(r.message)", alert: !r.ok)
+        add(tr("Firmas: %@", r.message), alert: !r.ok)
         if r.updated { daemon.reload() }
         hasSignatures = ClamPaths.hasDatabase
         dbInfo = await Updater.databaseInfo()
@@ -239,24 +240,24 @@ final class Engine: ObservableObject {
     func runSelfTest() async {
         guard selfTest != .running, busy == nil else { return }
         selfTest = .running
-        add("Prueba de protección iniciada")
+        add(tr("Prueba de protección iniciada"))
         let folder = settings.realtimeEnabled
             ? settings.watchedFolders.first(where: { $0.enabled && FileManager.default.fileExists(atPath: $0.path) })?.path : nil
         guard let folder else {
             // Sin vigilancia: solo se puede probar el motor, no la protección automática.
             let tmp = FileManager.default.temporaryDirectory.path
-            guard let p = try? TestFile.create(in: tmp) else { selfTest = .failed("No se pudo crear el fichero de prueba."); return }
+            guard let p = try? TestFile.create(in: tmp) else { selfTest = .failed(tr("No se pudo crear el fichero de prueba.")); return }
             defer { try? FileManager.default.removeItem(atPath: p) }
             let r = await scanner.scan(files: [p])
-            if let e = r.engineError { selfTest = .failed("Error del motor: \(e)") }
-            else if r.threats.isEmpty { selfTest = .failed("El motor NO detectó el fichero de prueba. Actualiza las firmas y reinstala ClamAV.") }
-            else { selfTest = .warning("El motor detecta amenazas, pero la vigilancia de carpetas está desactivada: no se protegería automáticamente. Actívala en Vigilancia.") }
+            if let e = r.engineError { selfTest = .failed(tr("Error del motor: %@", e)) }
+            else if r.threats.isEmpty { selfTest = .failed(tr("El motor NO detectó el fichero de prueba. Actualiza las firmas y reinstala ClamAV.")) }
+            else { selfTest = .warning(tr("El motor detecta amenazas, pero la vigilancia de carpetas está desactivada: no se protegería automáticamente. Actívala en Vigilancia.")) }
             add("Prueba de protección: \(selfTest)")
             return
         }
         let path: String
         do { path = try TestFile.create(in: folder) } catch {
-            selfTest = .failed("No se pudo crear el fichero de prueba en \((folder as NSString).abbreviatingWithTildeInPath): \(error.localizedDescription)"); return
+            selfTest = .failed(tr("No se pudo crear el fichero de prueba en %@: %@", (folder as NSString).abbreviatingWithTildeInPath, error.localizedDescription)); return
         }
         let name = (path as NSString).lastPathComponent
         for _ in 0..<40 {                                     // hasta ~40 s
@@ -265,25 +266,25 @@ final class Engine: ObservableObject {
             let gone = !FileManager.default.fileExists(atPath: path)
             if let item {                                      // detectado y apartado: limpiar la prueba
                 try? quarantine.delete(item); refreshQuarantine()
-                selfTest = .passed("Todo funciona: ClamMac detectó el fichero de prueba en \((folder as NSString).abbreviatingWithTildeInPath) y lo apartó a cuarentena.")
-                add("Prueba de protección superada"); return
+                selfTest = .passed(tr("Todo funciona: ClamMac detectó el fichero de prueba en %@ y lo apartó a cuarentena.", (folder as NSString).abbreviatingWithTildeInPath))
+                add(tr("Prueba de protección superada")); return
             }
             if gone && !settings.autoQuarantine { break }      // alguien lo borró: no se puede concluir nada
-            if !settings.autoQuarantine, log.contains(where: { $0.text.contains(name) && $0.text.hasPrefix("PRUEBA") }) {
+            if !settings.autoQuarantine, testDetections.contains(name) {
                 try? FileManager.default.removeItem(atPath: path)
-                selfTest = .passed("Todo funciona: ClamMac detectó el fichero de prueba. (La cuarentena automática está desactivada, por eso solo se avisa.)")
-                add("Prueba de protección superada"); return
+                selfTest = .passed(tr("Todo funciona: ClamMac detectó el fichero de prueba. (La cuarentena automática está desactivada, por eso solo se avisa.)"))
+                add(tr("Prueba de protección superada")); return
             }
         }
         try? FileManager.default.removeItem(atPath: path)
-        selfTest = .failed("ClamMac no detectó el fichero de prueba en 40 s. Revisa: 1) el permiso de Acceso total al disco, 2) que la carpeta esté vigilada y activada, 3) que las firmas estén descargadas.")
-        add("Prueba de protección FALLIDA", alert: true)
+        selfTest = .failed(tr("ClamMac no detectó el fichero de prueba en 40 s. Revisa: 1) el permiso de Acceso total al disco, 2) que la carpeta esté vigilada y activada, 3) que las firmas estén descargadas."))
+        add(tr("Prueba de protección FALLIDA"), alert: true)
     }
 
     // MARK: cuarentena
     func refreshQuarantine() { quarantined = quarantine.list() }
-    func restore(_ i: QuarantineItem) { do { let p = try quarantine.restore(i); add("Restaurado: \(p)") } catch { add("No se pudo restaurar: \(error.localizedDescription)", alert: true) }; refreshQuarantine() }
-    func deleteQuarantined(_ i: QuarantineItem) { do { try quarantine.delete(i); add("Eliminado de cuarentena: \((i.originalPath as NSString).lastPathComponent)") } catch { add("No se pudo eliminar: \(error.localizedDescription)", alert: true) }; refreshQuarantine() }
+    func restore(_ i: QuarantineItem) { do { let p = try quarantine.restore(i); add(tr("Restaurado: %@", p)) } catch { add(tr("No se pudo restaurar: %@", error.localizedDescription), alert: true) }; refreshQuarantine() }
+    func deleteQuarantined(_ i: QuarantineItem) { do { try quarantine.delete(i); add(tr("Eliminado de cuarentena: %@", (i.originalPath as NSString).lastPathComponent)) } catch { add(tr("No se pudo eliminar: %@", error.localizedDescription), alert: true) }; refreshQuarantine() }
 
     // MARK: sistema
     func checkFullDiskAccess() {
@@ -296,7 +297,7 @@ final class Engine: ObservableObject {
         get { SMAppService.mainApp.status == .enabled }
         set {
             do { if newValue { try SMAppService.mainApp.register() } else { try SMAppService.mainApp.unregister() } }
-            catch { add("Inicio automático: \(error.localizedDescription)", alert: true) }
+            catch { add(tr("Inicio automático: %@", error.localizedDescription), alert: true) }
             objectWillChange.send()
         }
     }
@@ -331,8 +332,8 @@ final class Engine: ObservableObject {
         guard ProcessInfo.processInfo.environment["CLAMMAC_FAKE_VERSION"] == nil else { return }
         let now = currentVersion
         if let last = settings.lastRunVersion, UpdateChecker.isNewer(now, than: last) {
-            add("ClamMac se ha actualizado de \(last) a \(now)")
-            notify(title: "ClamMac actualizada", body: "Ahora usas la versión \(now). La protección está activa.")
+            add(tr("ClamMac se ha actualizado de %@ a %@", last, now))
+            notify(title: tr("ClamMac actualizada"), body: tr("Ahora usas la versión %@. La protección está activa.", now))
         }
         if settings.lastRunVersion != now { settings.lastRunVersion = now }
     }
@@ -350,11 +351,11 @@ final class Engine: ObservableObject {
             settings.lastAppUpdateCheck = Date()
             availableUpdate = rel
             if let r = rel {
-                updateStatus = "Hay una versión nueva: \(r.version)"
-                add("Nueva versión de ClamMac disponible: \(r.version)")
-                notify(title: "ClamMac \(r.version) disponible", body: "Ábrelo para actualizarla con un clic.")
+                updateStatus = tr("Hay una versión nueva: %@", r.version)
+                add(tr("Nueva versión de ClamMac disponible: %@", r.version))
+                notify(title: tr("ClamMac %@ disponible", r.version), body: tr("Ábrelo para actualizarla con un clic."))
                 if ProcessInfo.processInfo.environment["CLAMMAC_AUTOINSTALL"] == "1" { await installAppUpdate() }   // solo pruebas
-            } else { updateStatus = "ClamMac \(currentVersion) está al día"; if manual { add(updateStatus!) } }
+            } else { updateStatus = tr("ClamMac %@ está al día", currentVersion); if manual { add(updateStatus!) } }
         } catch { updateStatus = error.localizedDescription; if manual { add(error.localizedDescription, alert: true) } }
     }
 
@@ -363,14 +364,14 @@ final class Engine: ObservableObject {
 
     func installAppUpdate() async {
         guard let rel = availableUpdate, busy == nil else { return }
-        busy = "Descargando ClamMac \(rel.version)…"
+        busy = tr("Descargando ClamMac %@…", rel.version)
         do {
             let dmg = try await UpdateChecker.downloadAndVerify(rel)
             if canSelfUpdate {
-                busy = "Preparando la actualización…"
+                busy = tr("Preparando la actualización…")
                 let newApp = try await SelfUpdater.prepareNewApp(from: dmg, expectedVersion: rel.version)
                 try? FileManager.default.removeItem(at: dmg)
-                add("ClamMac \(rel.version) verificada. Se reiniciará sola en unos segundos.")
+                add(tr("ClamMac %@ verificada. Se reiniciará sola en unos segundos.", rel.version))
                 let noRelaunch = ProcessInfo.processInfo.environment["CLAMMAC_UPDATE_NO_RELAUNCH"] == "1"   // solo pruebas
                 try SelfUpdater.launchHelper(newApp: newApp, dest: Bundle.main.bundleURL, noRelaunch: noRelaunch)
                 shutdown()
@@ -378,12 +379,20 @@ final class Engine: ObservableObject {
                 return
             }
             // Ubicación sin permiso de escritura (p. ej. ejecutada desde el DMG): se abre el DMG y se explica el paso manual.
-            add("ClamMac \(rel.version) descargada y verificada. Cierra ClamMac (menú del escudo › Salir), arrastra la app nueva a Aplicaciones y ábrela.", alert: true)
-            notify(title: "Actualización lista", body: "Cierra ClamMac, arrastra la app nueva a Aplicaciones y ábrela.")
+            add(tr("ClamMac %@ descargada y verificada. Cierra ClamMac (menú del escudo › Salir), arrastra la app nueva a Aplicaciones y ábrela.", rel.version), alert: true)
+            notify(title: tr("Actualización lista"), body: tr("Cierra ClamMac, arrastra la app nueva a Aplicaciones y ábrela."))
             NSWorkspace.shared.open(dmg)
         } catch { add(error.localizedDescription, alert: true); updateStatus = error.localizedDescription }
         busy = nil
     }
 
     func shutdown() { watcher?.stop(); daemon.stop() }
+
+    /// Reinicia la app (p. ej. tras cambiar de idioma): un proceso aparte la vuelve a abrir cuando esta se cierra.
+    func relaunch() {
+        let p = Process(); p.executableURL = URL(fileURLWithPath: "/bin/sh")
+        p.arguments = ["-c", "sleep 1; /usr/bin/open -n \"$0\"", Bundle.main.bundleURL.path]
+        try? p.run()
+        shutdown(); NSApp.terminate(nil)
+    }
 }

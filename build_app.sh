@@ -5,7 +5,7 @@ set -e
 cd "${0:A:h}"
 SIGN_HASH="DD3894D51C0CD7431CB40011799962688668037D"
 APP="build/ClamMac.app"
-VERSION="1.1.2"
+VERSION="1.2.0"
 
 swift build -c release --arch arm64 --arch x86_64
 BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/ClamMac
@@ -14,11 +14,14 @@ BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/ClamMac
 rm -rf "$APP"; mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/ClamMac"
 cp Icon/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+for L in Localization/*.lproj; do mkdir -p "$APP/Contents/Resources/$(basename "$L")"; cp "$L/Localizable.strings" "$APP/Contents/Resources/$(basename "$L")/"; done   # idiomas: es ca en fr de
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
  <key>CFBundleIdentifier</key><string>com.abdatabase.clammac</string>
+ <key>CFBundleDevelopmentRegion</key><string>es</string>
+ <key>CFBundleLocalizations</key><array><string>es</string><string>ca</string><string>en</string><string>fr</string><string>de</string></array>
  <key>CFBundleName</key><string>ClamMac</string>
  <key>CFBundleDisplayName</key><string>ClamMac</string>
  <key>CFBundleIconFile</key><string>AppIcon</string>

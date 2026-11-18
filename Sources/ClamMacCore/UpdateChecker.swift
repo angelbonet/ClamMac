@@ -13,12 +13,12 @@ public enum UpdateError: Error, LocalizedError {
     case network(String), noAsset, noHash, hashMismatch, badSignature(String), installFailed(String)
     public var errorDescription: String? {
         switch self {
-        case .network(let m): return "Sin conexión con GitHub: \(m)"
-        case .noAsset: return "La release no incluye un DMG."
-        case .noHash: return "La release no publica el SHA-256 del DMG; no se instala automáticamente."
-        case .hashMismatch: return "El SHA-256 del DMG descargado no coincide con el publicado. Descarga cancelada."
-        case .badSignature(let m): return "La actualización no está firmada y notarizada por el desarrollador: \(m)"
-        case .installFailed(let m): return "No se pudo preparar la actualización: \(m)"
+        case .network(let m): return tr("Sin conexión con GitHub: %@", m)
+        case .noAsset: return tr("La release no incluye un DMG.")
+        case .noHash: return tr("La release no publica el SHA-256 del DMG; no se instala automáticamente.")
+        case .hashMismatch: return tr("El SHA-256 del DMG descargado no coincide con el publicado. Descarga cancelada.")
+        case .badSignature(let m): return tr("La actualización no está firmada y notarizada por el desarrollador: %@", m)
+        case .installFailed(let m): return tr("No se pudo preparar la actualización: %@", m)
         }
     }
 }
@@ -65,7 +65,7 @@ public enum UpdateChecker {
         req.timeoutInterval = 20
         do {
             let (data, resp) = try await session.data(for: req)
-            guard let http = resp as? HTTPURLResponse else { throw UpdateError.network("respuesta inválida") }
+            guard let http = resp as? HTTPURLResponse else { throw UpdateError.network(tr("respuesta inválida")) }
             if http.statusCode == 404 { return nil }                   // aún sin releases
             guard http.statusCode == 200 else { throw UpdateError.network("HTTP \(http.statusCode)") }
             guard let rel = parse(json: data) else { return nil }
@@ -98,11 +98,11 @@ public enum UpdateChecker {
     static func verifySignature(_ dmg: URL) async throws {
         let info = await Shell.run("/usr/bin/codesign", ["-dvv", dmg.path])
         guard (info.stdout + info.stderr).contains("TeamIdentifier=\(expectedTeamID)") else {
-            try? FileManager.default.removeItem(at: dmg); throw UpdateError.badSignature("el equipo firmante no es el esperado")
+            try? FileManager.default.removeItem(at: dmg); throw UpdateError.badSignature(tr("el equipo firmante no es el esperado"))
         }
         let gk = await Shell.run("/usr/sbin/spctl", ["-a", "-t", "open", "--context", "context:primary-signature", dmg.path])
         guard gk.status == 0 else {
-            try? FileManager.default.removeItem(at: dmg); throw UpdateError.badSignature("Gatekeeper no lo acepta (¿sin notarizar?)")
+            try? FileManager.default.removeItem(at: dmg); throw UpdateError.badSignature(tr("Gatekeeper no lo acepta (¿sin notarizar?)"))
         }
     }
 }

@@ -22,16 +22,16 @@ public enum SelfUpdater {
         defer { try? FileManager.default.removeItem(at: mnt) }
 
         let att = await Shell.run("/usr/bin/hdiutil", ["attach", "-nobrowse", "-readonly", "-noautoopen", "-mountpoint", mnt.path, dmg.path])
-        guard att.status == 0 else { throw UpdateError.installFailed("no se pudo abrir el DMG: \(att.stderr)") }
+        guard att.status == 0 else { throw UpdateError.installFailed(tr("no se pudo abrir el DMG: %@", att.stderr)) }
         let newApp = work.appendingPathComponent("ClamMac-new.app")
         try? FileManager.default.removeItem(at: newApp)
         let src = mnt.appendingPathComponent("ClamMac.app")
         guard FileManager.default.fileExists(atPath: src.path) else {
-            _ = await Shell.run("/usr/bin/hdiutil", ["detach", "-force", mnt.path]); throw UpdateError.installFailed("el DMG no contiene ClamMac.app")
+            _ = await Shell.run("/usr/bin/hdiutil", ["detach", "-force", mnt.path]); throw UpdateError.installFailed(tr("el DMG no contiene ClamMac.app"))
         }
         let cp = await Shell.run("/usr/bin/ditto", [src.path, newApp.path])
         _ = await Shell.run("/usr/bin/hdiutil", ["detach", "-force", mnt.path])
-        guard cp.status == 0 else { throw UpdateError.installFailed("no se pudo copiar la app nueva: \(cp.stderr)") }
+        guard cp.status == 0 else { throw UpdateError.installFailed(tr("no se pudo copiar la app nueva: %@", cp.stderr)) }
 
         try await verifyApp(newApp, expectedVersion: expectedVersion)
         return newApp
@@ -40,14 +40,14 @@ public enum SelfUpdater {
     static func verifyApp(_ app: URL, expectedVersion: String) async throws {
         func fail(_ m: String) -> UpdateError { try? FileManager.default.removeItem(at: app); return .badSignature(m) }
         let cs = await Shell.run("/usr/bin/codesign", ["--verify", "--deep", "--strict", app.path])
-        guard cs.status == 0 else { throw fail("la firma de la app nueva no es válida") }
+        guard cs.status == 0 else { throw fail(tr("la firma de la app nueva no es válida")) }
         let info = await Shell.run("/usr/bin/codesign", ["-dvv", app.path])
-        guard (info.stdout + info.stderr).contains("TeamIdentifier=\(UpdateChecker.expectedTeamID)") else { throw fail("la app nueva no es del desarrollador esperado") }
+        guard (info.stdout + info.stderr).contains("TeamIdentifier=\(UpdateChecker.expectedTeamID)") else { throw fail(tr("la app nueva no es del desarrollador esperado")) }
         let plist = NSDictionary(contentsOf: app.appendingPathComponent("Contents/Info.plist"))
-        guard plist?["CFBundleIdentifier"] as? String == bundleID else { throw fail("identificador de app inesperado") }
-        guard plist?["CFBundleShortVersionString"] as? String == expectedVersion else { throw fail("la versión de la app no coincide con la release") }
+        guard plist?["CFBundleIdentifier"] as? String == bundleID else { throw fail(tr("identificador de app inesperado")) }
+        guard plist?["CFBundleShortVersionString"] as? String == expectedVersion else { throw fail(tr("la versión de la app no coincide con la release")) }
         let gk = await Shell.run("/usr/sbin/spctl", ["-a", "-t", "exec", app.path])
-        guard gk.status == 0 else { throw fail("Gatekeeper no acepta la app nueva (¿sin notarizar?)") }
+        guard gk.status == 0 else { throw fail(tr("Gatekeeper no acepta la app nueva (¿sin notarizar?)")) }
     }
 
     /// Script ayudante (sh). Argumentos: PID NUEVA DESTINO LOG. Variables: VERIFY=0 / OPEN=0 solo para pruebas.

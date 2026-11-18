@@ -620,6 +620,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#idiomas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Idiomas
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -741,6 +750,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#idiomas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Idiomas
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -763,31 +781,32 @@
 <p>Swift Package con dos destinos: una librería con la lógica (<code>ClamMacCore</code>, testeable) y la app SwiftUI (<code>ClamMac</code>).</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ClamMac/
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── Package.swift
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Sources/
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│   ├── ClamMacCore/              # lógica, sin interfaz
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   │   ├── ClamPaths.swift       # localiza binarios de ClamAV y carpetas de datos
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   │   ├── Settings.swift        # ajustes (JSON, decodificación tolerante a versiones antiguas)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   │   ├── Shell.swift           # ejecutar procesos sin bloquear
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   │   ├── Scanner.swift         # analiza con clamdscan / clamscan y parsea la salida
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   │   ├── ClamdManager.swift    # arranca y para el clamd propio (socket en Application Support)
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   │   ├── FolderWatcher.swift   # FSEvents + espera a que el fichero termine de escribirse
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   │   ├── Quarantine.swift      # apartar, listar, restaurar y eliminar
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   │   ├── Updater.swift         # freshclam y versión de las firmas
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   │   ├── UpdateChecker.swift   # busca/descarga/verifica versiones de la app en GitHub
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   │   ├── SelfUpdater.swift     # sustituye la app en ejecución y la reabre (con marcha atrás)
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   │   ├── TestFile.swift        # fichero de prueba EICAR (autoprueba)
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   │   ├── Keychain.swift        # token de Pushover
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   │   └── Pushover.swift
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   └── ClamMac/                  # app SwiftUI
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│       ├── ClamMacApp.swift      # barra de menú + ventana
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│       ├── Engine.swift          # orquesta todo (ObservableObject)
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│       └── Views.swift           # pantallas
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>├── Tests/ClamMacCoreTests/
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>├── Icon/                         # PNG de diseño y generador de .icns
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├── Installer/Leeme.template.html      # Léeme del DMG
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>├── docs/ + mkdocs.yml            # esta documentación
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├── build_app.sh  build_dmg.sh  release.sh
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>└── .github/workflows/docs.yml    # publica la documentación en GitHub Pages
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── Localization/             # es, ca, en, fr, de: &lt;idioma&gt;.lproj/Localizable.strings (clave = texto en español)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── Sources/
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│   ├── ClamMacCore/              # lógica, sin interfaz
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   │   ├── ClamPaths.swift       # localiza binarios de ClamAV y carpetas de datos
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   │   ├── Settings.swift        # ajustes (JSON, decodificación tolerante a versiones antiguas)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   │   ├── Shell.swift           # ejecutar procesos sin bloquear
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   │   ├── Scanner.swift         # analiza con clamdscan / clamscan y parsea la salida
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   │   ├── ClamdManager.swift    # arranca y para el clamd propio (socket en Application Support)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   │   ├── FolderWatcher.swift   # FSEvents + espera a que el fichero termine de escribirse
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   │   ├── Quarantine.swift      # apartar, listar, restaurar y eliminar
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   │   ├── Updater.swift         # freshclam y versión de las firmas
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   │   ├── UpdateChecker.swift   # busca/descarga/verifica versiones de la app en GitHub
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   │   ├── SelfUpdater.swift     # sustituye la app en ejecución y la reabre (con marcha atrás)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   │   ├── TestFile.swift        # fichero de prueba EICAR (autoprueba)
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   │   ├── Keychain.swift        # token de Pushover
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   │   └── Pushover.swift
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   └── ClamMac/                  # app SwiftUI
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│       ├── ClamMacApp.swift      # barra de menú + ventana
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│       ├── Engine.swift          # orquesta todo (ObservableObject)
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│       └── Views.swift           # pantallas
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>├── Tests/ClamMacCoreTests/
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├── Icon/                         # PNG de diseño y generador de .icns
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>├── Installer/Leeme.template.html      # Léeme del DMG
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>├── docs/ + mkdocs.yml            # esta documentación
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>├── build_app.sh  build_dmg.sh  release.sh
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>└── .github/workflows/docs.yml    # publica la documentación en GitHub Pages
 </code></pre></div>
 <h2 id="como-trabaja">Cómo trabaja<a class="headerlink" href="#como-trabaja" title="Permanent link">&para;</a></h2>
 <ol>
@@ -801,6 +820,13 @@
 <li><strong>Incluye su propio ClamAV</strong> (<code>Contents/Helpers</code>, estático y universal, compilado con <code>Engine/build_clamav.sh</code>): funciona sin Homebrew, también en Intel. Usa sus propias firmas en <code>Application Support/ClamMac/Database</code> (copia las de Homebrew la primera vez si existen). Si no hay motor incluido (compilación de desarrollo), cae al de Homebrew.</li>
 <li><strong>Sin sandbox</strong>: necesita leer carpetas del usuario y ejecutar <code>clamd</code>/<code>freshclam</code>; por eso pide <em>Acceso total al disco</em>.</li>
 <li><strong>Modo de lenguaje Swift 5</strong> (<code>swiftLanguageModes: [.v5]</code>) para evitar fricción de concurrencia estricta.</li>
+</ul>
+<h2 id="idiomas">Idiomas<a class="headerlink" href="#idiomas" title="Permanent link">&para;</a></h2>
+<ul>
+<li>La clave de cada cadena es el <strong>texto en español</strong>. En vistas SwiftUI, <code>Text("…")</code>, <code>Button("…")</code>, etc. se traducen solos; para cadenas calculadas o con datos se usa <code>tr("clave %@", valor)</code> (marcadores <code>%@</code> texto y <code>%ld</code> enteros <code>Int</code>).</li>
+<li>Una cadena nueva debe añadirse a los <strong>cinco</strong> <code>Localizable.strings</code>; el test <code>testTranslationsAreComplete</code> falla si falta alguna clave o si los marcadores no coinciden.</li>
+<li><code>build_app.sh</code> copia los <code>.lproj</code> a <code>Contents/Resources</code> y declara <code>CFBundleLocalizations</code> en el Info.plist. macOS elige el idioma según las preferencias del usuario; <em>Ajustes › Idioma</em> lo fija con <code>AppleLanguages</code> (efectivo al reiniciar).</li>
+<li>Evita <code>Text(a ? "x" : "y")</code> con literales: el ternario es un <code>String</code> y no se traduce; usa <code>tr()</code>.</li>
 </ul>
 
 

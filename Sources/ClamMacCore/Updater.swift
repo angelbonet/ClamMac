@@ -26,7 +26,7 @@ public enum Updater {
     /// Ejecuta freshclam. `updated` es true si bajó firmas nuevas.
     public static func updateNow() async -> UpdateResult {
         guard let bin = ClamPaths.freshclam else {
-            return UpdateResult(ok: false, updated: false, message: "freshclam no encontrado (brew install clamav)")
+            return UpdateResult(ok: false, updated: false, message: tr("freshclam no encontrado (brew install clamav)"))
         }
         var args: [String] = []
         if ClamPaths.usingBundledEngine {
@@ -46,8 +46,8 @@ public enum Updater {
         let updated = ok && text.contains("updated (version")
         let msg: String
         if !ok { msg = text.split(separator: "\n").suffix(3).joined(separator: " ") }
-        else if updated { msg = "Firmas actualizadas" }
-        else { msg = "Las firmas ya estaban al día" }
+        else if updated { msg = tr("Firmas actualizadas") }
+        else { msg = tr("Las firmas ya estaban al día") }
         return UpdateResult(ok: ok, updated: updated, message: msg)
     }
 
