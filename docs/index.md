@@ -33,7 +33,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 
 - macOS 14 (Sonoma) o superior
 - Mac con **Apple Silicon o Intel** (binario universal)
-- ClamAV: `brew install clamav`
+- Nada más: el motor antivirus ClamAV **va incluido** en la app (no hace falta Homebrew ni Terminal)
 
 ---
 

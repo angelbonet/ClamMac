@@ -28,6 +28,7 @@ final class Engine: ObservableObject {
     @Published var hasFullDiskAccess = true
     @Published var engineInstalled = ClamPaths.clamscan != nil
     @Published var selfTest: SelfTest = .idle
+    @Published var hasSignatures = ClamPaths.hasDatabase
     @Published var installingEngine = false
     @Published var engineInstallError: String?
     @Published var hasBrew = ClamPaths.brew != nil
@@ -67,6 +68,11 @@ final class Engine: ObservableObject {
             watchForEngine(); return
         }
         noteVersionChange()
+        if !ClamPaths.hasDatabase {          // primera vez con el motor incluido: descarga de firmas antes de arrancar
+            add("Primera ejecución: preparando las firmas de ClamAV (puede tardar unos minutos)…")
+            await updateSignatures()
+        }
+        hasSignatures = ClamPaths.hasDatabase
         dbInfo = await Updater.databaseInfo()
         if settings.useDaemon { await startDaemon() }
         applyWatcher()
@@ -200,6 +206,7 @@ final class Engine: ObservableObject {
         settings.lastUpdateCheck = Date()
         add("Firmas: \(r.message)", alert: !r.ok)
         if r.updated { daemon.reload() }
+        hasSignatures = ClamPaths.hasDatabase
         dbInfo = await Updater.databaseInfo()
     }
 

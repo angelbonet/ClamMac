@@ -20,8 +20,14 @@ App nativa de barra de menú (SwiftUI, macOS 14+, binario universal arm64 + x86_
 - Notarización: un `503` de notarytool es caída del servicio de Apple (no del llavero); reintentar más tarde. `gh` necesita el scope `workflow` para subir `.github/workflows`.
 - Los iconos derivan de la mascota de ClamAV (marca de Cisco): no cubiertos por la licencia MIT.
 
+## Motor incluido (desde 1.1.0)
+- ClamAV 1.5.4 va DENTRO de la app (`Contents/Helpers`, estático, universal), compilado por `Engine/build_clamav.sh` (necesita `brew install cmake ninja rustup`; toolchain Rust aislada en `build/engine/`). `build_app.sh` exige `build/engine/universal` y firma cada helper con hardened runtime + `--identifier`.
+- Firmas propias en `Application Support/ClamMac/Database` + `freshclam.conf` propio; la 1ª vez copia las de Homebrew. Se pasa `--cvdcertsdir` (certs en `Contents/Resources/certs`) a freshclam/clamscan/clamd. `NULL X509 store` de freshclam es ruido inocuo (libcurl de Apple, no OpenSSL).
+- GPLv2: licencias en `Contents/Resources/Licenses` + `docs/licencias.md` (enlace al tarball exacto + receta). Subir de versión ClamAV = cambiar versión/SHA en el script y en licencias.
+- Sin motor incluido (builds de desarrollo) cae al de Homebrew. Pruebas de la app desde terminal NO pasan el autotest (TCC): instalar en /Applications y lanzar con `open -n --env ...`.
+
 ## Estado
-- Última versión publicada: **1.0.3** (2026-11-17), universal, notarizada; web de docs desplegada. Autoactualización de un clic verificada en uso real.
+- Última versión publicada: **1.1.0** (antes 1.0.3 (2026-11-17), universal, notarizada; web de docs desplegada. Autoactualización de un clic verificada en uso real.
 
 ## Pendiente
 - Capturas nuevas (Estado, Cuarentena, Firmas) para la documentación; probar en un Mac Intel real.

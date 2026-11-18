@@ -4,7 +4,31 @@ import Foundation
 public enum ClamPaths {
     public static let prefixes = ["/opt/homebrew", "/usr/local"]
 
+    /// Motor ClamAV incluido dentro de la app (Contents/Helpers). `CLAMMAC_ENGINE_DIR` lo fuerza en pruebas.
+    public static var bundledDir: String? {
+        let candidates: [String] = [
+            ProcessInfo.processInfo.environment["CLAMMAC_ENGINE_DIR"],
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Helpers").path
+        ].compactMap { $0 }.filter { !$0.isEmpty }
+        return candidates.first { FileManager.default.isExecutableFile(atPath: "\($0)/clamscan") }
+    }
+    public static var usingBundledEngine: Bool { bundledDir != nil }
+
+    /// Certificado raíz con el que ClamAV 1.5 verifica las firmas digitales de las bases (.cvd.sign).
+    /// El motor incluido lo trae en Contents/Resources/certs; sin esto muestra «NULL X509 store» y no verifica.
+    public static var certsArgs: [String] {
+        guard let b = bundledDir else { return [] }
+        for d in ["\(b)/../Resources/certs", "\(b)/certs"] where FileManager.default.fileExists(atPath: "\(d)/clamav.crt") {
+            return ["--cvdcertsdir=\((d as NSString).standardizingPath)"]
+        }
+        return []
+    }
+
     public static func binary(_ name: String) -> String? {
+        if let b = bundledDir {
+            let path = "\(b)/\(name)"
+            if FileManager.default.isExecutableFile(atPath: path) { return path }
+        }
         for p in prefixes {
             for sub in ["bin", "sbin"] {
                 let path = "\(p)/\(sub)/\(name)"
@@ -35,11 +59,43 @@ public enum ClamPaths {
 
     /// Directorio de firmas de Homebrew (se reutiliza, no se duplica).
     public static var databaseDir: String {
+        if usingBundledEngine {                       // motor propio → firmas propias (sin depender de Homebrew)
+            let d = appSupport.appendingPathComponent("Database", isDirectory: true)
+            try? FileManager.default.createDirectory(at: d, withIntermediateDirectories: true)
+            return d.path
+        }
         for p in prefixes {
             let d = "\(p)/var/lib/clamav"
             if FileManager.default.fileExists(atPath: d) { return d }
         }
         return "/opt/homebrew/var/lib/clamav"
+    }
+
+    /// ¿Hay ya una base de firmas utilizable?
+    public static var hasDatabase: Bool {
+        let fm = FileManager.default, d = databaseDir
+        return ["main", "daily"].allSatisfy { fm.fileExists(atPath: "\(d)/\($0).cvd") || fm.fileExists(atPath: "\(d)/\($0).cld") }
+    }
+
+    /// Primera vez con motor propio: si Homebrew ya tiene firmas, se copian para no descargar ~300 MB de nuevo.
+    public static func seedDatabaseFromHomebrew() {
+        guard usingBundledEngine, !hasDatabase else { return }
+        let fm = FileManager.default
+        for p in prefixes {
+            let src = "\(p)/var/lib/clamav"
+            guard let files = try? fm.contentsOfDirectory(atPath: src) else { continue }
+            for f in files where f.hasSuffix(".cvd") || f.hasSuffix(".cld") {
+                try? fm.copyItem(atPath: "\(src)/\(f)", toPath: "\(databaseDir)/\(f)")
+            }
+            if hasDatabase { return }
+        }
+    }
+
+    /// freshclam.conf propio de la app (el motor incluido no trae ninguno).
+    public static var freshclamConf: URL { appSupport.appendingPathComponent("freshclam.conf") }
+    public static func writeFreshclamConf() {
+        let text = "DatabaseDirectory \(databaseDir)\nDatabaseMirror database.clamav.net\nCompressLocalDatabase no\n"
+        if (try? String(contentsOf: freshclamConf, encoding: .utf8)) != text { try? text.write(to: freshclamConf, atomically: true, encoding: .utf8) }
     }
 
     public static var appSupport: URL {

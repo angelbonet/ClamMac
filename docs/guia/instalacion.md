@@ -1,21 +1,10 @@
 # Instalación
 
-## 1. Instalar ClamAV (el motor)
+## 1. El motor antivirus ya va incluido
 
-ClamMac es la interfaz; el motor antivirus es **ClamAV**, que **no incluye**. Se instala con [Homebrew](https://brew.sh/):
+ClamMac lleva dentro el motor **ClamAV** (versión para Apple Silicon e Intel). **No tienes que instalar nada más**: ni Homebrew, ni Terminal.
 
-```bash
-brew install clamav
-```
-
-Si ya lo tienes, no hay nada que hacer: ClamMac usa el de Homebrew (`/opt/homebrew` o `/usr/local`) y reutiliza sus firmas.
-
-**Si no lo tienes, no hace falta instalarlo antes**: al abrir ClamMac, la pantalla *Estado* muestra en rojo «ClamMac todavía NO te protege» y:
-
-- Si tu Mac **ya tiene Homebrew**, pulsa **Instalar ClamAV ahora** y ClamMac lo instala solo (unos minutos).
-- Si **no tiene Homebrew** (el comando `brew` da «command not found»), la propia pantalla te da el comando para instalarlo, con botones *Copiar comando* y *Abrir Terminal*. Cuando termine, ClamMac lo detecta solo y aparece el botón anterior.
-
-Hasta que ClamAV esté instalado, ClamMac muestra «Sin protección» y no vigila nada.
+La primera vez que abras ClamMac descargará las firmas de virus (unos 300 MB, 1-2 minutos). Si ya tenías ClamAV con Homebrew, ClamMac copia sus firmas para no descargarlas otra vez; el ClamAV de Homebrew se queda como estaba y ClamMac usa el suyo propio.
 
 ## 2. Instalar ClamMac
 

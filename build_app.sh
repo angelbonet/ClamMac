@@ -5,7 +5,7 @@ set -e
 cd "${0:A:h}"
 SIGN_HASH="F211AC309817AB7AE7332B19F29F294C19C40AA0"
 APP="build/ClamMac.app"
-VERSION="1.0.4"
+VERSION="1.1.0"
 
 swift build -c release --arch arm64 --arch x86_64
 BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/ClamMac
@@ -33,8 +33,27 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 </dict></plist>
 PLIST
 
+# --- Motor ClamAV incluido (universal, estático): Engine/build_clamav.sh lo genera en build/engine/universal ---
+ENG="build/engine/universal"
+[[ -x "$ENG/clamscan" ]] || { echo "Falta el motor universal: ejecuta Engine/build_clamav.sh"; exit 1; }
+mkdir -p "$APP/Contents/Helpers" "$APP/Contents/Resources/Licenses"
+for b in clamscan clamdscan clamd freshclam; do
+  cp "$ENG/$b" "$APP/Contents/Helpers/$b"
+  strip -x "$APP/Contents/Helpers/$b" 2>/dev/null || true
+  [[ "$(lipo -archs "$APP/Contents/Helpers/$b" | tr ' ' '\n' | sort | tr '\n' ' ')" == "arm64 x86_64 " ]] || { echo "$b no es universal"; exit 1; }
+  codesign --force --options runtime --timestamp --identifier "com.abdatabase.clammac.$b" --sign "$SIGN_HASH" "$APP/Contents/Helpers/$b"
+done
+S="build/engine/src"
+cp "$S"/clamav-*/COPYING.txt "$APP/Contents/Resources/Licenses/ClamAV-GPLv2.txt"
+cp -R "$S"/clamav-*/COPYING "$APP/Contents/Resources/Licenses/ClamAV-componentes"
+cp "$S"/openssl-*/LICENSE.txt "$APP/Contents/Resources/Licenses/OpenSSL-Apache2.txt"
+cp "$S"/pcre2-*/LICENCE.md "$APP/Contents/Resources/Licenses/PCRE2.txt"
+cp "$S"/json-c-*/COPYING "$APP/Contents/Resources/Licenses/json-c-MIT.txt"
+mkdir -p "$APP/Contents/Resources/certs"; cp "$S"/clamav-*/certs/clamav.crt "$APP/Contents/Resources/certs/clamav.crt"
+cp Engine/LEEME-LICENCIAS.txt "$APP/Contents/Resources/Licenses/LEEME.txt"
+
 codesign --force --options runtime --timestamp --sign "$SIGN_HASH" "$APP"
-codesign --verify --strict --verbose=2 "$APP"
+codesign --verify --strict --deep --verbose=2 "$APP"
 echo "OK → $APP"
 if [[ "$1" == "--install" ]]; then
   rm -rf /Applications/ClamMac.app; cp -R "$APP" /Applications/ClamMac.app

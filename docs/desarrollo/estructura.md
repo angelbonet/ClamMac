@@ -41,6 +41,6 @@ ClamMac/
 
 ## Decisiones de diseño
 
-- **Reutiliza el ClamAV de Homebrew** en vez de empaquetarlo: no duplica firmas (cientos de MB) y se actualiza con el sistema habitual.
+- **Incluye su propio ClamAV** (`Contents/Helpers`, estático y universal, compilado con `Engine/build_clamav.sh`): funciona sin Homebrew, también en Intel. Usa sus propias firmas en `Application Support/ClamMac/Database` (copia las de Homebrew la primera vez si existen). Si no hay motor incluido (compilación de desarrollo), cae al de Homebrew.
 - **Sin sandbox**: necesita leer carpetas del usuario y ejecutar `clamd`/`freshclam`; por eso pide *Acceso total al disco*.
 - **Modo de lenguaje Swift 5** (`swiftLanguageModes: [.v5]`) para evitar fricción de concurrencia estricta.

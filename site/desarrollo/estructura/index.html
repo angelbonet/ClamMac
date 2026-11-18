@@ -643,6 +643,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../../licencias/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Licencias y código fuente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../changelog/" class="md-nav__link">
         
   
@@ -757,7 +777,7 @@
 </ol>
 <h2 id="decisiones-de-diseno">Decisiones de diseño<a class="headerlink" href="#decisiones-de-diseno" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Reutiliza el ClamAV de Homebrew</strong> en vez de empaquetarlo: no duplica firmas (cientos de MB) y se actualiza con el sistema habitual.</li>
+<li><strong>Incluye su propio ClamAV</strong> (<code>Contents/Helpers</code>, estático y universal, compilado con <code>Engine/build_clamav.sh</code>): funciona sin Homebrew, también en Intel. Usa sus propias firmas en <code>Application Support/ClamMac/Database</code> (copia las de Homebrew la primera vez si existen). Si no hay motor incluido (compilación de desarrollo), cae al de Homebrew.</li>
 <li><strong>Sin sandbox</strong>: necesita leer carpetas del usuario y ejecutar <code>clamd</code>/<code>freshclam</code>; por eso pide <em>Acceso total al disco</em>.</li>
 <li><strong>Modo de lenguaje Swift 5</strong> (<code>swiftLanguageModes: [.v5]</code>) para evitar fricción de concurrencia estricta.</li>
 </ul>

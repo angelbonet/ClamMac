@@ -195,4 +195,28 @@ final class CoreTests: XCTestCase {
         got.lock(); defer { got.unlock() }
         XCTAssertEqual(seen.map { ($0 as NSString).lastPathComponent }, ["a.txt"])
     }
+
+    func testBundledEnginePathsAndConf() throws {
+        let fm = FileManager.default
+        let tmp = fm.temporaryDirectory.appendingPathComponent("clammac-eng-\(UUID().uuidString)")
+        let eng = tmp.appendingPathComponent("eng"), data = tmp.appendingPathComponent("data")
+        try fm.createDirectory(at: eng, withIntermediateDirectories: true)
+        for b in ["clamscan", "freshclam"] {
+            let f = eng.appendingPathComponent(b)
+            try "#!/bin/sh\n".write(to: f, atomically: true, encoding: .utf8)
+            try fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: f.path)
+        }
+        setenv("CLAMMAC_ENGINE_DIR", eng.path, 1); setenv("CLAMMAC_DATA_DIR", data.path, 1)
+        defer { unsetenv("CLAMMAC_ENGINE_DIR"); unsetenv("CLAMMAC_DATA_DIR"); try? fm.removeItem(at: tmp) }
+        XCTAssertTrue(ClamPaths.usingBundledEngine)
+        XCTAssertEqual(ClamPaths.clamscan, eng.appendingPathComponent("clamscan").path)
+        XCTAssertEqual(ClamPaths.databaseDir, data.appendingPathComponent("Database").path)
+        XCTAssertFalse(ClamPaths.hasDatabase)
+        ClamPaths.writeFreshclamConf()
+        let conf = try String(contentsOf: ClamPaths.freshclamConf, encoding: .utf8)
+        XCTAssertTrue(conf.contains("DatabaseDirectory \(ClamPaths.databaseDir)"))
+        XCTAssertFalse(conf.contains("Example"))
+        for n in ["main.cvd", "daily.cld"] { fm.createFile(atPath: ClamPaths.databaseDir + "/" + n, contents: Data()) }
+        XCTAssertTrue(ClamPaths.hasDatabase)
+    }
 }

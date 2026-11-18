@@ -365,9 +365,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-instalar-clamav-el-motor" class="md-nav__link">
+  <a href="#1-el-motor-antivirus-ya-va-incluido" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Instalar ClamAV (el motor)
+      1. El motor antivirus ya va incluido
     </span>
   </a>
   
@@ -679,6 +679,26 @@
   
   
     <li class="md-nav__item">
+      <a href="../../licencias/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Licencias y código fuente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../changelog/" class="md-nav__link">
         
   
@@ -719,9 +739,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-instalar-clamav-el-motor" class="md-nav__link">
+  <a href="#1-el-motor-antivirus-ya-va-incluido" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Instalar ClamAV (el motor)
+      1. El motor antivirus ya va incluido
     </span>
   </a>
   
@@ -791,17 +811,9 @@
 
 
 <h1 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h1>
-<h2 id="1-instalar-clamav-el-motor">1. Instalar ClamAV (el motor)<a class="headerlink" href="#1-instalar-clamav-el-motor" title="Permanent link">&para;</a></h2>
-<p>ClamMac es la interfaz; el motor antivirus es <strong>ClamAV</strong>, que <strong>no incluye</strong>. Se instala con <a href="https://brew.sh/">Homebrew</a>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>brew<span class="w"> </span>install<span class="w"> </span>clamav
-</code></pre></div>
-<p>Si ya lo tienes, no hay nada que hacer: ClamMac usa el de Homebrew (<code>/opt/homebrew</code> o <code>/usr/local</code>) y reutiliza sus firmas.</p>
-<p><strong>Si no lo tienes, no hace falta instalarlo antes</strong>: al abrir ClamMac, la pantalla <em>Estado</em> muestra en rojo «ClamMac todavía NO te protege» y:</p>
-<ul>
-<li>Si tu Mac <strong>ya tiene Homebrew</strong>, pulsa <strong>Instalar ClamAV ahora</strong> y ClamMac lo instala solo (unos minutos).</li>
-<li>Si <strong>no tiene Homebrew</strong> (el comando <code>brew</code> da «command not found»), la propia pantalla te da el comando para instalarlo, con botones <em>Copiar comando</em> y <em>Abrir Terminal</em>. Cuando termine, ClamMac lo detecta solo y aparece el botón anterior.</li>
-</ul>
-<p>Hasta que ClamAV esté instalado, ClamMac muestra «Sin protección» y no vigila nada.</p>
+<h2 id="1-el-motor-antivirus-ya-va-incluido">1. El motor antivirus ya va incluido<a class="headerlink" href="#1-el-motor-antivirus-ya-va-incluido" title="Permanent link">&para;</a></h2>
+<p>ClamMac lleva dentro el motor <strong>ClamAV</strong> (versión para Apple Silicon e Intel). <strong>No tienes que instalar nada más</strong>: ni Homebrew, ni Terminal.</p>
+<p>La primera vez que abras ClamMac descargará las firmas de virus (unos 300 MB, 1-2 minutos). Si ya tenías ClamAV con Homebrew, ClamMac copia sus firmas para no descargarlas otra vez; el ClamAV de Homebrew se queda como estaba y ClamMac usa el suyo propio.</p>
 <h2 id="2-instalar-clammac">2. Instalar ClamMac<a class="headerlink" href="#2-instalar-clammac" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Descarga <code>ClamMac-x.y.z.dmg</code> de <a href="https://github.com/angelbonet/ClamMac/releases/latest">Releases</a>.</li>
@@ -826,7 +838,7 @@
 </ul>
 <h2 id="si-vienes-de-scripts-propios-launchd">Si vienes de scripts propios (launchd)<a class="headerlink" href="#si-vienes-de-scripts-propios-launchd" title="Permanent link">&para;</a></h2>
 <p>Si ya analizabas Descargas con un script de <code>launchd</code>, <strong>desactívalo</strong> para no analizar dos veces:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>launchctl<span class="w"> </span>bootout<span class="w"> </span>gui/<span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span>/NOMBRE.DEL.AGENTE
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>launchctl<span class="w"> </span>bootout<span class="w"> </span>gui/<span class="k">$(</span>id<span class="w"> </span>-u<span class="k">)</span>/NOMBRE.DEL.AGENTE
 </code></pre></div>
 
 

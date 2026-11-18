@@ -73,6 +73,7 @@ nav:
       - Compilar y firmar: desarrollo/compilar.md
       - Estructura del proyecto: desarrollo/estructura.md
       - Publicar una versión: desarrollo/publicar.md
+  - Licencias y código fuente: licencias.md
   - Cambios: changelog.md
 
 extra:

@@ -6,9 +6,11 @@ Concédelo siguiendo la [guía de permisos](permisos.md). Después cierra y abre
 
 ## «ClamMac todavía NO te protege» (falta ClamAV)
 
-En *Estado* pulsa **Instalar ClamAV ahora**. Si en su lugar te explica cómo instalar Homebrew, sigue esos pasos (es lo que ocurre si `brew` da «command not found»). ClamMac detecta la instalación solo; no hace falta reabrirlo.
+Desde la 1.1.0 el motor va dentro de la app, así que no debería ocurrir. Si aparece, la copia de ClamMac está incompleta o dañada: descarga el DMG de [Releases](https://github.com/angelbonet/ClamMac/releases/latest) e instálalo de nuevo.
 
-A mano también vale: `brew install clamav`.
+## «Todavía no hay firmas de virus»
+
+Pasa si la primera descarga falló por falta de internet. Conéctate y pulsa **Estado › Actualizar firmas**.
 
 ## «clamd no arrancó; se usará clamscan»
 

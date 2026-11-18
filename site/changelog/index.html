@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://angelbonet.github.io/ClamMac/changelog/">
       
       
-        <link rel="prev" href="../desarrollo/publicar/">
+        <link rel="prev" href="../licencias/">
       
       
       
@@ -580,6 +580,26 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../licencias/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Licencias y código fuente
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -629,6 +649,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#110-2026-11-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      [1.1.0] — 2026-11-18
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.1.0] — 2026-11-18">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anadido" class="md-nav__link">
+    <span class="md-ellipsis">
+      Añadido
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#104-2026-11-18" class="md-nav__link">
     <span class="md-ellipsis">
       [1.0.4] — 2026-11-18
@@ -639,7 +683,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#anadido" class="md-nav__link">
+  <a href="#anadido_1" class="md-nav__link">
     <span class="md-ellipsis">
       Añadido
     </span>
@@ -696,7 +740,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#anadido_1" class="md-nav__link">
+  <a href="#anadido_2" class="md-nav__link">
     <span class="md-ellipsis">
       Añadido
     </span>
@@ -786,6 +830,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#110-2026-11-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      [1.1.0] — 2026-11-18
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="[1.1.0] — 2026-11-18">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#anadido" class="md-nav__link">
+    <span class="md-ellipsis">
+      Añadido
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#104-2026-11-18" class="md-nav__link">
     <span class="md-ellipsis">
       [1.0.4] — 2026-11-18
@@ -796,7 +864,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#anadido" class="md-nav__link">
+  <a href="#anadido_1" class="md-nav__link">
     <span class="md-ellipsis">
       Añadido
     </span>
@@ -853,7 +921,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#anadido_1" class="md-nav__link">
+  <a href="#anadido_2" class="md-nav__link">
     <span class="md-ellipsis">
       Añadido
     </span>
@@ -928,8 +996,15 @@
 
 <h1 id="cambios">Cambios<a class="headerlink" href="#cambios" title="Permanent link">&para;</a></h1>
 <p>Formato basado en <a href="https://keepachangelog.com/es-ES/1.1.0/">Keep a Changelog</a>.</p>
-<h2 id="104-2026-11-18">[1.0.4] — 2026-11-18<a class="headerlink" href="#104-2026-11-18" title="Permanent link">&para;</a></h2>
+<h2 id="110-2026-11-18">[1.1.0] — 2026-11-18<a class="headerlink" href="#110-2026-11-18" title="Permanent link">&para;</a></h2>
 <h3 id="anadido">Añadido<a class="headerlink" href="#anadido" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>ClamAV incluido en la app</strong> (universal, Apple Silicon + Intel): ya no hace falta Homebrew ni Terminal. Firmas propias en <code>Application Support/ClamMac/Database</code> (copia las de Homebrew la primera vez si existen) y descarga inicial automática.</li>
+<li>Verificación de la firma digital de las bases de ClamAV con el certificado incluido.</li>
+<li>Página de licencias y código fuente.</li>
+</ul>
+<h2 id="104-2026-11-18">[1.0.4] — 2026-11-18<a class="headerlink" href="#104-2026-11-18" title="Permanent link">&para;</a></h2>
+<h3 id="anadido_1">Añadido<a class="headerlink" href="#anadido_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Instalación guiada de ClamAV</strong>: si falta el motor, <em>Estado</em> ofrece «Instalar ClamAV ahora» (con Homebrew) o, si no hay Homebrew, explica cómo instalarlo; ClamMac detecta la instalación solo.</li>
 <li>Crea <code>freshclam.conf</code> automáticamente tras instalar ClamAV.</li>
@@ -944,7 +1019,7 @@
 <li>ClamMac ya no se queda en el Dock al cerrar la ventana: vuelve a ser solo icono de barra de menús.</li>
 </ul>
 <h2 id="102-2026-11-17">[1.0.2] — 2026-11-17<a class="headerlink" href="#102-2026-11-17" title="Permanent link">&para;</a></h2>
-<h3 id="anadido_1">Añadido<a class="headerlink" href="#anadido_1" title="Permanent link">&para;</a></h3>
+<h3 id="anadido_2">Añadido<a class="headerlink" href="#anadido_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Binario universal</strong> (Apple Silicon + Intel).</li>
 <li><strong>Botón «Probar protección»</strong>: crea un fichero de prueba EICAR (inofensivo), comprueba que ClamMac lo detecta y lo aparta, y lo limpia. También en el menú del escudo.</li>

@@ -1,0 +1,19 @@
+ClamMac incluye el motor antivirus ClamAV (https://www.clamav.net/) sin modificar.
+
+ClamMac (interfaz)  : licencia MIT, © Ángel Bonet · ABDatabase.
+ClamAV 1.5.4        : GNU GPL v2, © Cisco Systems / Talos (con excepción OpenSSL). Ver ClamAV-GPLv2.txt
+                      y, para los componentes propios de ClamAV, la carpeta ClamAV-componentes
+                      (incluye UnRAR, que tiene su propia licencia: permite redistribuir pero no
+                      recrear el algoritmo de compresión RAR).
+OpenSSL 3.5.9       : Apache License 2.0.
+PCRE2 10.49         : BSD.
+json-c 0.19         : MIT.
+
+CÓDIGO FUENTE (GPLv2): el código exacto de ClamAV incluido se obtiene de
+  https://github.com/Cisco-Talos/clamav/releases/download/clamav-1.5.4/clamav-1.5.4.tar.gz
+  (SHA-256 1af1117a228f1b5bc7fa91a0dabc37848a99e7d25188e9be8043332ce721dfd3)
+La receta para recompilarlo tal y como va en ClamMac (estático y universal, sin parches) es
+Engine/build_clamav.sh en https://github.com/angelbonet/ClamMac
+
+ClamAV es marca de Cisco. ClamMac es un proyecto independiente, no afiliado ni respaldado por Cisco
+ni por el proyecto ClamAV.

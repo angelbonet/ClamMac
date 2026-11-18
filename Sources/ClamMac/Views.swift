@@ -74,6 +74,9 @@ struct StatusView: View {
                 .background(Color.accentColor.opacity(0.15), in: RoundedRectangle(cornerRadius: 8))
             }
             if !e.engineInstalled { EngineMissingCard() }
+            else if !e.hasSignatures && e.busy == nil {
+                Banner(text: "Todavía no hay firmas de virus: ClamMac no puede analizar. Pulsa «Actualizar firmas» (hace falta conexión a internet).", color: .orange)
+            }
             if !e.hasFullDiskAccess {
                 Banner(text: "Falta Acceso total al disco: macOS ocultará ficheros al análisis. Ajustes del Sistema → Privacidad y seguridad → Acceso total al disco → añade ClamMac.", color: .orange)
                 Button("Abrir ajustes de privacidad") {
@@ -379,6 +382,8 @@ struct AboutView: View {
                 Link(destination: Dev.webURL) { Label("abdatabase.com", systemImage: "globe") }
             }
             Divider()
+            Text("Incluye el motor ClamAV 1.5.4 (licencia GPLv2). ").font(.caption).foregroundStyle(.secondary)
+            + Text("[Licencias y código fuente](https://angelbonet.github.io/ClamMac/licencias/)").font(.caption)
             Text("ClamAV® es una marca de Cisco Systems. ClamMac no está afiliado a Cisco ni a Apple.")
                 .font(.caption).foregroundStyle(.secondary)
         }

@@ -48,7 +48,7 @@ public final class Scanner: @unchecked Sendable {
     /// Analiza carpetas de forma recursiva (modo bajo demanda). Siempre clamscan, con progreso por línea.
     public func scan(folders: [String], excludeDirs: [String] = ["node_modules", "\\.git"]) async -> ScanReport {
         guard let bin = ClamPaths.clamscan else { return err("clamscan no encontrado (brew install clamav)") }
-        var args = ["-r", "--infected", "--database=\(ClamPaths.databaseDir)"]
+        var args = ["-r", "--infected", "--database=\(ClamPaths.databaseDir)"] + ClamPaths.certsArgs
         args += excludeDirs.map { "--exclude-dir=\($0)" }
         args += folders.map { ($0 as NSString).expandingTildeInPath }
         let res = await Shell.run(bin, args)
@@ -73,7 +73,7 @@ public final class Scanner: @unchecked Sendable {
 
     private func fallback(extra: [String], fileCount: Int) async -> ScanReport {
         guard let bin = ClamPaths.clamscan else { return err("clamscan no encontrado (brew install clamav)") }
-        let res = await Shell.run(bin, ["--infected", "--database=\(ClamPaths.databaseDir)"] + extra)
+        let res = await Shell.run(bin, ["--infected", "--database=\(ClamPaths.databaseDir)"] + ClamPaths.certsArgs + extra)
         var r = Scanner.parse(output: res.stdout, errors: res.stderr)
         if res.status >= 2 && r.threats.isEmpty { r.engineError = res.stderr.isEmpty ? "clamscan salió con código \(res.status)" : res.stderr }
         r.scannedFiles = max(r.scannedFiles, fileCount)

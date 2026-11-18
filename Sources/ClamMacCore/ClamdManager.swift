@@ -37,7 +37,7 @@ public final class ClamdManager: @unchecked Sendable {
         try? FileManager.default.removeItem(at: socketURL)
         let p = Process()
         p.executableURL = URL(fileURLWithPath: bin)
-        p.arguments = ["--config-file=\(configURL.path)"]
+        p.arguments = ["--config-file=\(configURL.path)"] + ClamPaths.certsArgs
         p.standardOutput = FileHandle.nullDevice
         p.standardError = FileHandle.nullDevice
         do { try p.run() } catch { return false }

@@ -2,6 +2,12 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.1.0] — 2026-11-18
+### Añadido
+- **ClamAV incluido en la app** (universal, Apple Silicon + Intel): ya no hace falta Homebrew ni Terminal. Firmas propias en `Application Support/ClamMac/Database` (copia las de Homebrew la primera vez si existen) y descarga inicial automática.
+- Verificación de la firma digital de las bases de ClamAV con el certificado incluido.
+- Página de licencias y código fuente.
+
 ## [1.0.4] — 2026-11-18
 ### Añadido
 - **Instalación guiada de ClamAV**: si falta el motor, *Estado* ofrece «Instalar ClamAV ahora» (con Homebrew) o, si no hay Homebrew, explica cómo instalarlo; ClamMac detecta la instalación solo.

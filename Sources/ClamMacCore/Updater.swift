@@ -28,13 +28,19 @@ public enum Updater {
         guard let bin = ClamPaths.freshclam else {
             return UpdateResult(ok: false, updated: false, message: "freshclam no encontrado (brew install clamav)")
         }
-        ClamPaths.ensureFreshclamConf()
         var args: [String] = []
+        if ClamPaths.usingBundledEngine {
+            ClamPaths.seedDatabaseFromHomebrew()
+            ClamPaths.writeFreshclamConf()
+            args.append("--config-file=\(ClamPaths.freshclamConf.path)")
+        } else {
+        ClamPaths.ensureFreshclamConf()
         for p in ClamPaths.prefixes {
             let conf = "\(p)/etc/clamav/freshclam.conf"
             if FileManager.default.fileExists(atPath: conf) { args.append("--config-file=\(conf)"); break }
         }
-        let res = await Shell.run(bin, args, timeout: 600)
+        }
+        let res = await Shell.run(bin, args + ClamPaths.certsArgs, timeout: 600)
         let text = res.stdout + res.stderr
         let ok = res.status == 0
         let updated = ok && text.contains("updated (version")
@@ -48,7 +54,7 @@ public enum Updater {
     /// Lee versión del motor y de las firmas con `clamscan --version`.
     public static func databaseInfo() async -> DatabaseInfo? {
         guard let bin = ClamPaths.clamscan else { return nil }
-        let res = await Shell.run(bin, ["--version", "--database=\(ClamPaths.databaseDir)"])
+        let res = await Shell.run(bin, ["--version", "--database=\(ClamPaths.databaseDir)"] + ClamPaths.certsArgs)
         return parseVersion(res.stdout)
     }
 

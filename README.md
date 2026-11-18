@@ -35,7 +35,7 @@ Es el equivalente para macOS de [ClamGuard](https://github.com/angelbonet/ClamGu
 |------------|-------------|--------|
 | macOS 14 (Sonoma) o superior | Sistema operativo | — |
 | Mac con **Apple Silicon o Intel** | Binario universal (`arm64` + `x86_64`) | — |
-| ClamAV | Motor antivirus (ClamMac **no lo incluye**, usa el de Homebrew) | `brew install clamav` · [clamav.net](https://www.clamav.net/) |
+| ClamAV | Motor antivirus: **va incluido** en ClamMac (universal, sin Homebrew ni Terminal) | [clamav.net](https://www.clamav.net/) · [licencias](https://angelbonet.github.io/ClamMac/licencias/) |
 | Conexión a Internet | Para descargar firmas y buscar versiones nuevas | — |
 
 ## Instalación
