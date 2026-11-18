@@ -4,16 +4,17 @@
 # Firma con Developer ID y NOTARIZA app y DMG (perfil de notarytool en el llavero; SKIP_NOTARIZE=1 para omitir).
 set -e
 cd "${0:A:h}"
-SIGN_HASH="F211AC309817AB7AE7332B19F29F294C19C40AA0"
+SIGN_HASH="DD3894D51C0CD7431CB40011799962688668037D"
 VERSION=$(grep -E '^VERSION=' build_app.sh | cut -d'"' -f2)
 NOTARY_PROFILE="${NOTARY_PROFILE:-cephaloplan}"
+NOTARY_TEAM="${NOTARY_TEAM:-P4CY35PF88}"
 DMG="build/ClamMac-$VERSION.dmg"
 STAGE="build/dmg-stage"
 
 ./build_app.sh
 
 notarize() {   # $1 = fichero (.zip o .dmg)
-  xcrun notarytool submit "$1" --keychain-profile "$NOTARY_PROFILE" --wait
+  xcrun notarytool submit "$1" --keychain-profile "$NOTARY_PROFILE" --team-id "$NOTARY_TEAM" --wait
 }
 if [[ "${SKIP_NOTARIZE:-0}" != "1" ]]; then
   ditto -c -k --sequesterRsrc --keepParent build/ClamMac.app build/ClamMac-notar.zip

@@ -84,7 +84,7 @@ swift test                    # tests (incluye detección EICAR real con tu Clam
 ./release.sh "Notas"          # publica la release en GitHub con el DMG y su SHA-256
 ```
 
-Los scripts firman con el certificado de INNOVAORTO AIE; para compilar tu propia copia cambia `SIGN_HASH` y `NOTARY_PROFILE` (ver [Desarrollo](https://angelbonet.github.io/ClamMac/desarrollo/compilar/)).
+Los scripts firman con el certificado Developer ID de Ángel Bonet; para compilar tu propia copia cambia `SIGN_HASH` y `NOTARY_PROFILE` (ver [Desarrollo](https://angelbonet.github.io/ClamMac/desarrollo/compilar/)).
 
 ## Documentación con MkDocs
 

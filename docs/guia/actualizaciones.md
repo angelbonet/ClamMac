@@ -25,7 +25,7 @@ ClamMac busca versiones nuevas en las [releases de GitHub](https://github.com/an
 Cuando hay una versión nueva aparece un **aviso** (banner en *Estado*, entrada en el menú del escudo y notificación). Al pulsar **Actualizar y reiniciar**:
 
 1. Descarga el DMG de la release.
-2. **Verifica** que es auténtico: coincide con el SHA-256 publicado, está firmado por el equipo del desarrollador (`54HHDMD6T8`) y notarizado por Apple, y la app del interior es la versión anunciada.
+2. **Verifica** que es auténtico: coincide con el SHA-256 publicado, está firmado por el equipo del desarrollador (`P4CY35PF88`) y notarizado por Apple, y la app del interior es la versión anunciada.
 3. Se **cierra**, sustituye la app instalada y se **vuelve a abrir sola**, sin que tengas que hacer nada.
 4. Si algo falla durante el cambio, **restaura la versión anterior**.
 5. Al arrancar avisa: *«ClamMac se ha actualizado a X»*.

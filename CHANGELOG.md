@@ -2,6 +2,10 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.1.1] — 2026-11-18
+### Cambiado
+- La app y el instalador se firman y notarizan con la cuenta de **Ángel Bonet (desarrollador independiente)**, ya no con INNOVAORTO AIE. Al instalarla por primera vez con esta firma macOS puede pedir de nuevo el permiso de *Acceso total al disco*.
+
 ## [1.1.0] — 2026-11-18
 ### Añadido
 - **ClamAV incluido en la app** (universal, Apple Silicon + Intel): ya no hace falta Homebrew ni Terminal. Firmas propias en `Application Support/ClamMac/Database` (copia las de Homebrew la primera vez si existen) y descarga inicial automática.

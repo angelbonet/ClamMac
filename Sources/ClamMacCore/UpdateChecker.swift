@@ -26,7 +26,7 @@ public enum UpdateError: Error, LocalizedError {
 /// Busca nuevas versiones en las releases de GitHub y descarga/verifica el DMG.
 public enum UpdateChecker {
     public static let repo = "angelbonet/ClamMac"
-    public static let expectedTeamID = "54HHDMD6T8"      // Innovaorto AIE
+    public static let expectedTeamID = "P4CY35PF88"      // Ángel Bonet (desarrollador independiente)
 
     /// Compara versiones numéricas ("1.10.0" > "1.9.2"); ignora una «v» inicial.
     public static func isNewer(_ a: String, than b: String) -> Bool {

@@ -1,11 +1,11 @@
 #!/bin/zsh
-# Compila ClamMac en release (binario UNIVERSAL: Apple Silicon + Intel), crea ClamMac.app y lo firma con Developer ID (G2 de Innovaorto).
+# Compila ClamMac en release (binario UNIVERSAL: Apple Silicon + Intel), crea ClamMac.app y lo firma con Developer ID (cuenta personal de Ángel Bonet).
 # Uso: ./build_app.sh [--install]   (--install copia a /Applications)
 set -e
 cd "${0:A:h}"
-SIGN_HASH="F211AC309817AB7AE7332B19F29F294C19C40AA0"
+SIGN_HASH="DD3894D51C0CD7431CB40011799962688668037D"
 APP="build/ClamMac.app"
-VERSION="1.1.0"
+VERSION="1.1.1"
 
 swift build -c release --arch arm64 --arch x86_64
 BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/ClamMac
@@ -29,7 +29,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
  <key>LSMinimumSystemVersion</key><string>14.0</string>
  <key>LSUIElement</key><true/>
  <key>NSHighResolutionCapable</key><true/>
- <key>NSHumanReadableCopyright</key><string>© Ángel Bonet · ABDatabase / INNOVAORTO AIE</string>
+ <key>NSHumanReadableCopyright</key><string>© Ángel Bonet · ABDatabase</string>
 </dict></plist>
 PLIST
 
