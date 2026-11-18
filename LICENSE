@@ -19,8 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-Nota: la licencia MIT cubre el código fuente de ClamMac. Los iconos de la carpeta
-Icon/ derivan de la mascota de ClamAV (marca de Cisco Systems) y NO están cubiertos
-por esta licencia. ClamAV es software de terceros (GPLv2) que ClamMac no incluye ni
-enlaza: solo ejecuta el que el usuario tiene instalado con Homebrew.
