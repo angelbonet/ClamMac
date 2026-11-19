@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Descarrega les signatures del mirall d'abDatabase (recomanat; si falla, s'usa el servidor oficial de ClamAV)";
 "Novedades de ClamMac %@" = "Novetats de ClamMac %@";
 "Entendido" = "Entesos";
+"no se pudo conectar con clamav.abdatabase.com" = "no s'ha pogut connectar amb clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "el mirall ha rebutjat la descàrrega";
+"Espejo de abDatabase: %@" = "Mirall d'abDatabase: %@";

@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Signaturen vom abDatabase-Spiegelserver laden (empfohlen; bei Fehlern wird der offizielle ClamAV-Server verwendet)";
 "Novedades de ClamMac %@" = "Neuigkeiten in ClamMac %@";
 "Entendido" = "Verstanden";
+"no se pudo conectar con clamav.abdatabase.com" = "Verbindung zu clamav.abdatabase.com nicht möglich";
+"el espejo rechazó la descarga" = "der Spiegelserver hat den Download abgelehnt";
+"Espejo de abDatabase: %@" = "abDatabase-Spiegel: %@";

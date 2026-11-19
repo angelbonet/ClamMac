@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Pobieraj sygnatury z serwera lustrzanego abDatabase (zalecane; w razie awarii używany jest oficjalny serwer ClamAV)";
 "Novedades de ClamMac %@" = "Nowości w ClamMac %@";
 "Entendido" = "Rozumiem";
+"no se pudo conectar con clamav.abdatabase.com" = "nie można połączyć się z clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "serwer lustrzany odrzucił pobieranie";
+"Espejo de abDatabase: %@" = "Serwer lustrzany abDatabase: %@";

@@ -291,6 +291,13 @@ final class CoreTests: XCTestCase {
         }
     }
 
+    func testMirrorFailureIsShownAlongsideOfficialError() {
+        XCTAssertEqual(Updater.mirrorSuffix(""), "")
+        XCTAssertTrue(Updater.mirrorSuffix("x").contains("x"))
+        let r = UpdateResult(ok: false, updated: false, message: "m", failure: .network, detail: "")
+        XCTAssertTrue(Updater.mirrorReason(r).contains("clamav.abdatabase.com"))
+    }
+
     func testCoolDownWithExitZeroIsAFailure() {
         let out = "WARNING: FreshClam previously received error code 429 or 403 from the CDN.\nWARNING: You are still on cool-down until after: 2026-11-19 17:52:21\n"
         let r = Updater.interpret(ShellResult(status: 0, stdout: out, stderr: ""))

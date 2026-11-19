@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Stahovat podpisy ze zrcadla abDatabase (doporučeno; při selhání se použije oficiální server ClamAV)";
 "Novedades de ClamMac %@" = "Novinky v ClamMac %@";
 "Entendido" = "Rozumím";
+"no se pudo conectar con clamav.abdatabase.com" = "nepodařilo se připojit k clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "zrcadlo stažení odmítlo";
+"Espejo de abDatabase: %@" = "Zrcadlo abDatabase: %@";

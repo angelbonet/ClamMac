@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Descarcă semnăturile din oglinda abDatabase (recomandat; dacă nu merge, se folosește serverul oficial ClamAV)";
 "Novedades de ClamMac %@" = "Noutăți în ClamMac %@";
 "Entendido" = "Am înțeles";
+"no se pudo conectar con clamav.abdatabase.com" = "nu s-a putut conecta la clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "oglinda a refuzat descărcarea";
+"Espejo de abDatabase: %@" = "Oglinda abDatabase: %@";

@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Λήψη υπογραφών από τον καθρέφτη της abDatabase (συνιστάται· αν αποτύχει, χρησιμοποιείται ο επίσημος διακομιστής ClamAV)";
 "Novedades de ClamMac %@" = "Τι νέο υπάρχει στο ClamMac %@";
 "Entendido" = "Κατάλαβα";
+"no se pudo conectar con clamav.abdatabase.com" = "δεν ήταν δυνατή η σύνδεση με το clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "ο καθρέφτης απέρριψε τη λήψη";
+"Espejo de abDatabase: %@" = "Καθρέφτης abDatabase: %@";

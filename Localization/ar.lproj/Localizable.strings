@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "تنزيل التواقيع من مرآة abDatabase (موصى به؛ وفي حال الفشل يُستخدم الخادم الرسمي لـ ClamAV)";
 "Novedades de ClamMac %@" = "الجديد في ClamMac %@";
 "Entendido" = "حسنًا";
+"no se pudo conectar con clamav.abdatabase.com" = "تعذّر الاتصال بـ clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "رفض المرآة التنزيل";
+"Espejo de abDatabase: %@" = "مرآة abDatabase: %@";

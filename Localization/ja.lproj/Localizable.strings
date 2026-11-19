@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "abDatabase のミラーからシグネチャをダウンロードする (推奨。失敗した場合は ClamAV の公式サーバーを使用)";
 "Novedades de ClamMac %@" = "ClamMac %@ の新機能";
 "Entendido" = "了解";
+"no se pudo conectar con clamav.abdatabase.com" = "clamav.abdatabase.com に接続できませんでした";
+"el espejo rechazó la descarga" = "ミラーがダウンロードを拒否しました";
+"Espejo de abDatabase: %@" = "abDatabase ミラー: %@";

@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Hämta signaturer från abDatabase-spegeln (rekommenderas; om den inte fungerar används ClamAV:s officiella server)";
 "Novedades de ClamMac %@" = "Nyheter i ClamMac %@";
 "Entendido" = "Uppfattat";
+"no se pudo conectar con clamav.abdatabase.com" = "kunde inte ansluta till clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "spegeln avvisade nedladdningen";
+"Espejo de abDatabase: %@" = "abDatabase-spegel: %@";

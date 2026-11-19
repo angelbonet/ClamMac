@@ -56,6 +56,7 @@ public enum Updater {
         }
         ClamPaths.seedDatabaseFromHomebrew()
         var mirrorNote = ""
+        var mirrorFailure = ""        // por qué falló el espejo (para no mostrar solo el error del servidor oficial)
         if useMirror {
             ClamPaths.writeFreshclamMirrorConf()
             // El cool-down del CDN oficial vive en freshclam.dat (carpeta de firmas) y freshclam lo respeta también con un
@@ -65,14 +66,32 @@ public enum Updater {
             ClamPaths.restoreFreshclamState(stash)
             if r.ok { return r }
             mirrorNote = "[espejo] " + r.detail + "\n"
+            mirrorFailure = mirrorReason(r)
         }
         if let until = officialBlockedUntil, until > Date() {
-            return UpdateResult(ok: false, updated: false, message: failureMessage(.coolDown(until: until), raw: ""),
+            return UpdateResult(ok: false, updated: false, message: failureMessage(.coolDown(until: until), raw: "") + mirrorSuffix(mirrorFailure),
                                 failure: .coolDown(until: until), detail: mirrorNote + "[cool-down hasta \(until)]")
         }
         ClamPaths.writeFreshclamConf()
         let r = interpret(await Shell.run(bin, ["--config-file=\(ClamPaths.freshclamConf.path)"] + ClamPaths.certsArgs, timeout: 600))
-        return UpdateResult(ok: r.ok, updated: r.updated, message: r.message, failure: r.failure, detail: mirrorNote + "[oficial] " + r.detail)
+        return UpdateResult(ok: r.ok, updated: r.updated, message: r.ok ? r.message : r.message + mirrorSuffix(mirrorFailure),
+                            failure: r.failure, detail: mirrorNote + "[oficial] " + r.detail)
+    }
+
+    /// Resumen corto de por qué falló el espejo (una línea).
+    static func mirrorReason(_ r: UpdateResult) -> String {
+        switch r.failure {
+        case .network?: return tr("no se pudo conectar con clamav.abdatabase.com")
+        case .coolDown?: return tr("el espejo rechazó la descarga")
+        default:
+            let l = r.detail.split(separator: "\n").last.map(String.init) ?? ""
+            return l.isEmpty ? r.message : l
+        }
+    }
+
+    /// Texto añadido al mensaje cuando el espejo también falló.
+    static func mirrorSuffix(_ reason: String) -> String {
+        reason.isEmpty ? "" : "\n" + tr("Espejo de abDatabase: %@", reason)
     }
 
     /// Convierte la salida de freshclam en un resultado con el motivo del fallo.

@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Handtekeningen downloaden van de abDatabase-mirror (aanbevolen; bij een storing wordt de officiële ClamAV-server gebruikt)";
 "Novedades de ClamMac %@" = "Nieuw in ClamMac %@";
 "Entendido" = "Begrepen";
+"no se pudo conectar con clamav.abdatabase.com" = "geen verbinding met clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "de mirror weigerde de download";
+"Espejo de abDatabase: %@" = "abDatabase-mirror: %@";

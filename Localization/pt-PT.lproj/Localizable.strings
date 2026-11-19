@@ -196,3 +196,6 @@
 "Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Transferir as assinaturas do espelho da abDatabase (recomendado; se falhar, usa-se o servidor oficial do ClamAV)";
 "Novedades de ClamMac %@" = "Novidades do ClamMac %@";
 "Entendido" = "Percebi";
+"no se pudo conectar con clamav.abdatabase.com" = "não foi possível ligar a clamav.abdatabase.com";
+"el espejo rechazó la descarga" = "o espelho recusou a transferência";
+"Espejo de abDatabase: %@" = "Espelho abDatabase: %@";
