@@ -101,6 +101,21 @@ public enum ClamPaths {
         if (try? String(contentsOf: freshclamConf, encoding: .utf8)) != text { try? text.write(to: freshclamConf, atomically: true, encoding: .utf8) }
     }
 
+    /// freshclam.dat guarda el cool-down del CDN oficial. Se aparta (renombrándolo) antes de usar el espejo.
+    public static var freshclamState: URL { URL(fileURLWithPath: databaseDir).appendingPathComponent("freshclam.dat") }
+    public static func stashFreshclamState() -> URL? {
+        let fm = FileManager.default, src = freshclamState, dst = src.appendingPathExtension("official")
+        guard fm.fileExists(atPath: src.path) else { return nil }
+        try? fm.removeItem(at: dst)
+        do { try fm.moveItem(at: src, to: dst); return dst } catch { return nil }
+    }
+    /// Descarta el freshclam.dat que haya creado la ejecución contra el espejo y recupera el original.
+    public static func restoreFreshclamState(_ stash: URL?) {
+        let fm = FileManager.default
+        try? fm.removeItem(at: freshclamState)
+        if let stash, fm.fileExists(atPath: stash.path) { try? fm.moveItem(at: stash, to: freshclamState) }
+    }
+
     /// freshclam.conf que descarga del espejo privado (sin consulta DNS al CDN oficial).
     public static var freshclamMirrorConf: URL { appSupport.appendingPathComponent("freshclam-mirror.conf") }
     public static func writeFreshclamMirrorConf(mirror: String = defaultMirror) {

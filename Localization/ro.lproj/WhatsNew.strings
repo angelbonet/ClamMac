@@ -1,2 +1,3 @@
 /* Novedades por versión: clave = versión. */
 "1.2.1" = "• Dacă serverul de semnături limitează descărcările, ClamMac îți explică acum și reîncearcă singur.\n• Semnăturile se descarcă din oglinda abDatabase, cu rezervă pe serverul oficial ClamAV: instalări mai fiabile în clinicile cu mai multe Mac-uri.\n• Buton nou „Copiază diagnosticul” pentru suport.\n• Limbi noi: japoneză și arabă.";
+"1.2.2" = "• Corectat: dacă serverul oficial ClamAV blocase anterior rețeaua, ClamMac nu descărca semnăturile nici măcar din oglindă.\n• Dacă o descărcare nu lasă semnături, Starea nu mai spune „la zi”: explică problema.";

@@ -31,7 +31,7 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Sin motor incluido (builds de desarrollo) cae al de Homebrew. Pruebas de la app desde terminal NO pasan el autotest (TCC): instalar en /Applications y lanzar con `open -n --env ...`.
 
 ## Estado
-- Versión en curso: **1.2.1** (2026-11-19: espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas). Anterior publicada: 1.2.0 (2026-11-18; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
+- Versión en curso: **1.2.2** (2026-11-19, corrige que el cool-down de freshclam.dat bloqueaba también el espejo; 1.2.1 = espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas). Anterior publicada: 1.2.0 (2026-11-18; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
 - Fork en la organización: https://github.com/fmwarriors/ClamMac (web https://fmwarriors.github.io/ClamMac/), como con rustdesk-manager. Sincronizar tras cada push: `gh repo sync fmwarriors/ClamMac` (y relanzar `Deploy Documentation` si cambian docs).
 
 - Solo se conserva en GitHub la release más reciente (y su etiqueta): al publicar una nueva, borrar la anterior (`gh release delete vX --cleanup-tag --yes`) si Ángel lo confirma.
@@ -57,3 +57,6 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Web y Léeme del DMG solo en español; «Acerca de» sin mención a ClamGuard (requiere versión nueva).
 - Capturas nuevas (Estado, Cuarentena, Firmas) para la documentación.
 - Decisiones abiertas: ZIP EICAR, logo abDatabase en «Acerca de».
+
+## Trampa: `freshclam.dat` y el cool-down (1.2.2)
+`freshclam` guarda el cool-down del CDN (429/403) en `freshclam.dat` de la carpeta de firmas y lo respeta **también con `PrivateMirror`**, saliendo con código 0 sin descargar. Por eso `Updater` aparta ese fichero (`ClamPaths.stashFreshclamState`) durante la ejecución contra el espejo y lo restaura después, y `interpret` trata «cool-down» o «código 0 sin base de datos» como fallo. Reproducido con servidores locales (429 y bueno). Arreglo manual en un Mac con 1.2.1: `rm "~/Library/Application Support/ClamMac/Database/freshclam.dat"`.

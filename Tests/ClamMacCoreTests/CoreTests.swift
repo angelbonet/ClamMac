@@ -282,6 +282,25 @@ final class CoreTests: XCTestCase {
             let url = root.appendingPathComponent("Localization/\(l)/WhatsNew.strings")
             let d = try XCTUnwrap(NSDictionary(contentsOf: url) as? [String: String], "falta WhatsNew en \(l)")
             XCTAssertFalse((d["1.2.1"] ?? "").isEmpty, "\(l): sin novedades de 1.2.1")
+            XCTAssertFalse((d["1.2.2"] ?? "").isEmpty, "\(l): sin novedades de 1.2.2")
         }
+    }
+
+    func testCoolDownWithExitZeroIsAFailure() {
+        let out = "WARNING: FreshClam previously received error code 429 or 403 from the CDN.\nWARNING: You are still on cool-down until after: 2026-11-19 17:52:21\n"
+        let r = Updater.interpret(ShellResult(status: 0, stdout: out, stderr: ""))
+        XCTAssertFalse(r.ok)
+        if case .coolDown = r.failure {} else { XCTFail("debería ser cool-down") }
+    }
+    func testStashAndRestoreFreshclamState() throws {
+        let fm = FileManager.default, f = ClamPaths.freshclamState
+        try? fm.removeItem(at: f); try? fm.removeItem(at: f.appendingPathExtension("official"))
+        try Data("ORIGINAL".utf8).write(to: f)
+        let stash = ClamPaths.stashFreshclamState()
+        XCTAssertFalse(fm.fileExists(atPath: f.path), "debe apartarse")
+        try Data("DEL-ESPEJO".utf8).write(to: f)              // lo que crearía freshclam contra el espejo
+        ClamPaths.restoreFreshclamState(stash)
+        XCTAssertEqual(try String(contentsOf: f, encoding: .utf8), "ORIGINAL")
+        try? fm.removeItem(at: f)
     }
 }

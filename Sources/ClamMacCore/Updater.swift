@@ -58,7 +58,11 @@ public enum Updater {
         var mirrorNote = ""
         if useMirror {
             ClamPaths.writeFreshclamMirrorConf()
+            // El cool-down del CDN oficial vive en freshclam.dat (carpeta de firmas) y freshclam lo respeta también con un
+            // espejo privado: se aparta el fichero durante la ejecución contra el espejo y se restaura después.
+            let stash = ClamPaths.stashFreshclamState()
             let r = interpret(await Shell.run(bin, ["--config-file=\(ClamPaths.freshclamMirrorConf.path)"] + ClamPaths.certsArgs, timeout: 600))
+            ClamPaths.restoreFreshclamState(stash)
             if r.ok { return r }
             mirrorNote = "[espejo] " + r.detail + "\n"
         }
@@ -72,10 +76,18 @@ public enum Updater {
     }
 
     /// Convierte la salida de freshclam en un resultado con el motivo del fallo.
-    static func interpret(_ res: ShellResult) -> UpdateResult {
+    static func interpret(_ res: ShellResult, requireDatabase: Bool = true) -> UpdateResult {
         let text = res.stdout + res.stderr
         let tail = text.split(separator: "\n").suffix(12).joined(separator: "\n")
+        // freshclam sale con código 0 aunque no haya descargado nada por estar en cool-down: no es un éxito.
+        if text.contains("cool-down") && !text.contains("Cool-down expired") {
+            let f = classify(text)
+            return UpdateResult(ok: false, updated: false, message: failureMessage(f, raw: text), failure: f, detail: tail)
+        }
         if res.status == 0 {
+            if requireDatabase && !ClamPaths.hasDatabase {
+                return UpdateResult(ok: false, updated: false, message: tr("No se pudieron actualizar las firmas."), failure: .other, detail: tail)
+            }
             let updated = text.contains("updated (version")
             return UpdateResult(ok: true, updated: updated, message: updated ? tr("Firmas actualizadas") : tr("Las firmas ya estaban al día"), detail: tail)
         }

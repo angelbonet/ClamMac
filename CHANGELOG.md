@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.2.2] — 2026-11-19
+### Corregido
+- **Con el espejo de abDatabase no se descargaban firmas si el CDN oficial de ClamAV había bloqueado antes la red**: el *cool-down* queda guardado en `freshclam.dat` y `freshclam` lo respeta también con el espejo (sale con código 0 sin descargar nada). Ahora ese fichero se aparta mientras se usa el espejo y se restaura después.
+- Un `freshclam` que termina sin error pero sin dejar firmas ya no se muestra como «Las firmas ya estaban al día»: *Estado* explica el problema (cool-down o fallo de descarga).
+
 ## [1.2.1] — 2026-11-19
 ### Añadido
 - **Espejo de firmas de abDatabase** (`clamav.abdatabase.com`): las firmas se descargan primero de ahí y, si falla, del servidor oficial de ClamAV. Evita que varios Macs de una misma clínica agoten el límite de descargas del CDN oficial en la primera instalación. Se puede desactivar en *Ajustes*.
