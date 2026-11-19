@@ -94,10 +94,14 @@ public enum ClamPaths {
     /// Espejo de firmas de abDatabase (cvdupdate): una sola petición al CDN de ClamAV para todas las clínicas.
     public static let defaultMirror = "https://clamav.abdatabase.com"
 
+    /// IMPORTANTE — `TestDatabases no` en TODAS las configuraciones del motor incluido: tras descargar, freshclam prueba la base
+    /// cargándola con libclamav, que busca el certificado en una ruta GRABADA al compilar (`.../build/engine/out-<arch>/etc/certs`,
+    /// que solo existe en el Mac de desarrollo) y falla con «Broken or not a CVD file» en cualquier otro Mac. La integridad sigue
+    /// verificándose con la firma digital (`--cvdcertsdir`). Descubierto en Recinf01 (Lorente) el 2026-11-19.
     /// freshclam.conf propio de la app (el motor incluido no trae ninguno): descarga directa del CDN oficial.
     public static var freshclamConf: URL { appSupport.appendingPathComponent("freshclam.conf") }
     public static func writeFreshclamConf() {
-        let text = "DatabaseDirectory \(databaseDir)\nDatabaseMirror database.clamav.net\nCompressLocalDatabase no\n"
+        let text = "DatabaseDirectory \(databaseDir)\nDatabaseMirror database.clamav.net\nCompressLocalDatabase no\nTestDatabases no\n"
         if (try? String(contentsOf: freshclamConf, encoding: .utf8)) != text { try? text.write(to: freshclamConf, atomically: true, encoding: .utf8) }
     }
 
@@ -119,7 +123,7 @@ public enum ClamPaths {
     /// freshclam.conf que descarga del espejo privado (sin consulta DNS al CDN oficial).
     public static var freshclamMirrorConf: URL { appSupport.appendingPathComponent("freshclam-mirror.conf") }
     public static func writeFreshclamMirrorConf(mirror: String = defaultMirror) {
-        let text = "DatabaseDirectory \(databaseDir)\nPrivateMirror \(mirror)\nDNSDatabaseInfo no\nCompressLocalDatabase no\n"
+        let text = "DatabaseDirectory \(databaseDir)\nPrivateMirror \(mirror)\nDNSDatabaseInfo no\nCompressLocalDatabase no\nTestDatabases no\n"
         if (try? String(contentsOf: freshclamMirrorConf, encoding: .utf8)) != text { try? text.write(to: freshclamMirrorConf, atomically: true, encoding: .utf8) }
     }
 

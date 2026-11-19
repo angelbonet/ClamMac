@@ -1,3 +1,4 @@
 /* Novedades por versión: clave = versión. */
 "1.2.1" = "• Se o servidor de assinaturas limitar os downloads, o ClamMac agora explica e tenta de novo sozinho.\n• As assinaturas são baixadas do espelho da abDatabase, com alternativa no servidor oficial do ClamAV: instalações mais confiáveis em clínicas com vários Macs.\n• Novo botão «Copiar diagnóstico» para enviar ao suporte.\n• Novos idiomas: japonês e árabe.";
 "1.2.2" = "• Corrigido: se o servidor oficial do ClamAV já tinha bloqueado a rede, o ClamMac não baixava as assinaturas nem do espelho.\n• Se um download não deixar assinaturas, o Status não diz mais «atualizado»: explica o problema.";
+"1.2.3" = "• Corrigido o erro que impedia o download das assinaturas na maioria dos Macs (aparecia «v? · ?» depois de instalar).\n• O ClamMac não para mais ao verificar o banco de dados recém-baixado.";

@@ -31,7 +31,7 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Sin motor incluido (builds de desarrollo) cae al de Homebrew. Pruebas de la app desde terminal NO pasan el autotest (TCC): instalar en /Applications y lanzar con `open -n --env ...`.
 
 ## Estado
-- Versión en curso: **1.2.2** (2026-11-19, corrige que el cool-down de freshclam.dat bloqueaba también el espejo; 1.2.1 = espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas). Anterior publicada: 1.2.0 (2026-11-18; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
+- Versión en curso: **1.2.3** (corrige TestDatabases, ver «Trampa grave»; 1.2.2 = (2026-11-19, corrige que el cool-down de freshclam.dat bloqueaba también el espejo; 1.2.1 = espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas). Anterior publicada: 1.2.0 (2026-11-18; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
 - Fork en la organización: https://github.com/fmwarriors/ClamMac (web https://fmwarriors.github.io/ClamMac/), como con rustdesk-manager. Sincronizar tras cada push: `gh repo sync fmwarriors/ClamMac` (y relanzar `Deploy Documentation` si cambian docs).
 
 - Solo se conserva en GitHub la release más reciente (y su etiqueta): al publicar una nueva, borrar la anterior (`gh release delete vX --cleanup-tag --yes`) si Ángel lo confirma.
@@ -60,3 +60,8 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 
 ## Trampa: `freshclam.dat` y el cool-down (1.2.2)
 `freshclam` guarda el cool-down del CDN (429/403) en `freshclam.dat` de la carpeta de firmas y lo respeta **también con `PrivateMirror`**, saliendo con código 0 sin descargar. Por eso `Updater` aparta ese fichero (`ClamPaths.stashFreshclamState`) durante la ejecución contra el espejo y lo restaura después, y `interpret` trata «cool-down» o «código 0 sin base de datos» como fallo. Reproducido con servidores locales (429 y bueno). Arreglo manual en un Mac con 1.2.1: `rm "~/Library/Application Support/ClamMac/Database/freshclam.dat"`.
+
+## ⚠️ Trampa grave: ruta de certificados grabada en el binario (corregida en 1.2.3)
+Tras descargar, freshclam **prueba** la base cargándola con libclamav, que busca los certificados en una ruta compilada (`<repo>/build/engine/out-<arch>/etc/certs`) y NO usa `--cvdcertsdir` ni `CVDCertsDirectory` para esa prueba. En el Mac de desarrollo esa ruta existe, así que **nunca falló aquí**; en cualquier otro Mac daba «Broken or not a CVD file» y no se descargaba ninguna firma (afectó a 1.1.0–1.2.2). Arreglo: `TestDatabases no` en los dos `freshclam*.conf` (la integridad sigue verificada por la firma digital). Descubierto por SSH en Recinf01 (Lorente, iMac 2017, Ventura) el 2026-11-19.
+**Lección:** probar siempre una versión nueva en un Mac limpio / de cliente (no en el de desarrollo, donde existen rutas de compilación). Para depurar un Mac de cliente: `freshclam` a mano con un `DatabaseDirectory` temporal; la sección `[espejo]` de «Copiar diagnóstico» también lleva la salida.
+Acceso a Recinf01 (temporal): salto por el servidor FM de Lorente (`ProxyCommand=ssh -p 8024 -W %h:%p admin@lorenteortodonciazar.es`) hacia `clinica@192.168.1.13`; el router no permite reenvío SSH (`forwarding-enabled=no`, no tocar). La ARCH del User-Agent de freshclam es la de compilación (arm64) aunque corra en Intel.

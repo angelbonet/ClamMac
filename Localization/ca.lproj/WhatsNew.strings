@@ -1,3 +1,4 @@
 /* Novedades por versión: clave = versión. */
 "1.2.1" = "• Si el servidor de signatures limita les descàrregues, ClamMac ara t'ho explica i ho torna a provar sol.\n• Les signatures es descarreguen del mirall d'abDatabase, amb suport del servidor oficial de ClamAV: instal·lacions més fiables a clíniques amb diversos Mac.\n• Nou botó «Copia el diagnòstic» per enviar a suport.\n• Nous idiomes: japonès i àrab.";
 "1.2.2" = "• Corregit: si el servidor oficial de ClamAV havia bloquejat abans la xarxa, ClamMac no descarregava les signatures ni tan sols del mirall.\n• Si una descàrrega no deixa signatures, Estat ja no diu «al dia»: explica el problema.";
+"1.2.3" = "• Corregit l'error que impedia descarregar les signatures a la majoria de Mac (apareixia «v? · ?» després d'instal·lar).\n• ClamMac ja no s'atura en comprovar la base de dades acabada de descarregar.";

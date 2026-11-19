@@ -1,3 +1,4 @@
 /* Novedades por versión: clave = versión. */
 "1.2.1" = "• Se o servidor de assinaturas limitar as transferências, o ClamMac explica-o agora e volta a tentar sozinho.\n• As assinaturas são transferidas do espelho da abDatabase, com recurso ao servidor oficial do ClamAV: instalações mais fiáveis em clínicas com vários Macs.\n• Novo botão «Copiar diagnóstico» para enviar ao suporte.\n• Novos idiomas: japonês e árabe.";
 "1.2.2" = "• Corrigido: se o servidor oficial do ClamAV tinha bloqueado antes a rede, o ClamMac não transferia as assinaturas nem sequer do espelho.\n• Se uma transferência não deixar assinaturas, o Estado já não diz «atualizado»: explica o problema.";
+"1.2.3" = "• Corrigido o erro que impedia a transferência das assinaturas na maioria dos Macs (aparecia «v? · ?» após a instalação).\n• O ClamMac já não pára ao verificar a base de dados acabada de transferir.";

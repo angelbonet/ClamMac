@@ -267,7 +267,11 @@ final class CoreTests: XCTestCase {
     }
     func testMirrorConf() throws {
         ClamPaths.writeFreshclamMirrorConf(mirror: "https://example.org/clamav")
+        ClamPaths.writeFreshclamConf()
+        let official = try String(contentsOf: ClamPaths.freshclamConf, encoding: .utf8)
+        XCTAssertTrue(official.contains("TestDatabases no"), "sin esto freshclam falla en Macs que no son el de desarrollo")
         let conf = try String(contentsOf: ClamPaths.freshclamMirrorConf, encoding: .utf8)
+        XCTAssertTrue(conf.contains("TestDatabases no"))
         XCTAssertTrue(conf.contains("PrivateMirror https://example.org/clamav"))
         XCTAssertTrue(conf.contains("DNSDatabaseInfo no"))
     }
@@ -283,6 +287,7 @@ final class CoreTests: XCTestCase {
             let d = try XCTUnwrap(NSDictionary(contentsOf: url) as? [String: String], "falta WhatsNew en \(l)")
             XCTAssertFalse((d["1.2.1"] ?? "").isEmpty, "\(l): sin novedades de 1.2.1")
             XCTAssertFalse((d["1.2.2"] ?? "").isEmpty, "\(l): sin novedades de 1.2.2")
+            XCTAssertFalse((d["1.2.3"] ?? "").isEmpty, "\(l): sin novedades de 1.2.3")
         }
     }
 

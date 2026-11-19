@@ -2,6 +2,10 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.2.3] — 2026-11-19
+### Corregido
+- **Las firmas no se descargaban en ningún Mac distinto del de desarrollo** (`v? · ?` tras instalar). Tras bajar una base, `freshclam` la prueba cargándola con libclamav, que buscaba el certificado en una ruta grabada al compilar (`…/build/engine/out-<arch>/etc/certs`, solo existente en el Mac donde se compiló) y daba «Broken or not a CVD file». Ahora se desactiva esa prueba interna (`TestDatabases no`); la integridad sigue verificándose con la firma digital de ClamAV (`--cvdcertsdir`). Detectado por SSH en un iMac de una clínica; afectaba a 1.1.0–1.2.2.
+
 ## [1.2.2] — 2026-11-19
 ### Corregido
 - **Con el espejo de abDatabase no se descargaban firmas si el CDN oficial de ClamAV había bloqueado antes la red**: el *cool-down* queda guardado en `freshclam.dat` y `freshclam` lo respeta también con el espejo (sale con código 0 sin descargar nada). Ahora ese fichero se aparta mientras se usa el espejo y se restaura después.
