@@ -139,15 +139,26 @@ systemctl reload nginx
 ok "nginx recargado; certificado instalado (renovación: la del certbot del sistema)"
 
 echo "== 6/6 Verificación =="
-CODE=$(curl -s -o /dev/null -w '%{http_code}' -I "https://$SITE/daily.cvd" || true)
-[ "$CODE" = "200" ] || { remove_vhost; die "https://$SITE/daily.cvd devolvió $CODE: vhost retirado"; }
+# se prueba contra el propio nginx (--resolve), sin depender de la ruta de red del VPS hacia su IP pública
+# el reload es asíncrono: hasta que los nuevos workers atienden, nginx sirve el certificado del servidor por defecto (caducado)
+CODE=000
+for i in 1 2 3 4 5 6; do
+  sleep 2
+  CODE=$(curl -sS -o /dev/null -w '%{http_code}' -I --resolve "$SITE:443:127.0.0.1" "https://$SITE/daily.cvd" 2>/tmp/clamav-mirror-curl.err || true)
+  [ "$CODE" = "200" ] && break
+done
+if [ "$CODE" != "200" ]; then
+  echo "  curl: $(cat /tmp/clamav-mirror-curl.err)" >&2
+  if [ "${KEEP_ON_FAIL:-0}" = "1" ]; then die "https://$SITE/daily.cvd devolvió $CODE (KEEP_ON_FAIL=1: vhost conservado para depurar)"; fi
+  remove_vhost; die "https://$SITE/daily.cvd devolvió $CODE: vhost retirado"
+fi
 ok "https://$SITE/daily.cvd -> 200"
-REMOTE=$(curl -sI "https://$SITE/main.cvd" | awk 'tolower($1)=="content-length:"{print $2+0}')
+REMOTE=$(curl -sI --resolve "$SITE:443:127.0.0.1" "https://$SITE/main.cvd" | awk 'tolower($1)=="content-length:"{print $2+0}')
 LOCAL=$(stat -c %s "$DB/main.cvd")
 [ "$REMOTE" = "$LOCAL" ] && ok "main.cvd: mismo tamaño servido y en disco ($LOCAL)" || die "tamaño distinto de main.cvd ($REMOTE vs $LOCAL)"
-CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "https://$SITE/daily.cvd" || true)
+CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST --resolve "$SITE:443:127.0.0.1" "https://$SITE/daily.cvd" || true)
 if [ "$CODE" = "405" ] || [ "$CODE" = "403" ]; then ok "POST rechazado ($CODE)"; else echo "  [AVISO] POST devolvió $CODE"; fi
-CODE=$(curl -s -o /dev/null -w '%{http_code}' "https://$SITE/" || true)
+CODE=$(curl -s -o /dev/null -w '%{http_code}' --resolve "$SITE:443:127.0.0.1" "https://$SITE/" || true)
 ok "raíz sin listado de ficheros ($CODE)"
 echo
 echo "LISTO. https://$SITE sirve las firmas. Quitar: sudo bash deploy_mirror.sh --uninstall"
