@@ -18,11 +18,18 @@ struct ClamMacApp: App {
         }
         Window("ClamMac", id: "main") {
             MainView().environmentObject(engine)
+                .environment(\.layoutDirection, appLayoutDirection)     // árabe: diseño de derecha a izquierda
                 .frame(minWidth: 760, minHeight: 520)
         }
         .defaultSize(width: 900, height: 600)
     }
 }
+
+/// Dirección del diseño según el idioma que usa la app (el fijado en Ajustes o el del sistema).
+let appLayoutDirection: LayoutDirection = {
+    let lang = Bundle.main.preferredLocalizations.first ?? "es"
+    return Locale.Language(identifier: lang).characterDirection == .rightToLeft ? .rightToLeft : .leftToRight
+}()
 
 struct MenuContent: View {
     @ObservedObject var engine: Engine

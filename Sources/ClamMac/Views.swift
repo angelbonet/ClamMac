@@ -61,7 +61,7 @@ struct StatusView: View {
             if let w = e.whatsNew {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(tr("Novedades de ClamMac %@", w.version)).font(.headline)
-                    Text(w.text).font(.callout)
+                    Text(w.text).font(.callout).fixedSize(horizontal: false, vertical: true)
                     Button("Entendido") { e.whatsNew = nil }
                 }
                 .padding(12).frame(maxWidth: .infinity, alignment: .leading)

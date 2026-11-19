@@ -2,3 +2,4 @@
 "1.2.1" = "• Pokud server s podpisy omezí stahování, ClamMac to nyní vysvětlí a sám to zkusí znovu.\n• Podpisy se stahují ze zrcadla abDatabase se zálohou na oficiální server ClamAV: spolehlivější instalace v ordinacích s více Mac.\n• Nové tlačítko „Kopírovat diagnostiku“ pro podporu.\n• Nové jazyky: japonština a arabština.";
 "1.2.2" = "• Opraveno: pokud oficiální server ClamAV dříve síť zablokoval, ClamMac nestahoval podpisy ani ze zrcadla.\n• Pokud stahování žádné podpisy nezanechá, Stav už nehlásí „aktuální“, ale vysvětlí problém.";
 "1.2.3" = "• Opraven chyba, kvůli které se na většině počítačů Mac nestahovaly podpisy (po instalaci se zobrazilo „v? · ?“).\n• ClamMac se už nezastaví při kontrole právě stažené databáze.";
+"1.2.4" = "• Pokud nelze stáhnout podpisy, Stav nyní vysvětlí i to, proč selhalo zrcadlo abDatabase.\n• Arabština: okno se nyní zobrazuje zprava doleva.";

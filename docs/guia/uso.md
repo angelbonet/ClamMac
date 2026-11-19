@@ -6,6 +6,8 @@ El menú del escudo permite activar/desactivar la vigilancia, lanzar un análisi
 
 ## Estado
 
+![Estado](../img/estado.png)
+
 Resume la protección: vigilancia, motor, versión de firmas, modo de actualización y elementos en cuarentena. Incluye el botón **Probar protección** ([más info](prueba.md)). Aquí aparecen los avisos importantes (falta de ClamAV, falta de *Acceso total al disco*, versión nueva de la app).
 
 ## Vigilancia de carpetas
@@ -36,6 +38,8 @@ Lo detectado se **aparta** a una carpeta propia de ClamMac y se le quitan todos 
 - **Eliminar**: lo borra definitivamente.
 
 ## Firmas
+
+![Firmas](../img/firmas.png)
 
 Ver [Actualizaciones](actualizaciones.md).
 

@@ -288,6 +288,7 @@ final class CoreTests: XCTestCase {
             XCTAssertFalse((d["1.2.1"] ?? "").isEmpty, "\(l): sin novedades de 1.2.1")
             XCTAssertFalse((d["1.2.2"] ?? "").isEmpty, "\(l): sin novedades de 1.2.2")
             XCTAssertFalse((d["1.2.3"] ?? "").isEmpty, "\(l): sin novedades de 1.2.3")
+            XCTAssertFalse((d["1.2.4"] ?? "").isEmpty, "\(l): sin novedades de 1.2.4")
         }
     }
 

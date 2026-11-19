@@ -111,4 +111,6 @@ ClamAV® y su mascota son marcas de Cisco Systems. ClamMac es un proyecto indepe
 
 ---
 
+<a href="https://abdatabase.com"><img src="docs/img/abdatabase-logo.png" alt="abDatabase" width="160"></a>
+
 **abDatabase** · [abdatabase.com](https://abdatabase.com) · [☕ Invita un café](https://buymeacoffee.com/angelbonet)

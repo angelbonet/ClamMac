@@ -2,6 +2,13 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.2.4] — 2026-11-19
+### Cambiado
+- Si falla la descarga de firmas y también el espejo de abDatabase, *Estado* muestra el motivo del fallo del espejo junto al del servidor oficial.
+### Corregido
+- La tarjeta de *Novedades* cortaba el texto en la primera línea cuando había varios puntos.
+- **Árabe**: la ventana se muestra de derecha a izquierda (barra lateral a la derecha) y el título de Novedades ya no sale con el orden invertido.
+
 ## [1.2.3] — 2026-11-19
 ### Corregido
 - **Las firmas no se descargaban en ningún Mac distinto del de desarrollo** (`v? · ?` tras instalar). Tras bajar una base, `freshclam` la prueba cargándola con libclamav, que buscaba el certificado en una ruta grabada al compilar (`…/build/engine/out-<arch>/etc/certs`, solo existente en el Mac donde se compiló) y daba «Broken or not a CVD file». Ahora se desactiva esa prueba interna (`TestDatabases no`); la integridad sigue verificándose con la firma digital de ClamAV (`--cvdcertsdir`). Detectado por SSH en un iMac de una clínica; afectaba a 1.1.0–1.2.2.
