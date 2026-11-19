@@ -31,7 +31,7 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Sin motor incluido (builds de desarrollo) cae al de Homebrew. Pruebas de la app desde terminal NO pasan el autotest (TCC): instalar en /Applications y lanzar con `open -n --env ...`.
 
 ## Estado
-- Versión en curso: **1.2.3** (corrige TestDatabases, ver «Trampa grave»; 1.2.2 = (2026-11-19, corrige que el cool-down de freshclam.dat bloqueaba también el espejo; 1.2.1 = espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas). Anterior publicada: 1.2.0 (2026-11-18; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
+- Versión actual: **1.2.3**, PUBLICADA 2026-11-19 y marcada como correcta (única release en GitHub; 1.2.0–1.2.2 borradas porque no descargaban firmas en Macs ajenos al de desarrollo, ver «Trampa grave»). 1.2.2 = el cool-down de freshclam.dat bloqueaba también el espejo; 1.2.1 = espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas. Autoactualización de un clic verificada en uso real.
 - Fork en la organización: https://github.com/fmwarriors/ClamMac (web https://fmwarriors.github.io/ClamMac/), como con rustdesk-manager. Sincronizar tras cada push: `gh repo sync fmwarriors/ClamMac` (y relanzar `Deploy Documentation` si cambian docs).
 
 - Solo se conserva en GitHub la release más reciente (y su etiqueta): al publicar una nueva, borrar la anterior (`gh release delete vX --cleanup-tag --yes`) si Ángel lo confirma.
@@ -49,7 +49,6 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 ## Soporte: «pide brew» / «Actualizar firmas no hace nada»
 - Causa típica: el usuario tiene una versión <1.1.0 (dependía de Homebrew; sin él `freshclam` no se encuentra y falla en silencio). Primero pedir la versión de «Acerca de»; solución: instalar el DMG actual. Incidencia Lorente 2026-11-18 (sin confirmar).
 - Si ya es ≥1.1.0: red (¿firewall bloquea `database.clamav.net` 443?) o permisos; mirar la pestaña Registro.
-- Idea 1.2.1: mostrar en pantalla el motivo del fallo de `freshclam` (`Updater.updateNow` solo conserva las 3 últimas líneas).
 
 ## Pendiente
 - Probar en un Mac Intel real, en macOS 13 y en una instalación limpia sin Homebrew; probar el cambio de idioma desde el selector.
@@ -65,3 +64,8 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 Tras descargar, freshclam **prueba** la base cargándola con libclamav, que busca los certificados en una ruta compilada (`<repo>/build/engine/out-<arch>/etc/certs`) y NO usa `--cvdcertsdir` ni `CVDCertsDirectory` para esa prueba. En el Mac de desarrollo esa ruta existe, así que **nunca falló aquí**; en cualquier otro Mac daba «Broken or not a CVD file» y no se descargaba ninguna firma (afectó a 1.1.0–1.2.2). Arreglo: `TestDatabases no` en los dos `freshclam*.conf` (la integridad sigue verificada por la firma digital). Descubierto por SSH en Recinf01 (Lorente, iMac 2017, Ventura) el 2026-11-19.
 **Lección:** probar siempre una versión nueva en un Mac limpio / de cliente (no en el de desarrollo, donde existen rutas de compilación). Para depurar un Mac de cliente: `freshclam` a mano con un `DatabaseDirectory` temporal; la sección `[espejo]` de «Copiar diagnóstico» también lleva la salida.
 Acceso a Recinf01 (temporal): salto por el servidor FM de Lorente (`ProxyCommand=ssh -p 8024 -W %h:%p admin@lorenteortodonciazar.es`) hacia `clinica@192.168.1.13`; el router no permite reenvío SSH (`forwarding-enabled=no`, no tocar). La ARCH del User-Agent de freshclam es la de compilación (arm64) aunque corra en Intel.
+
+## Pendiente tras 1.2.3
+- Verificar en Recinf01 (Lorente) que pasa a 1.2.3 y muestra versión de firmas; Ángel debe desactivar Sesión remota allí y rotar las contraseñas expuestas en el chat (Recinf01 `clinica`, sudo del VPS).
+- Cosmético: árabe sin espejado RTL / bidi del título de Novedades. Mostrar también el error del espejo (no solo el cool-down oficial) en Estado.
+- Lección: probar cada release en un Mac limpio/de cliente, no solo en el de desarrollo.
