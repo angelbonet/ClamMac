@@ -58,6 +58,15 @@ struct StatusView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Estado").font(.largeTitle.bold())
+            if let w = e.whatsNew {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(tr("Novedades de ClamMac %@", w.version)).font(.headline)
+                    Text(w.text).font(.callout)
+                    Button("Entendido") { e.whatsNew = nil }
+                }
+                .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.green.opacity(0.15), in: RoundedRectangle(cornerRadius: 8))
+            }
             if let u = e.availableUpdate {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(tr("Hay una versión nueva de ClamMac: %@", u.version)).font(.headline)
@@ -77,6 +86,7 @@ struct StatusView: View {
             else if !e.hasSignatures && e.busy == nil {
                 Banner(text: tr("Todavía no hay firmas de virus: ClamMac no puede analizar. Pulsa «Actualizar firmas» (hace falta conexión a internet)."), color: .orange)
             }
+            if let p = e.signatureProblem, e.busy == nil { Banner(text: p, color: .orange) }
             if !e.hasFullDiskAccess {
                 Banner(text: tr("Falta Acceso total al disco: macOS ocultará ficheros al análisis. Ajustes del Sistema → Privacidad y seguridad → Acceso total al disco → añade ClamMac."), color: .orange)
                 Button("Abrir ajustes de privacidad") {
@@ -92,6 +102,7 @@ struct StatusView: View {
             HStack {
                 Button("Análisis rápido") { Task { await e.quickScan() } }.disabled(e.busy != nil || !e.engineInstalled)
                 Button("Actualizar firmas") { Task { await e.updateSignatures() } }.disabled(e.busy != nil || !e.engineInstalled)
+                Button("Copiar diagnóstico") { e.copyDiagnostics() }
             }
             SelfTestCard()
         }
@@ -285,6 +296,7 @@ struct SettingsView: View {
             Toggle("Abrir ClamMac al iniciar sesión", isOn: Binding(get: { e.launchAtLogin }, set: { e.launchAtLogin = $0 }))
             Toggle("Mantener clamd en marcha (análisis instantáneo, ~1 GB de RAM)", isOn: $e.settings.useDaemon)
             Toggle("Notificaciones del sistema", isOn: $e.settings.notificationsEnabled)
+            Toggle("Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)", isOn: $e.settings.useSignatureMirror)
             Divider()
             Toggle("Avisos por Pushover", isOn: $e.settings.pushoverEnabled)
             if e.settings.pushoverEnabled {

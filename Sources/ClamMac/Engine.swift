@@ -35,6 +35,11 @@ final class Engine: ObservableObject {
     private var engineWatch: Timer?
     @Published var availableUpdate: ReleaseInfo?
     @Published var updateStatus: String?     // mensaje de la última búsqueda de versiones
+    @Published var whatsNew: (version: String, text: String)?   // novedades de la versión recién instalada (se muestra una vez)
+    @Published var signatureProblem: String?  // por qué falló la última descarga de firmas (nil = bien)
+    private var lastUpdateDetail = ""
+    /// Retraso aleatorio (0–20 min) de las actualizaciones automáticas: evita que todos los Macs de una clínica pidan a la vez.
+    private let updateJitter = Double.random(in: 0...1200)
 
     let daemon = ClamdManager()
     let quarantine = Quarantine()
@@ -202,19 +207,53 @@ final class Engine: ObservableObject {
     func updateSignatures() async {
         guard busy == nil else { return }
         busy = tr("Actualizando firmas…")
-        let r = await Updater.updateNow()
+        let r = await Updater.updateNow(useMirror: settings.useSignatureMirror, officialBlockedUntil: settings.officialCoolDownUntil)
         busy = nil
         settings.lastUpdateCheck = Date()
+        lastUpdateDetail = r.detail
+        if r.ok { settings.officialCoolDownUntil = nil; signatureProblem = nil }
+        else {
+            signatureProblem = r.message
+            if case .coolDown(let until) = r.failure { settings.officialCoolDownUntil = until ?? Date().addingTimeInterval(3600) }
+        }
         add(tr("Firmas: %@", r.message), alert: !r.ok)
         if r.updated { daemon.reload() }
         hasSignatures = ClamPaths.hasDatabase
         dbInfo = await Updater.databaseInfo()
     }
 
+    /// Texto para pegar en un correo de soporte (sin datos personales).
+    func diagnosticText() -> String {
+        let v = ProcessInfo.processInfo.operatingSystemVersion
+        var arch = "?"
+        #if arch(arm64)
+        arch = "arm64"
+        #else
+        arch = "x86_64"
+        #endif
+        var l = ["ClamMac \(currentVersion) · macOS \(v.majorVersion).\(v.minorVersion).\(v.patchVersion) · \(arch)",
+                 "Motor: \(ClamPaths.usingBundledEngine ? "incluido" : "Homebrew") · clamd: \(daemonReady ? "sí" : "no")",
+                 "Firmas: \(dbInfo.map { "v\($0.signatureVersion) · \($0.date)" } ?? "ninguna") · base de datos presente: \(ClamPaths.hasDatabase ? "sí" : "no")",
+                 "Espejo abDatabase: \(settings.useSignatureMirror ? ClamPaths.defaultMirror : "desactivado")",
+                 "Última actualización: \(settings.lastUpdateCheck.map { $0.formatted() } ?? "nunca")",
+                 "Cool-down CDN oficial: \(settings.officialCoolDownUntil.map { $0.formatted() } ?? "no")",
+                 "Acceso total al disco: \(hasFullDiskAccess ? "sí" : "no")",
+                 "Problema actual: \(signatureProblem ?? "ninguno")"]
+        if !lastUpdateDetail.isEmpty { l += ["", "--- freshclam ---", lastUpdateDetail] }
+        l += ["", "--- registro (últimas líneas) ---"] + log.suffix(25).map { "\($0.date.formatted(date: .omitted, time: .standard)) \($0.text)" }
+        return l.joined(separator: "\n")
+    }
+
+    func copyDiagnostics() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(diagnosticText(), forType: .string)
+        add(tr("Diagnóstico copiado al portapapeles"))
+    }
+
     private func minuteTick() {
         // actualización automática
         if settings.updateMode == .automatic, busy == nil {
-            let due = settings.lastUpdateCheck.map { Date().timeIntervalSince($0) >= Double(settings.updateIntervalHours) * 3600 } ?? true
+            let due = settings.lastUpdateCheck.map { Date().timeIntervalSince($0) >= Double(settings.updateIntervalHours) * 3600 + updateJitter } ?? true
             if due { Task { await updateSignatures() } }
         }
         // actualizaciones de la propia app: como mucho una vez al día
@@ -334,6 +373,8 @@ final class Engine: ObservableObject {
         if let last = settings.lastRunVersion, UpdateChecker.isNewer(now, than: last) {
             add(tr("ClamMac se ha actualizado de %@ a %@", last, now))
             notify(title: tr("ClamMac actualizada"), body: tr("Ahora usas la versión %@. La protección está activa.", now))
+            let notes = Bundle.main.localizedString(forKey: now, value: "", table: "WhatsNew")
+            if !notes.isEmpty, notes != now { whatsNew = (now, notes) }
         }
         if settings.lastRunVersion != now { settings.lastRunVersion = now }
     }

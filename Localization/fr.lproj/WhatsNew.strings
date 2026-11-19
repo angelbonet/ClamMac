@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Si le serveur de signatures limite les téléchargements, ClamMac vous l'explique désormais et réessaie tout seul.\n• Les signatures sont téléchargées depuis le miroir abDatabase, avec repli sur le serveur officiel de ClamAV : installations plus fiables dans les cliniques avec plusieurs Mac.\n• Nouveau bouton « Copier le diagnostic » à envoyer au support.\n• Nouvelles langues : japonais et arabe.";

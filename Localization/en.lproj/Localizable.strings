@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Download and install";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "ClamMac will quit and reopen by itself in a few seconds. You do not have to do anything else.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "This copy cannot update itself: the installer will open and you will need to drag the app to Applications.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "The signature server has temporarily limited downloads from this network. ClamMac will retry by itself at %@; you do not need to click anything.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "The signature server has temporarily limited downloads from this network. ClamMac will retry by itself later; you do not need to click anything.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "Could not connect to the signature server. Check the internet connection, firewall or proxy (database.clamav.net and clamav.abdatabase.com, port 443).";
+"No se pudieron actualizar las firmas." = "The signatures could not be updated.";
+"Diagnóstico copiado al portapapeles" = "Diagnostics copied to the clipboard";
+"Copiar diagnóstico" = "Copy diagnostics";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Download signatures from the abDatabase mirror (recommended; if it fails, the official ClamAV server is used)";
+"Novedades de ClamMac %@" = "What's new in ClamMac %@";
+"Entendido" = "Got it";

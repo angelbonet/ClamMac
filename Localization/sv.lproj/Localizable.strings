@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Hämta och installera";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "ClamMac avslutas och öppnas igen av sig självt om några sekunder. Du behöver inte göra något mer.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "Den här kopian kan inte uppdatera sig själv: installationsprogrammet öppnas och du måste dra appen till Program.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "Signaturservern har tillfälligt begränsat nedladdningar från det här nätverket. ClamMac försöker igen av sig själv kl. %@; du behöver inte klicka på något.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "Signaturservern har tillfälligt begränsat nedladdningar från det här nätverket. ClamMac försöker igen av sig själv senare; du behöver inte klicka på något.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "Det gick inte att ansluta till signaturservern. Kontrollera internetanslutningen, brandväggen eller proxyn (database.clamav.net och clamav.abdatabase.com, port 443).";
+"No se pudieron actualizar las firmas." = "Signaturerna kunde inte uppdateras.";
+"Diagnóstico copiado al portapapeles" = "Diagnostiken kopierades till Urklipp";
+"Copiar diagnóstico" = "Kopiera diagnostik";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Hämta signaturer från abDatabase-spegeln (rekommenderas; om den inte fungerar används ClamAV:s officiella server)";
+"Novedades de ClamMac %@" = "Nyheter i ClamMac %@";
+"Entendido" = "Uppfattat";

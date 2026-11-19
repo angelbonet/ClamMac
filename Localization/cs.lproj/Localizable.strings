@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Stáhnout a nainstalovat";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "ClamMac se ukončí a za několik sekund se sám znovu otevře. Nemusíte dělat nic dalšího.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "Tuto kopii nelze aktualizovat sama: otevře se instalátor a aplikaci budete muset přetáhnout do složky Aplikace.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "Server s podpisy dočasně omezil stahování z této sítě. ClamMac to sám zkusí znovu v %@; nemusíte nic klikat.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "Server s podpisy dočasně omezil stahování z této sítě. ClamMac to sám zkusí znovu později; nemusíte nic klikat.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "Nelze se připojit k serveru s podpisy. Zkontrolujte připojení k internetu, firewall nebo proxy (database.clamav.net a clamav.abdatabase.com, port 443).";
+"No se pudieron actualizar las firmas." = "Podpisy se nepodařilo aktualizovat.";
+"Diagnóstico copiado al portapapeles" = "Diagnostika zkopírována do schránky";
+"Copiar diagnóstico" = "Kopírovat diagnostiku";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Stahovat podpisy ze zrcadla abDatabase (doporučeno; při selhání se použije oficiální server ClamAV)";
+"Novedades de ClamMac %@" = "Novinky v ClamMac %@";
+"Entendido" = "Rozumím";

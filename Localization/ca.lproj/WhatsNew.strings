@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Si el servidor de signatures limita les descàrregues, ClamMac ara t'ho explica i ho torna a provar sol.\n• Les signatures es descarreguen del mirall d'abDatabase, amb suport del servidor oficial de ClamAV: instal·lacions més fiables a clíniques amb diversos Mac.\n• Nou botó «Copia el diagnòstic» per enviar a suport.\n• Nous idiomes: japonès i àrab.";

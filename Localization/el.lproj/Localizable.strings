@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Λήψη και εγκατάσταση";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "Το ClamMac θα κλείσει και θα ανοίξει ξανά μόνο του σε λίγα δευτερόλεπτα. Δεν χρειάζεται να κάνετε τίποτα άλλο.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "Αυτό το αντίγραφο δεν μπορεί να ενημερωθεί μόνο του: θα ανοίξει το πρόγραμμα εγκατάστασης και θα πρέπει να σύρετε την εφαρμογή στις Εφαρμογές.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "Ο διακομιστής υπογραφών περιόρισε προσωρινά τις λήψεις από αυτό το δίκτυο. Το ClamMac θα ξαναδοκιμάσει μόνο του στις %@· δεν χρειάζεται να πατήσετε τίποτα.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "Ο διακομιστής υπογραφών περιόρισε προσωρινά τις λήψεις από αυτό το δίκτυο. Το ClamMac θα ξαναδοκιμάσει μόνο του αργότερα· δεν χρειάζεται να πατήσετε τίποτα.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "Δεν ήταν δυνατή η σύνδεση με τον διακομιστή υπογραφών. Ελέγξτε τη σύνδεση στο διαδίκτυο, το τείχος προστασίας ή τον διακομιστή μεσολάβησης (database.clamav.net και clamav.abdatabase.com, θύρα 443).";
+"No se pudieron actualizar las firmas." = "Δεν ήταν δυνατή η ενημέρωση των υπογραφών.";
+"Diagnóstico copiado al portapapeles" = "Τα διαγνωστικά αντιγράφηκαν στο πρόχειρο";
+"Copiar diagnóstico" = "Αντιγραφή διαγνωστικών";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Λήψη υπογραφών από τον καθρέφτη της abDatabase (συνιστάται· αν αποτύχει, χρησιμοποιείται ο επίσημος διακομιστής ClamAV)";
+"Novedades de ClamMac %@" = "Τι νέο υπάρχει στο ClamMac %@";
+"Entendido" = "Κατάλαβα";

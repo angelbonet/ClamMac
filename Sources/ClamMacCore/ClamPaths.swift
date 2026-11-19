@@ -91,11 +91,21 @@ public enum ClamPaths {
         }
     }
 
-    /// freshclam.conf propio de la app (el motor incluido no trae ninguno).
+    /// Espejo de firmas de abDatabase (cvdupdate): una sola petición al CDN de ClamAV para todas las clínicas.
+    public static let defaultMirror = "https://clamav.abdatabase.com"
+
+    /// freshclam.conf propio de la app (el motor incluido no trae ninguno): descarga directa del CDN oficial.
     public static var freshclamConf: URL { appSupport.appendingPathComponent("freshclam.conf") }
     public static func writeFreshclamConf() {
         let text = "DatabaseDirectory \(databaseDir)\nDatabaseMirror database.clamav.net\nCompressLocalDatabase no\n"
         if (try? String(contentsOf: freshclamConf, encoding: .utf8)) != text { try? text.write(to: freshclamConf, atomically: true, encoding: .utf8) }
+    }
+
+    /// freshclam.conf que descarga del espejo privado (sin consulta DNS al CDN oficial).
+    public static var freshclamMirrorConf: URL { appSupport.appendingPathComponent("freshclam-mirror.conf") }
+    public static func writeFreshclamMirrorConf(mirror: String = defaultMirror) {
+        let text = "DatabaseDirectory \(databaseDir)\nPrivateMirror \(mirror)\nDNSDatabaseInfo no\nCompressLocalDatabase no\n"
+        if (try? String(contentsOf: freshclamMirrorConf, encoding: .utf8)) != text { try? text.write(to: freshclamMirrorConf, atomically: true, encoding: .utf8) }
     }
 
     public static var appSupport: URL {

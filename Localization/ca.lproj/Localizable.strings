@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Descarrega i instal·la";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "ClamMac es tancarà i es tornarà a obrir sola d'aquí a uns segons. No has de fer res més.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "Aquesta còpia no es pot actualitzar sola: s'obrirà l'instal·lador i hauràs d'arrossegar l'app a Aplicacions.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "El servidor de signatures ha limitat temporalment les descàrregues des d'aquesta xarxa. ClamMac ho tornarà a provar sol a les %@; no cal prémer res.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "El servidor de signatures ha limitat temporalment les descàrregues des d'aquesta xarxa. ClamMac ho tornarà a provar sol més tard; no cal prémer res.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "No s'ha pogut connectar amb el servidor de signatures. Comprova la connexió a internet, el tallafocs o el servidor intermediari (database.clamav.net i clamav.abdatabase.com, port 443).";
+"No se pudieron actualizar las firmas." = "No s'han pogut actualitzar les signatures.";
+"Diagnóstico copiado al portapapeles" = "Diagnòstic copiat al porta-retalls";
+"Copiar diagnóstico" = "Copia el diagnòstic";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Descarrega les signatures del mirall d'abDatabase (recomanat; si falla, s'usa el servidor oficial de ClamAV)";
+"Novedades de ClamMac %@" = "Novetats de ClamMac %@";
+"Entendido" = "Entesos";

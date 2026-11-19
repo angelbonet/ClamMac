@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Descarcă și instalează";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "ClamMac se va închide și se va redeschide singur în câteva secunde. Nu trebuie să faci nimic altceva.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "Această copie nu se poate actualiza singură: se va deschide programul de instalare și va trebui să tragi aplicația în Aplicații.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "Serverul de semnături a limitat temporar descărcările din această rețea. ClamMac va reîncerca singur la %@; nu trebuie să apeși nimic.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "Serverul de semnături a limitat temporar descărcările din această rețea. ClamMac va reîncerca singur mai târziu; nu trebuie să apeși nimic.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "Nu m-am putut conecta la serverul de semnături. Verifică conexiunea la internet, firewall-ul sau proxy-ul (database.clamav.net și clamav.abdatabase.com, portul 443).";
+"No se pudieron actualizar las firmas." = "Semnăturile nu au putut fi actualizate.";
+"Diagnóstico copiado al portapapeles" = "Diagnostic copiat în clipboard";
+"Copiar diagnóstico" = "Copiază diagnosticul";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Descarcă semnăturile din oglinda abDatabase (recomandat; dacă nu merge, se folosește serverul oficial ClamAV)";
+"Novedades de ClamMac %@" = "Noutăți în ClamMac %@";
+"Entendido" = "Am înțeles";

@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Se o servidor de assinaturas limitar as transferências, o ClamMac explica-o agora e volta a tentar sozinho.\n• As assinaturas são transferidas do espelho da abDatabase, com recurso ao servidor oficial do ClamAV: instalações mais fiáveis em clínicas com vários Macs.\n• Novo botão «Copiar diagnóstico» para enviar ao suporte.\n• Novos idiomas: japonês e árabe.";

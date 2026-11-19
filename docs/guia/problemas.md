@@ -25,6 +25,10 @@ ClamMac sigue funcionando, pero cada análisis es más lento. Causas habituales:
 
 ## La actualización de firmas falla
 
+- Mira el aviso naranja de *Estado*: explica el motivo.
+- **«El servidor de firmas ha limitado temporalmente las descargas desde esta red»**: el CDN de ClamAV bloquea durante unas horas las IP que piden demasiado (típico al instalar varios Macs a la vez en una misma clínica). No pulses «Actualizar firmas» más: ClamMac lo reintentará solo a la hora indicada, y cada intento alarga la espera.
+- **«No se pudo conectar con el servidor de firmas»**: revisa internet, cortafuegos o proxy; deben poder salir a `clamav.abdatabase.com` y `database.clamav.net` (puerto 443).
+- Si tienes que contactar con soporte, pulsa **Copiar diagnóstico** en *Estado* y pega el texto en el correo.
 - Comprueba la conexión a Internet.
 - Mira el mensaje en *Registro*. Si dice que otro `freshclam` está en marcha, espera unos minutos.
 - Prueba desde la terminal: `freshclam`

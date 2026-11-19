@@ -31,12 +31,25 @@ App nativa de barra de menú (SwiftUI, macOS 13+ (mínimo; no usar APIs de macOS
 - Sin motor incluido (builds de desarrollo) cae al de Homebrew. Pruebas de la app desde terminal NO pasan el autotest (TCC): instalar en /Applications y lanzar con `open -n --env ...`.
 
 ## Estado
-- Última versión publicada: **1.2.0** (2026-11-18; 14 idiomas; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
+- Versión en curso: **1.2.1** (2026-11-19: espejo de firmas, motivo del fallo/cool-down, «Copiar diagnóstico», tarjeta de novedades, japonés y árabe = 16 idiomas). Anterior publicada: 1.2.0 (2026-11-18; mínimo macOS 13; firmada con la cuenta personal). Autoactualización de un clic verificada en uso real.
 - Fork en la organización: https://github.com/fmwarriors/ClamMac (web https://fmwarriors.github.io/ClamMac/), como con rustdesk-manager. Sincronizar tras cada push: `gh repo sync fmwarriors/ClamMac` (y relanzar `Deploy Documentation` si cambian docs).
 
 - Solo se conserva en GitHub la release más reciente (y su etiqueta): al publicar una nueva, borrar la anterior (`gh release delete vX --cleanup-tag --yes`) si Ángel lo confirma.
 - `LICENSE` debe quedar como MIT estándar (GitHub lo reconoce); los avisos extra van en `NOTICE.md`.
+- **Decisión de licencia (2026-11-18): se queda MIT.** David Casas M (ClamGuard, CC BY-SA 4.0) sugirió Creative Commons; Ángel se lo explicó públicamente en X: CC no se recomienda para software y el motor ClamAV incluido es GPLv2 (NC/ND chocarían). MIT vale porque ClamMac lanza `clamscan`/`freshclam`/`clamd` como procesos separados (mera agregación). **No enlazar `libclamav` directamente**: eso haría el código obra derivada de GPL. Opcional pendiente: documentación (`docs/`) en CC BY 4.0.
 - Fork de ClamGuard `angelbonet/ClamGuard`: copia sin cambios del de David; decidir si se borra.
+
+## Firmas: espejo propio + cool-down (desde 1.2.1)
+- **Causa de la incidencia Lorente (2026-11-19):** el CDN de ClamAV limita por IP pública (429/403 + «cool-down» de horas en `freshclam.dat`); varios Macs de una clínica instalando a la vez (~300 MB cada uno) lo agotan, y los reintentos lo alargan. `curl -I https://database.clamav.net` da 403.
+- `Updater.updateNow`: 1.º espejo `https://clamav.abdatabase.com` (`PrivateMirror` + `DNSDatabaseInfo no`, conf propia `freshclam-mirror.conf`); si falla, CDN oficial (`freshclam.conf`) salvo que `settings.officialCoolDownUntil` esté en el futuro. Probado con freshclam real (espejo local) y con espejo caído → respaldo OK.
+- Servidor del espejo: `Mirror/deploy_mirror.sh` (cvdupdate + nginx + certbot, en el VPS Arsys 94.143.142.237; lo ejecuta Ángel con sudo). **`tools.abdatabase.com` NO es un nombre DNS** (solo etiqueta del VPS); el espejo necesita el registro A `clamav.abdatabase.com`. Hasta que exista, las apps caen al CDN oficial (funciona, pero sin la ventaja).
+- Novedades: `Localization/<id>.lproj/WhatsNew.strings` (clave = versión, texto con «•»). **Al subir de versión hay que añadir la entrada nueva en los 16 idiomas** (test `testWhatsNewExistsForCurrentVersion` exige la de la versión actual: actualizarlo al versionar).
+- Pendiente cosmético: en árabe el diseño no se espeja (barra lateral a la izquierda) y «الجديد في ClamMac 1.2.1» muestra bidi invertido.
+
+## Soporte: «pide brew» / «Actualizar firmas no hace nada»
+- Causa típica: el usuario tiene una versión <1.1.0 (dependía de Homebrew; sin él `freshclam` no se encuentra y falla en silencio). Primero pedir la versión de «Acerca de»; solución: instalar el DMG actual. Incidencia Lorente 2026-11-18 (sin confirmar).
+- Si ya es ≥1.1.0: red (¿firewall bloquea `database.clamav.net` 443?) o permisos; mirar la pestaña Registro.
+- Idea 1.2.1: mostrar en pantalla el motivo del fallo de `freshclam` (`Updater.updateNow` solo conserva las 3 últimas líneas).
 
 ## Pendiente
 - Probar en un Mac Intel real, en macOS 13 y en una instalación limpia sin Homebrew; probar el cambio de idioma desde el selector.

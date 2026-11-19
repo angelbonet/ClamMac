@@ -187,3 +187,12 @@
 "Descargar e instalar" = "Downloaden en installeren";
 "ClamMac se cerrará y volverá a abrirse sola en unos segundos. No tienes que hacer nada más." = "ClamMac sluit af en opent over enkele seconden vanzelf weer. Je hoeft verder niets te doen.";
 "Esta copia no puede actualizarse sola: se abrirá el instalador y deberás arrastrar la app a Aplicaciones." = "Deze kopie kan zichzelf niet bijwerken: het installatieprogramma wordt geopend en je moet de app naar Programma's slepen.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo a las %@; no hace falta pulsar nada." = "De handtekeningenserver heeft downloads vanaf dit netwerk tijdelijk beperkt. ClamMac probeert het om %@ zelf opnieuw; u hoeft nergens op te klikken.";
+"El servidor de firmas ha limitado temporalmente las descargas desde esta red. ClamMac lo reintentará solo más tarde; no hace falta pulsar nada." = "De handtekeningenserver heeft downloads vanaf dit netwerk tijdelijk beperkt. ClamMac probeert het later zelf opnieuw; u hoeft nergens op te klikken.";
+"No se pudo conectar con el servidor de firmas. Comprueba la conexión a internet, el cortafuegos o el proxy (database.clamav.net y clamav.abdatabase.com, puerto 443)." = "Kan geen verbinding maken met de handtekeningenserver. Controleer de internetverbinding, firewall of proxy (database.clamav.net en clamav.abdatabase.com, poort 443).";
+"No se pudieron actualizar las firmas." = "De handtekeningen konden niet worden bijgewerkt.";
+"Diagnóstico copiado al portapapeles" = "Diagnose gekopieerd naar het klembord";
+"Copiar diagnóstico" = "Diagnose kopiëren";
+"Descargar las firmas del espejo de abDatabase (recomendado; si falla, se usa el servidor oficial de ClamAV)" = "Handtekeningen downloaden van de abDatabase-mirror (aanbevolen; bij een storing wordt de officiële ClamAV-server gebruikt)";
+"Novedades de ClamMac %@" = "Nieuw in ClamMac %@";
+"Entendido" = "Begrepen";

@@ -2,6 +2,16 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [1.2.1] — 2026-11-19
+### Añadido
+- **Espejo de firmas de abDatabase** (`clamav.abdatabase.com`): las firmas se descargan primero de ahí y, si falla, del servidor oficial de ClamAV. Evita que varios Macs de una misma clínica agoten el límite de descargas del CDN oficial en la primera instalación. Se puede desactivar en *Ajustes*.
+- **Motivo del fallo en pantalla**: si el servidor de firmas limita las descargas (error 429/403, «cool-down») o no hay conexión, *Estado* lo explica y, en el primer caso, indica a qué hora se reintentará. Mientras dura el cool-down ClamMac no vuelve a llamar al CDN oficial (cada intento lo alarga).
+- **Copiar diagnóstico**: botón en *Estado* que copia versión, macOS, firmas, última salida de `freshclam` y registro para enviarlo a soporte.
+- **Novedades de la versión**: tras actualizar, *Estado* muestra una vez las mejoras de la nueva versión en el idioma del usuario.
+- **Nuevos idiomas**: japonés (日本語) y árabe (العربية). Total: 16.
+### Cambiado
+- Las actualizaciones automáticas de firmas se reparten con un retraso aleatorio de hasta 20 min, para que los Macs de una misma red no pidan a la vez.
+
 ## [1.2.0] — 2026-11-18
 ### Añadido
 - **Selección de idioma** en 14 idiomas: español, català, English, français, Deutsch, italiano, português (Portugal y Brasil), Nederlands, polski, română, svenska, ελληνικά y čeština. Por defecto sigue el idioma de macOS; se puede fijar en *Ajustes › Idioma* (se aplica al reiniciar). Traducidos menús, pantallas, avisos, registro y mensajes de error; fechas y horas según el idioma.

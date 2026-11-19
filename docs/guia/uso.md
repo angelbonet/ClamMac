@@ -44,7 +44,7 @@ Ver [Actualizaciones](actualizaciones.md).
 ![Ajustes](../img/ajustes.png)
 
 - *Abrir ClamMac al iniciar sesión*.
-- *Idioma*: **Automático** (sigue el idioma del Mac) o uno de los 14 idiomas disponibles: Español, Català, English, Français, Deutsch, Italiano, Português (Portugal), Português (Brasil), Nederlands, Polski, Română, Svenska, Ελληνικά y Čeština. El cambio se aplica al reiniciar ClamMac (botón *Reiniciar ahora*). Si el idioma de tu Mac no está entre ellos, ClamMac se muestra en español. Las traducciones al catalán, francés, alemán y al resto de idiomas nuevos no las ha revisado un hablante nativo: [ayuda a corregirlas](https://github.com/angelbonet/ClamMac/issues).
+- *Idioma*: **Automático** (sigue el idioma del Mac) o uno de los 16 idiomas disponibles: Español, Català, English, Français, Deutsch, Italiano, Português (Portugal), Português (Brasil), Nederlands, Polski, Română, Svenska, Ελληνικά, Čeština, 日本語 y العربية. Además hay una casilla para descargar las firmas del espejo de abDatabase (recomendado). El cambio se aplica al reiniciar ClamMac (botón *Reiniciar ahora*). Si el idioma de tu Mac no está entre ellos, ClamMac se muestra en español. Las traducciones al catalán, francés, alemán y al resto de idiomas nuevos no las ha revisado un hablante nativo: [ayuda a corregirlas](https://github.com/angelbonet/ClamMac/issues).
 - *Mantener clamd en marcha*: análisis casi instantáneo a cambio de ~1 GB de RAM. Si lo desactivas, cada análisis carga las firmas desde cero (unos segundos más).
 - *Notificaciones del sistema* y **Pushover** (opcional).
 - *Buscar nuevas versiones de ClamMac en GitHub*.

@@ -225,7 +225,7 @@ final class CoreTests: XCTestCase {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let langs = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Localization").path)
             .filter { $0.hasSuffix(".lproj") }.map { String($0.dropLast(6)) }.sorted()
-        XCTAssertGreaterThanOrEqual(langs.count, 14)
+        XCTAssertGreaterThanOrEqual(langs.count, 16)
         XCTAssertTrue(Language.allCases.filter { $0 != .auto }.allSatisfy { langs.contains($0.rawValue) }, "selector con idioma sin traducción")
         let tables = try langs.map { l -> [String: String] in
             let url = root.appendingPathComponent("Localization/\(l).lproj/Localizable.strings")
@@ -251,6 +251,37 @@ final class CoreTests: XCTestCase {
                 let key = (text as NSString).substring(with: m.range(at: 1)).replacingOccurrences(of: "\\\"", with: "\"")
                 XCTAssertTrue(base.contains(key), "sin traducción: «\(key)» en \(f.lastPathComponent)")
             }
+        }
+    }
+
+    // MARK: actualización de firmas (1.2.1)
+    func testClassifyCoolDown() throws {
+        let out = "WARNING: FreshClam previously received error code 429 or 403 from the CDN.\nWARNING: You are still on cool-down until after: 2026-11-19 17:52:21\n"
+        guard case .coolDown(let until) = Updater.classify(out) else { return XCTFail("debería ser cool-down") }
+        let c = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: try XCTUnwrap(until))
+        XCTAssertEqual([c.year, c.month, c.day, c.hour, c.minute], [2026, 11, 19, 17, 52])
+    }
+    func testClassifyNetworkAndOther() {
+        XCTAssertEqual(Updater.classify("ERROR: Can't connect to database.clamav.net"), .network)
+        XCTAssertEqual(Updater.classify("ERROR: Can't open file"), .other)
+    }
+    func testMirrorConf() throws {
+        ClamPaths.writeFreshclamMirrorConf(mirror: "https://example.org/clamav")
+        let conf = try String(contentsOf: ClamPaths.freshclamMirrorConf, encoding: .utf8)
+        XCTAssertTrue(conf.contains("PrivateMirror https://example.org/clamav"))
+        XCTAssertTrue(conf.contains("DNSDatabaseInfo no"))
+    }
+    func testSettingsOldFileKeepsMirrorDefault() throws {
+        let s = try JSONDecoder().decode(AppSettings.self, from: Data("{\"realtimeEnabled\":false}".utf8))
+        XCTAssertTrue(s.useSignatureMirror); XCTAssertNil(s.officialCoolDownUntil)
+    }
+    func testWhatsNewExistsForCurrentVersion() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let langs = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Localization").path).filter { $0.hasSuffix(".lproj") }
+        for l in langs {
+            let url = root.appendingPathComponent("Localization/\(l)/WhatsNew.strings")
+            let d = try XCTUnwrap(NSDictionary(contentsOf: url) as? [String: String], "falta WhatsNew en \(l)")
+            XCTAssertFalse((d["1.2.1"] ?? "").isEmpty, "\(l): sin novedades de 1.2.1")
         }
     }
 }

@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Pokud server s podpisy omezí stahování, ClamMac to nyní vysvětlí a sám to zkusí znovu.\n• Podpisy se stahují ze zrcadla abDatabase se zálohou na oficiální server ClamAV: spolehlivější instalace v ordinacích s více Mac.\n• Nové tlačítko „Kopírovat diagnostiku“ pro podporu.\n• Nové jazyky: japonština a arabština.";

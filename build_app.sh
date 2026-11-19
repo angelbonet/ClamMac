@@ -5,7 +5,7 @@ set -e
 cd "${0:A:h}"
 SIGN_HASH="DD3894D51C0CD7431CB40011799962688668037D"
 APP="build/ClamMac.app"
-VERSION="1.2.0"
+VERSION="1.2.1"
 
 swift build -c release --arch arm64 --arch x86_64
 BIN=$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)/ClamMac
@@ -15,7 +15,7 @@ rm -rf "$APP"; mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/ClamMac"
 cp Icon/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 LOCS=""; for L in Localization/*.lproj; do LOCS="$LOCS<string>$(basename "$L" .lproj)</string>"; done
-for L in Localization/*.lproj; do mkdir -p "$APP/Contents/Resources/$(basename "$L")"; cp "$L/Localizable.strings" "$APP/Contents/Resources/$(basename "$L")/"; done   # un .lproj por idioma
+for L in Localization/*.lproj; do mkdir -p "$APP/Contents/Resources/$(basename "$L")"; cp "$L/Localizable.strings" "$L/WhatsNew.strings" "$APP/Contents/Resources/$(basename "$L")/"; done   # un .lproj por idioma
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

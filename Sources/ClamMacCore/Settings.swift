@@ -53,6 +53,10 @@ public struct AppSettings: Codable, Equatable, Sendable {
     public var lastAppUpdateCheck: Date?
     /// Versión de la app la última vez que se ejecutó (para avisar «actualizada a X»).
     public var lastRunVersion: String?
+    /// Descargar las firmas del espejo de abDatabase (con respaldo al CDN oficial de ClamAV).
+    public var useSignatureMirror: Bool = true
+    /// Hasta cuándo el CDN oficial de ClamAV tiene limitada esta red (no se le vuelve a llamar antes).
+    public var officialCoolDownUntil: Date?
 
     public init() {}
 
@@ -60,7 +64,7 @@ public struct AppSettings: Codable, Equatable, Sendable {
     enum CodingKeys: String, CodingKey {
         case watchedFolders, realtimeEnabled, updateMode, updateIntervalHours, lastUpdateCheck, scheduledScan,
              useDaemon, autoQuarantine, notificationsEnabled, pushoverEnabled, pushoverUser, excludeExtensions,
-             autoCheckAppUpdates, lastAppUpdateCheck, lastRunVersion
+             autoCheckAppUpdates, lastAppUpdateCheck, lastRunVersion, useSignatureMirror, officialCoolDownUntil
     }
     public init(from d: Decoder) throws {
         self.init()
@@ -80,6 +84,8 @@ public struct AppSettings: Codable, Equatable, Sendable {
         autoCheckAppUpdates = try c.decodeIfPresent(Bool.self, forKey: .autoCheckAppUpdates) ?? autoCheckAppUpdates
         lastAppUpdateCheck = try c.decodeIfPresent(Date.self, forKey: .lastAppUpdateCheck)
         lastRunVersion = try c.decodeIfPresent(String.self, forKey: .lastRunVersion)
+        useSignatureMirror = try c.decodeIfPresent(Bool.self, forKey: .useSignatureMirror) ?? useSignatureMirror
+        officialCoolDownUntil = try c.decodeIfPresent(Date.self, forKey: .officialCoolDownUntil)
     }
 
     public static func load(from url: URL = ClamPaths.settingsFile) -> AppSettings {

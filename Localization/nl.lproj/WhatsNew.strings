@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Beperkt de handtekeningenserver downloads, dan legt ClamMac dat nu uit en probeert het zelf opnieuw.\n• Handtekeningen worden gedownload van de abDatabase-mirror, met terugval op de officiële ClamAV-server: betrouwbaardere installaties in praktijken met meerdere Macs.\n• Nieuwe knop ‘Diagnose kopiëren’ om naar support te sturen.\n• Nieuwe talen: Japans en Arabisch.";

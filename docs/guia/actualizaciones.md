@@ -4,7 +4,7 @@ ClamMac se actualiza en dos niveles, que no hay que confundir.
 
 ## La biblioteca de amenazas (firmas)
 
-Son las «definiciones de virus» de ClamAV. Se descargan con `freshclam` desde los servidores oficiales de ClamAV.
+Son las «definiciones de virus» de ClamAV. Se descargan con `freshclam` desde el espejo de abDatabase (`clamav.abdatabase.com`) y, si no responde, desde los servidores oficiales de ClamAV.
 
 En la pantalla **Firmas**:
 

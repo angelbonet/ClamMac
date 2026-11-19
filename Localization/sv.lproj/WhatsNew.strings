@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Om signaturservern begränsar nedladdningar förklarar ClamMac det nu och försöker igen av sig själv.\n• Signaturer hämtas från abDatabase-spegeln, med reserv hos ClamAV:s officiella server: tillförlitligare installationer på kliniker med flera Mac-datorer.\n• Ny knapp ”Kopiera diagnostik” att skicka till support.\n• Nya språk: japanska och arabiska.";

@@ -1,0 +1,2 @@
+/* Novedades por versión: clave = versión. */
+"1.2.1" = "• Gdy serwer sygnatur ogranicza pobieranie, ClamMac teraz to wyjaśnia i sam ponawia próbę.\n• Sygnatury są pobierane z serwera lustrzanego abDatabase, z awaryjnym przejściem na oficjalny serwer ClamAV: pewniejsze instalacje w gabinetach z kilkoma komputerami Mac.\n• Nowy przycisk „Kopiuj diagnostykę” do wysłania do pomocy technicznej.\n• Nowe języki: japoński i arabski.";
